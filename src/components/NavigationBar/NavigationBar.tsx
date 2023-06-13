@@ -1,13 +1,11 @@
-import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-
-import styled from "styled-components";
-
+import React from "react";
 import { AiFillHome } from "react-icons/ai";
+import { BsPeopleFill } from "react-icons/bs";
 import { MdAddBox } from "react-icons/md";
 import { SiSimpleanalytics } from "react-icons/si";
-import { BsPeopleFill } from "react-icons/bs";
+import styled from "styled-components";
 
 const navigationTabs = [
   { icon: AiFillHome, path: "/", title: "Home" },

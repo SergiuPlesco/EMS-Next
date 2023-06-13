@@ -1,12 +1,10 @@
-import React, { useState } from "react";
 import Image from "next/image";
+import React, { useState } from "react";
+import styled from "styled-components";
 
 import LogoImg from "@/assets/images/logo.svg";
 import ProfileImg from "@/assets/images/profile-picture.png";
-
 import Switch from "@/components/Switch";
-
-import styled from "styled-components";
 
 const Header = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);

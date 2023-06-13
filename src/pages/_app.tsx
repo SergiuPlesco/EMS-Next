@@ -1,5 +1,3 @@
-import type { AppType } from "next/app";
-import { trpc } from "@/utils/trpc";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createGlobalStyle } from "styled-components";
 
@@ -11,6 +9,9 @@ const GlobalStyle = createGlobalStyle`
   }
 
 `;
+import type { AppType } from "next/app";
+
+import { trpc } from "@/utils/trpc";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (

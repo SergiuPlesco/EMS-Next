@@ -1,6 +1,7 @@
 import React from "react";
-import { trpc } from "@/utils/trpc";
+
 import MainLayout from "@/layouts/MainLayout";
+import { trpc } from "@/utils/trpc";
 
 const index = () => {
   const hello = trpc.hello.useQuery({ text: "client" });
