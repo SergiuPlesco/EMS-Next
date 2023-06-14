@@ -31,7 +31,7 @@ const Header = () => {
 export default Header;
 
 const Wrapper = styled.div`
-  border-bottom: 1px solid #efefef;
+  border-bottom: 1px solid ${(props) => props.theme.border.primary};
   box-shadow: 0px 2px 5px rgba(128, 128, 128, 0.05);
   padding: 0 2rem;
 `;

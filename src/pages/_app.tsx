@@ -1,5 +1,9 @@
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import type { AppType } from "next/app";
+import { ThemeProvider } from "styled-components";
 import { createGlobalStyle } from "styled-components";
+
+import { trpc } from "@/utils/trpc";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -9,18 +13,17 @@ const GlobalStyle = createGlobalStyle`
   }
 
 `;
-import type { AppType } from "next/app";
 
-import { trpc } from "@/utils/trpc";
+import theme from "@/constants/theme";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Component {...pageProps} />
       <ReactQueryDevtools initialIsOpen={false} />
-    </>
+
+      <Component {...pageProps} />
+    </ThemeProvider>
   );
 };
-
 export default trpc.withTRPC(MyApp);

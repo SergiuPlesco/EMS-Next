@@ -43,7 +43,7 @@ const Container = styled.div`
   height: calc(100vh - 60px);
   padding: 50px 42px;
   gap: 25px;
-  border-right: 1px solid #efefef;
+  border-right: 1px solid ${(props) => props.theme.border.primary};
   box-shadow: 2px 0px 5px rgba(128, 128, 128, 0.05);
 `;
 
