@@ -6,6 +6,8 @@ import LogoImg from "@/assets/images/logo.svg";
 import ProfileImg from "@/assets/images/profile-picture.png";
 import Switch from "@/components/Switch";
 
+import LoginButton from "../LoginButton/LoginButton";
+
 const Header = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -17,7 +19,7 @@ const Header = () => {
     <Wrapper>
       <Container>
         <Logo src={LogoImg} alt="Logo" />
-
+        <LoginButton />
         <ProfileContainer>
           <Switch checked={isDarkMode} handleChange={handleDarkMode} />
           <Paragraph>Greetings, Iulian</Paragraph>

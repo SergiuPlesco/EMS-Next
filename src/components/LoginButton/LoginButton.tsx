@@ -1,7 +1,8 @@
-import { signIn, signOut,useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const LoginButton = () => {
   const { data: session } = useSession();
+
   if (session) {
     return (
       <>
@@ -12,8 +13,15 @@ const LoginButton = () => {
   }
   return (
     <>
-      Not signed in <br />
-      <button onClick={() => signIn}>Sign in</button>
+      <a
+        href={`/api/auth/signin`}
+        onClick={(e) => {
+          e.preventDefault();
+          signIn();
+        }}
+      >
+        Sign in
+      </a>
     </>
   );
 };
