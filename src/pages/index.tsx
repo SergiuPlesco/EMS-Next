@@ -1,5 +1,6 @@
 import React from "react";
 
+import MainLayout from "@/layouts/MainLayout";
 import { trpc } from "@/utils/trpc";
 
 const index = () => {
@@ -9,7 +10,7 @@ const index = () => {
     return <div>loading...</div>;
   }
 
-  return <div>{hello.data.greeting}</div>;
+  return <MainLayout>Content</MainLayout>;
 };
 
 export default index;
