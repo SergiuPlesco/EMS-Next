@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 const LoginButton = () => {
@@ -7,21 +8,29 @@ const LoginButton = () => {
     return (
       <>
         Signed in as {session?.user?.email} <br />
-        <button onClick={() => signOut}>Sign out</button>
+        <button onClick={() => signOut()}>Sign out</button>
       </>
     );
   }
   return (
     <>
-      <a
-        href={`/api/auth/signin`}
-        onClick={(e) => {
-          e.preventDefault();
-          signIn();
+      <Link
+        href="/api/auth/signin"
+        style={{
+          padding: "0.5rem 2rem",
         }}
+        // onClick={() => signIn()}
       >
         Sign in
-      </a>
+      </Link>
+      <button
+        style={{
+          padding: "0.5rem 2rem",
+        }}
+        onClick={() => signIn("google")}
+      >
+        Sign in
+      </button>
     </>
   );
 };

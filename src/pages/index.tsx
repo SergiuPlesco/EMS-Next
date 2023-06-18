@@ -1,16 +1,20 @@
+import { useSession } from "next-auth/react";
 import React from "react";
 
 import MainLayout from "@/layouts/MainLayout";
-import { trpc } from "@/utils/trpc";
+import SignInLayout from "@/layouts/SignInLayout/SignInLayout";
 
-const index = () => {
-  const hello = trpc.hello.useQuery({ text: "client" });
+const HomePage = () => {
+  const { status } = useSession();
 
-  if (!hello.data) {
-    return <div>loading...</div>;
+  if (status === "loading") {
+    return <p>Loading...</p>;
+  }
+  if (status === "unauthenticated") {
+    return <SignInLayout />;
   }
 
   return <MainLayout>Content</MainLayout>;
 };
 
-export default index;
+export default HomePage;
