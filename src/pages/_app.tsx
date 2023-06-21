@@ -3,6 +3,7 @@ import type { AppType } from "next/app";
 import { ThemeProvider } from "styled-components";
 import { createGlobalStyle } from "styled-components";
 
+import MainLayout from "@/layouts/MainLayout/MainLayout";
 import { trpc } from "@/utils/trpc";
 
 const GlobalStyle = createGlobalStyle`
@@ -22,7 +23,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       <GlobalStyle />
       <ReactQueryDevtools initialIsOpen={false} />
 
-      <Component {...pageProps} />
+      <MainLayout>
+        <Component {...pageProps} />
+      </MainLayout>
     </ThemeProvider>
   );
 };
