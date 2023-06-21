@@ -5,12 +5,9 @@ import MainLayout from "@/layouts/MainLayout";
 import SignInLayout from "@/layouts/SignInLayout/SignInLayout";
 
 const HomePage = () => {
-  const { status } = useSession();
+  const { data: session } = useSession();
 
-  if (status === "loading") {
-    return <p>Loading...</p>;
-  }
-  if (status === "unauthenticated") {
+  if (!session) {
     return <SignInLayout />;
   }
 
