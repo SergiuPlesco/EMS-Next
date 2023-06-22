@@ -36,6 +36,12 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  // callbacks: {
+  // 	async signIn({ user, account, profile, email, credentials }) {
+  // 		// save to db here
+  // 		return true;
+  // 	},
+  // },
   secret: "sfj46jfg24564dfjgsdfg45", // required in produtction, see next-auth docs
 };
 
