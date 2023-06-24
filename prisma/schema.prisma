@@ -44,8 +44,15 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  skills        Skill[]
 }
 
+model Skill {
+  id           String     @id @default(cuid())
+  value        String
+  userId       String
+  user         User       @relation(fields: [userId], references: [id])
+}
 model VerificationToken {
   identifier String
   token      String   @unique
