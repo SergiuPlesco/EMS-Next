@@ -1,7 +1,8 @@
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { AppType } from "next/app";
-import { ThemeProvider } from "styled-components";
-import { createGlobalStyle } from "styled-components";
+import type { Session } from "next-auth";
+import { SessionProvider } from "next-auth/react";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
 
 import MainLayout from "@/layouts/MainLayout/MainLayout";
 import { trpc } from "@/utils/trpc";
@@ -17,16 +18,21 @@ const GlobalStyle = createGlobalStyle`
 
 import theme from "@/constants/theme";
 
-const MyApp: AppType = ({ Component, pageProps }) => {
+const MyApp: AppType<{ session: Session }> = ({
+  Component,
+  pageProps: { session, ...pageProps },
+}) => {
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <ReactQueryDevtools initialIsOpen={false} />
+    <SessionProvider session={session}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <ReactQueryDevtools initialIsOpen={false} />
 
-      <MainLayout>
-        <Component {...pageProps} />
-      </MainLayout>
-    </ThemeProvider>
+        <MainLayout>
+          <Component {...pageProps} />
+        </MainLayout>
+      </ThemeProvider>
+    </SessionProvider>
   );
 };
 export default trpc.withTRPC(MyApp);
