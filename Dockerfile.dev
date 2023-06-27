@@ -1,4 +1,4 @@
-FROM node:18.14.0-alpine as build
+FROM node:lts-alpine as build
 WORKDIR /app
 COPY .env ./.env
 COPY package* ./
@@ -9,7 +9,7 @@ COPY public ./public
 COPY src ./src
 RUN npm run build
 
-FROM node:18.14.0-alpine
+FROM node:lts-alpine
 WORKDIR /app
 COPY --from=build /app/.env ./
 COPY --from=build /app/next.config.js ./
