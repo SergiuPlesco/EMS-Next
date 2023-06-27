@@ -4,6 +4,7 @@ import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 
+import MainLayout from "@/layouts/MainLayout/MainLayout";
 import { trpc } from "@/utils/trpc";
 
 const GlobalStyle = createGlobalStyle`
@@ -27,7 +28,9 @@ const MyApp: AppType<{ session: Session }> = ({
         <GlobalStyle />
         <ReactQueryDevtools initialIsOpen={false} />
 
-        <Component {...pageProps} />
+        <MainLayout>
+          <Component {...pageProps} />
+        </MainLayout>
       </ThemeProvider>
     </SessionProvider>
   );
