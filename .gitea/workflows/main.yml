@@ -14,7 +14,7 @@ jobs:
         run: |
           cp .env.production .env
           echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u administrator --password-stdin git.s4.smartdata.solutions
-          docker build -t git.s4.smartdata.solutions/smartdata/smartskills:latest .
+          docker build -f Dockerfile.main -t git.s4.smartdata.solutions/smartdata/smartskills:latest .
           docker push git.s4.smartdata.solutions/smartdata/smartskills                 
 
       - name: Prepare deployment
