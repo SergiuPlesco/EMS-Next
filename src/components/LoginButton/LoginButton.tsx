@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { signIn } from "next-auth/react";
 
 const LoginButton = () => {
   return (
@@ -12,14 +11,6 @@ const LoginButton = () => {
       >
         Sign in
       </Link>
-      <button
-        style={{
-          padding: "0.5rem 2rem",
-        }}
-        onClick={() => signIn("google")}
-      >
-        Sign in
-      </button>
     </>
   );
 };
