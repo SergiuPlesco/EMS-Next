@@ -42,3 +42,11 @@ jobs:
             cd /tmp
             chmod 755 ./deploy.sh
             ./deploy.sh smartskills 9094
+
+      - name: Notify
+        uses: https://github.com/teknatha136/actions-google-chat-text-message@main
+        with:
+          google-chat-webhook: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
+          text-message: "Smartskills build <https://git.s4.smartdata.solutions/${{ gitea.repository }}/actions/runs/${{ gitea.run_number }}|#${{ gitea.run_number }}> for branch *${{ gitea.head_ref || gitea.ref_name }}*, *${{ gitea.event_name }}* by *${{ gitea.actor }}*\nStatus: *${{ job.status }}*"
+        if: always()
+        
