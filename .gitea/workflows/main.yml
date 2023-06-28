@@ -1,0 +1,53 @@
+name: Build and Deploy Production Environment Docker Image 
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v2
+      - name: Build docker image
+        run: |
+          cp .env.production .env
+          echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u administrator --password-stdin git.s4.smartdata.solutions
+          docker build -f Dockerfile.main -t git.s4.smartdata.solutions/smartdata/smartskills:latest .
+          docker push git.s4.smartdata.solutions/smartdata/smartskills                 
+
+      - name: Prepare deployment
+        uses: https://github.com/appleboy/scp-action@master
+        with:
+          host: ${{ secrets.DEV_DEPLOY_HOST }}
+          username: ${{ secrets.DEV_DEPLOY_USER }}
+          key: ${{ secrets.DEV_DEPLOY_KEY }}
+          port: 22
+          rm: false
+          source: "deploy.sh"
+          target: "/tmp"
+
+      - name: Deploy new image
+        uses: https://github.com/appleboy/ssh-action@v0.1.10
+        env:
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+        with:
+          host: ${{ secrets.DEV_DEPLOY_HOST }}
+          username: ${{ secrets.DEV_DEPLOY_USER }}
+          key: ${{ secrets.DEV_DEPLOY_KEY }}
+          port: 22
+          envs: DOCKER_TOKEN 
+          script_stop: true
+          script: |
+            cd /tmp
+            chmod 755 ./deploy.sh
+            ./deploy.sh smartskills 9094
+
+      - name: Notify
+        uses: https://github.com/teknatha136/actions-google-chat-text-message@main
+        with:
+          google-chat-webhook: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
+          text-message: "Smartskills build <https://git.s4.smartdata.solutions/${{ gitea.repository }}/actions/runs/${{ gitea.run_number }}|#${{ gitea.run_number }}> for branch *${{ gitea.head_ref || gitea.ref_name }}*, *${{ gitea.event_name }}* by *${{ gitea.actor }}*\nStatus: *${{ job.status }}*"
+        if: always()
+        
