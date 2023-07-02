@@ -12,9 +12,9 @@ interface MainLayoutProps {
 }
 
 const MainLayout = ({ children }: MainLayoutProps) => {
-  const { data: session } = useSession();
+  const { status } = useSession();
 
-  if (!session) {
+  if (status === "unauthenticated") {
     return <SignInLayout />;
   }
 
