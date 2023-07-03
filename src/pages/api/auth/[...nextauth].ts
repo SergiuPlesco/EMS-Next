@@ -6,6 +6,7 @@ import { prisma } from "@/server/prisma";
 
 const { NEXT_PUBLIC_GOOGLE_ID = "", NEXT_PUBLIC_GOOGLE_SECRET = "" } =
   process.env; // for typescript
+
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
