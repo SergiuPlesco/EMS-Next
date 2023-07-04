@@ -1,6 +1,8 @@
 import React, { ChangeEvent, useState } from "react";
 import styled from "styled-components";
 
+import { Rating } from "@/components/styled";
+
 const availableRatings = [1, 2, 3, 4, 5];
 
 interface SkillChipProps {
@@ -99,11 +101,8 @@ const RatingContainer = styled.div`
   position: relative;
 `;
 
-const ChipRating = styled.div`
+const ChipRating = styled(Rating)`
   cursor: pointer;
-  border-radius: 50%;
-  border: 1px solid ${(props) => props.theme.colors.purple};
-  padding: 3px 8px;
 `;
 
 const RatingSelector = styled.div<{ $active: boolean }>`
