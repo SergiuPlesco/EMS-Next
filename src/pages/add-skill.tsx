@@ -1,9 +1,10 @@
+import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import styled from "styled-components";
 
 import Search from "@/components/Search";
 import SkillChip from "@/components/SkillChip";
-
+import { trpc } from "@/utils/trpc";
 const searchDataFakeResponse = ["python", "react", "ruby"];
 
 interface Chip {
@@ -14,6 +15,9 @@ interface Chip {
 }
 
 const AddSkillPage = () => {
+  const { data } = useSession();
+  const mutation = trpc.skill.add.useMutation();
+
   const [searchData, setSearchData] = useState<string[]>(
     searchDataFakeResponse
   );
@@ -35,6 +39,7 @@ const AddSkillPage = () => {
 
   const handleAddChip = (title: string) => {
     setSelectedSkillList((prev) => prev.filter((item) => item.title !== title));
+    mutation.mutate({ id: data?.user.id, skill: title });
   };
 
   const handleCancelChip = (title: string) => {

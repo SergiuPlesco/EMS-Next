@@ -15,6 +15,14 @@ export const authOptions: NextAuthOptions = {
       clientSecret: NEXT_PUBLIC_GOOGLE_SECRET,
     }),
   ],
+  callbacks: {
+    async session({ session, user }) {
+      if (session) {
+        session.user.id = user.id;
+      }
+      return session;
+    },
+  },
   secret: "sfj46jfg24564dfjgsdfg45", // required in produtction, see next-auth docs
 };
 
