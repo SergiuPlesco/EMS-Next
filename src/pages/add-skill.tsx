@@ -39,7 +39,7 @@ const AddSkillPage = () => {
 
   const handleAddChip = (title: string) => {
     setSelectedSkillList((prev) => prev.filter((item) => item.title !== title));
-    mutation.mutate({ id: data?.user.id, skill: title });
+    mutation.mutate({ id: data?.user.id as string, skill: title });
   };
 
   const handleCancelChip = (title: string) => {
