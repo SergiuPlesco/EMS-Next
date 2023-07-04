@@ -2,14 +2,25 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import AnalyticsItem from "@/components/AnalyticsItem";
+import EmployeeModal from "@/components/EmployeeModal";
 import { Title } from "@/components/styled";
 import Table from "@/components/Table";
 
 const AnalyticsPage = () => {
+  const [showModal, setShowModal] = useState(false);
   const [showTable, setShowTable] = useState(false);
 
   const handleShowTable = () => {
     setShowTable(true);
+  };
+
+  const handleOpenModal = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
   };
 
   return (
@@ -31,9 +42,11 @@ const AnalyticsPage = () => {
       {showTable ? (
         <TableContainer>
           <Title>JavaScript</Title>
-          <Table />
+          <Table onActionClick={handleOpenModal} />
         </TableContainer>
       ) : null}
+
+      {showModal ? <EmployeeModal onClose={handleCloseModal} /> : null}
     </Container>
   );
 };

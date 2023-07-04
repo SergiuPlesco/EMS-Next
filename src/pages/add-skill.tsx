@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import AddSkillChip from "@/components/AddSkillChip";
 import Search from "@/components/Search";
-import SkillChip from "@/components/SkillChip";
 import { Title } from "@/components/styled";
 
 const searchDataFakeResponse = ["python", "react", "ruby"];
@@ -100,7 +100,7 @@ const AddSkillPage = () => {
 
           <ChipContainer>
             {selectedSkillList.map((item, index) => (
-              <SkillChip
+              <AddSkillChip
                 key={index}
                 onAdd={() => handleAddChip(item.title)}
                 onCancel={() => handleCancelChip(item.title)}

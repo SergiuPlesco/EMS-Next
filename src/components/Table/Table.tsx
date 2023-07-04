@@ -5,9 +5,13 @@ import styled from "styled-components";
 import ProfileImg from "@/assets/images/profile-picture.png";
 import { Rating } from "@/components/styled";
 
-const employees = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const employees = [1, 2, 3];
 
-const Table = () => {
+interface TableProps {
+  onActionClick: (e: React.MouseEvent<HTMLElement>) => void;
+}
+
+const Table = ({ onActionClick }: TableProps) => {
   return (
     <Container>
       <Header>
@@ -30,7 +34,7 @@ const Table = () => {
             <div>
               <Rating>5</Rating>
             </div>
-            <Action>Show all skills</Action>
+            <Action onClick={onActionClick}>Show all skills</Action>
           </Row>
         ))}
       </RowList>
@@ -42,11 +46,10 @@ export default Table;
 
 const Container = styled.div`
   display: grid;
-  grid-template-rows: 50px minmax(244px, 487px);
+  grid-template-rows: 50px minmax(auto, 487px);
   border-radius: 20px;
   border: 1px solid #d3d3d3;
   background: #fff;
-  overflow-y: auto;
 `;
 
 const Header = styled.div`
@@ -59,7 +62,9 @@ const Header = styled.div`
   border-bottom: 1px solid #d3d3d3;
 `;
 
-const RowList = styled.div``;
+const RowList = styled.div`
+  overflow-y: auto;
+`;
 
 const Row = styled.div<{ lcBorder: boolean }>`
   display: grid;
