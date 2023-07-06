@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import AnalyticsItem from "@/components/AnalyticsItem";
+import AnalyticsTable from "@/components/AnalyticsTable";
 import EmployeeModal from "@/components/EmployeeModal";
 import { Title } from "@/components/styled";
-import Table from "@/components/Table";
 
 const AnalyticsPage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -42,7 +42,7 @@ const AnalyticsPage = () => {
       {showTable ? (
         <TableContainer>
           <Title>JavaScript</Title>
-          <Table onActionClick={handleOpenModal} />
+          <AnalyticsTable onActionClick={handleOpenModal} />
         </TableContainer>
       ) : null}
 
