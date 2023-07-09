@@ -1,22 +1,21 @@
 import { z } from "zod";
 
-import { prisma } from "../prisma";
+// import { prisma } from "../prisma";
 import { procedure, router } from "../trpc";
 
 export const skillRouter = router({
   add: procedure
     .input(z.object({ id: z.string(), skill: z.string() }))
-    .mutation(async () => {
-      // const newSkill = prisma.skill.create({
-      // 	data: {
-      // 		id: opts.input.id,
-      // 		value: opts.input.skill,
-      // 		userId: opts.ctx.
-      // 	}
-      // })
-      return;
+    .mutation(async ({ ctx, input }) => {
+      const newSkill = ctx.prisma.skill.create({
+        data: {
+          value: input.skill,
+          userId: ctx.session?.user.id,
+        },
+      });
+      return newSkill;
     }),
-  getAll: procedure.query(() => {
-    return prisma.skill.findMany();
+  getAll: procedure.query(({ ctx }) => {
+    return ctx.prisma.skill.findMany();
   }),
 });
