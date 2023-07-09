@@ -18,7 +18,7 @@ const LoginButton = () => {
 
   return (
     <Button onClick={handleSignin}>
-      <Loader isLoading={isLoading}>
+      <Loader $isLoading={isLoading}>
         <Image src={googleIcon} width={32} height={32} alt="" />
       </Loader>
       Sign in with Google
@@ -41,7 +41,7 @@ const Button = styled.button`
   padding: 0.5rem 2rem;
 `;
 
-const Loader = styled.div<{ isLoading: boolean }>`
+const Loader = styled.div<{ $isLoading: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,8 +49,8 @@ const Loader = styled.div<{ isLoading: boolean }>`
   height: 1.625rem;
   border-radius: 50%;
   -webkit-animation: ${(props) =>
-    props.isLoading ? "spin 2s infinite" : "none"};
-  animation: ${(props) => (props.isLoading ? "spin 2s infinite" : "none")};
+    props.$isLoading ? "spin 2s infinite" : "none"};
+  animation: ${(props) => (props.$isLoading ? "spin 2s infinite" : "none")};
 
   @keyframes spin {
     100% {
