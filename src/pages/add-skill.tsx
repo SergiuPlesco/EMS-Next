@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import AddSkillChip from "@/components/AddSkillChip";
 import Search from "@/components/Search";
-import SkillChip from "@/components/SkillChip";
+// const searchDataFakeResponse = ["python", "react", "ruby"];
+import { Title } from "@/components/styled";
 import { trpc } from "@/utils/trpc";
+
 // const searchDataFakeResponse = ["python", "react", "ruby"];
 
 interface Chip {
@@ -107,7 +110,7 @@ const AddSkillPage = () => {
 
           <ChipContainer>
             {selectedSkillList.map((item, index) => (
-              <SkillChip
+              <AddSkillChip
                 key={index}
                 onAdd={() => handleAddChip(item.title)}
                 onCancel={() => handleCancelChip(item.title)}
@@ -131,12 +134,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
-`;
-
-const Title = styled.h1`
-  font-size: 32px;
-  font-weight: 600;
-  margin-bottom: 10px;
 `;
 
 const SkillsContainer = styled.div`
