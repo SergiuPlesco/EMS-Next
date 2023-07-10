@@ -3,9 +3,11 @@ import styled from "styled-components";
 
 import AddSkillChip from "@/components/AddSkillChip";
 import Search from "@/components/Search";
+// const searchDataFakeResponse = ["python", "react", "ruby"];
 import { Title } from "@/components/styled";
+import { trpc } from "@/utils/trpc";
 
-const searchDataFakeResponse = ["python", "react", "ruby"];
+// const searchDataFakeResponse = ["python", "react", "ruby"];
 
 interface Chip {
   title: string;
@@ -15,13 +17,14 @@ interface Chip {
 }
 
 const AddSkillPage = () => {
-  const [searchData, setSearchData] = useState<string[]>(
-    searchDataFakeResponse
-  );
+  const createSkill = trpc.skills.create.useMutation();
+  const { data, isLoading: isDataLoading } = trpc.skills.all.useQuery();
+
+  // const [searchData, setSearchData] = useState<string[]>(searchDataFakeResponse);
   const [selectedSkillList, setSelectedSkillList] = useState<Chip[]>([]);
 
   const handleSelectedSearchItem = (title: string) => {
-    setSearchData((prev) => prev.filter((item) => item !== title));
+    // setSearchData((prev) => prev.filter((item) => item !== title));
 
     setSelectedSkillList((prev) => [
       ...prev,
@@ -36,11 +39,12 @@ const AddSkillPage = () => {
 
   const handleAddChip = (title: string) => {
     setSelectedSkillList((prev) => prev.filter((item) => item.title !== title));
+    createSkill.mutate({ skillTitle: title });
   };
 
   const handleCancelChip = (title: string) => {
     setSelectedSkillList((prev) => prev.filter((item) => item.title !== title));
-    setSearchData((prev) => [...prev, title]);
+    // setSearchData((prev) => [...prev, title]);
   };
 
   const handleCreateSkill = (title: string) => {
@@ -74,6 +78,12 @@ const AddSkillPage = () => {
     setSelectedSkillList(newSkillList);
   };
 
+  if (isDataLoading) {
+    return <h1>Loading</h1>;
+  }
+
+  if (!data) return null;
+
   return (
     <Container>
       <div>
@@ -85,7 +95,7 @@ const AddSkillPage = () => {
       </div>
 
       <Search
-        data={searchData}
+        data={data}
         selectedData={selectedSkillList.map((item) => item.title)}
         handleSelectedItem={handleSelectedSearchItem}
         handleCreateItem={handleCreateSkill}

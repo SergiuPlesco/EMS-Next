@@ -3,13 +3,14 @@ import { FiSearch } from "react-icons/fi";
 import styled, { keyframes } from "styled-components";
 
 interface SearchProps {
-  data: string[];
+  data: Skill[];
   selectedData: string[];
   // eslint-disable-next-line no-unused-vars
   handleSelectedItem: (title: string) => void;
   // eslint-disable-next-line no-unused-vars
   handleCreateItem: (title: string) => void;
 }
+type Skill = { id: string; title: string; authorId: string };
 
 const Search: React.FC<SearchProps> = ({
   data,
@@ -18,16 +19,16 @@ const Search: React.FC<SearchProps> = ({
   handleCreateItem,
 }) => {
   const [search, setSearch] = useState("");
-  const [matchedItems, setMatchedItems] = useState<string[]>([]);
-
+  const [matchedItems, setMatchedItems] = useState<Skill[]>([]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
     setSearch(value);
 
     const matches = data.filter((item) =>
-      item.toLowerCase().includes(value.toLowerCase())
+      item.title.toLowerCase().includes(value.toLowerCase())
     );
+
     setMatchedItems(matches);
   };
 
@@ -42,7 +43,8 @@ const Search: React.FC<SearchProps> = ({
   };
 
   const isCreateAvailable =
-    !matchedItems.includes(search) && !selectedData.includes(search);
+    !matchedItems.map((skill) => skill.title).includes(search) &&
+    !selectedData.includes(search);
 
   const isResultsAvailable = !!search && !selectedData.includes(search);
 
@@ -65,8 +67,8 @@ const Search: React.FC<SearchProps> = ({
             </ResultItem>
           )}
           {matchedItems.map((item, index) => (
-            <ResultItem key={index} onClick={() => handleSelect(item)}>
-              {item}
+            <ResultItem key={index} onClick={() => handleSelect(item.title)}>
+              {item.title}
             </ResultItem>
           ))}
         </ResultContainer>
