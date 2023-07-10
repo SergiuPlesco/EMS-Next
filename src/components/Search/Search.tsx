@@ -6,11 +6,11 @@ interface SearchProps {
   data: Skill[];
   selectedData: string[];
   // eslint-disable-next-line no-unused-vars
-  handleSelectedItem: (title: string) => void;
+  handleSelectedItem: (value: string) => void;
   // eslint-disable-next-line no-unused-vars
-  handleCreateItem: (title: string) => void;
+  handleCreateItem: (value: string) => void;
 }
-type Skill = { id: string; title: string; authorId: string };
+type Skill = { id: string; value: string; userId: string };
 
 const Search: React.FC<SearchProps> = ({
   data,
@@ -26,15 +26,15 @@ const Search: React.FC<SearchProps> = ({
     setSearch(value);
 
     const matches = data.filter((item) =>
-      item.title.toLowerCase().includes(value.toLowerCase())
+      item.value.toLowerCase().includes(value.toLowerCase())
     );
 
     setMatchedItems(matches);
   };
 
-  const handleSelect = (title: string) => {
+  const handleSelect = (value: string) => {
     setSearch("");
-    handleSelectedItem(title);
+    handleSelectedItem(value);
   };
 
   const handleCreate = () => {
@@ -43,7 +43,7 @@ const Search: React.FC<SearchProps> = ({
   };
 
   const isCreateAvailable =
-    !matchedItems.map((skill) => skill.title).includes(search) &&
+    !matchedItems.map((skill) => skill.value).includes(search) &&
     !selectedData.includes(search);
 
   const isResultsAvailable = !!search && !selectedData.includes(search);
@@ -67,8 +67,8 @@ const Search: React.FC<SearchProps> = ({
             </ResultItem>
           )}
           {matchedItems.map((item, index) => (
-            <ResultItem key={index} onClick={() => handleSelect(item.title)}>
-              {item.title}
+            <ResultItem key={index} onClick={() => handleSelect(item.value)}>
+              {item.value}
             </ResultItem>
           ))}
         </ResultContainer>
