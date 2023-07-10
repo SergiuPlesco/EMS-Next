@@ -9,7 +9,7 @@ export const skillRouter = router({
       const newSkill = await ctx.prisma.skill.create({
         data: {
           title: input.skillTitle,
-          authorId: ctx.session?.user.id,
+          authorId: ctx?.session?.user.id,
         },
       });
       return newSkill;
