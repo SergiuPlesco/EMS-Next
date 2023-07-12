@@ -29,6 +29,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.9",
     "react-icons": "^4.9.0",
+    "sharp": "^0.32.2",
     "styled-components": "^6.0.0-rc.3",
     "zod": "^3.21.4"
   },
