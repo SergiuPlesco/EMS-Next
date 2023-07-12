@@ -20,11 +20,13 @@ const AddSkillPage = () => {
   const createSkill = trpc.skills.create.useMutation();
   const { data, isLoading: isDataLoading } = trpc.skills.all.useQuery();
 
-  // const [searchData, setSearchData] = useState<string[]>(searchDataFakeResponse);
+  // const [searchData, setSearchData] = useState<
+  // 	{ id: string; title: string; authorId: string; rating: number }[] | undefined
+  // >(data);
   const [selectedSkillList, setSelectedSkillList] = useState<Chip[]>([]);
 
   const handleSelectedSearchItem = (title: string) => {
-    // setSearchData((prev) => prev.filter((item) => item !== title));
+    // setSearchData((prev) => prev.filter((item) => item.title !== title));
 
     setSelectedSkillList((prev) => [
       ...prev,
