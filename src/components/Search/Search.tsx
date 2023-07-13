@@ -10,7 +10,12 @@ interface SearchProps {
   // eslint-disable-next-line no-unused-vars
   handleCreateItem: (value: string) => void;
 }
-type Skill = { id: string; value: string; userId: string };
+type Skill = {
+  title: string;
+  id: string;
+  authorId: string;
+  rating: number;
+};
 
 const Search: React.FC<SearchProps> = ({
   data,
@@ -26,7 +31,7 @@ const Search: React.FC<SearchProps> = ({
     setSearch(value);
 
     const matches = data.filter((item) =>
-      item.value.toLowerCase().includes(value.toLowerCase())
+      item.title.toLowerCase().includes(value.toLowerCase())
     );
 
     setMatchedItems(matches);
@@ -43,7 +48,7 @@ const Search: React.FC<SearchProps> = ({
   };
 
   const isCreateAvailable =
-    !matchedItems.map((skill) => skill.value).includes(search) &&
+    !matchedItems.map((skill) => skill.title).includes(search) &&
     !selectedData.includes(search);
 
   const isResultsAvailable = !!search && !selectedData.includes(search);
@@ -67,8 +72,8 @@ const Search: React.FC<SearchProps> = ({
             </ResultItem>
           )}
           {matchedItems.map((item, index) => (
-            <ResultItem key={index} onClick={() => handleSelect(item.value)}>
-              {item.value}
+            <ResultItem key={index} onClick={() => handleSelect(item.title)}>
+              {item.title}
             </ResultItem>
           ))}
         </ResultContainer>
