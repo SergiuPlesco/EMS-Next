@@ -9,7 +9,7 @@ export const userRouter = router({
   getById: procedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {
-      return await ctx.prisma.user.findUnique({
+      return await ctx.prisma.user.findFirst({
         where: {
           id: input.userId,
         },
@@ -36,5 +36,22 @@ export const userRouter = router({
         },
       });
       return updatedSkill;
+    }),
+  deleteSkill: procedure
+    .input(z.object({ skillId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const deleteSkill = await ctx.prisma.user.update({
+        where: {
+          id: ctx.session?.user.id,
+        },
+        data: {
+          skills: {
+            delete: {
+              id: input.skillId,
+            },
+          },
+        },
+      });
+      return deleteSkill;
     }),
 });

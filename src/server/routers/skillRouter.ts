@@ -17,4 +17,13 @@ export const skillRouter = router({
   all: procedure.query(({ ctx }) => {
     return ctx.prisma.skill.findMany();
   }),
+  skillByUserId: procedure.query(async ({ ctx }) => {
+    return await ctx.prisma.skill.findMany({
+      where: {
+        user: {
+          id: ctx.session?.user.id,
+        },
+      },
+    });
+  }),
 });
