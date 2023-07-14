@@ -39,9 +39,9 @@ const AddSkillPage = () => {
     ]);
   };
 
-  const handleAddChip = (title: string) => {
+  const handleAddChip = (title: string, rating: number) => {
     setSelectedSkillList((prev) => prev.filter((item) => item.title !== title));
-    createSkill.mutate({ skillTitle: title });
+    createSkill.mutate({ skillTitle: title, rating });
   };
 
   const handleCancelChip = (title: string) => {
@@ -114,7 +114,7 @@ const AddSkillPage = () => {
             {selectedSkillList.map((item, index) => (
               <AddSkillChip
                 key={index}
-                onAdd={() => handleAddChip(item.title)}
+                onAdd={() => handleAddChip(item.title, item.rating)}
                 onCancel={() => handleCancelChip(item.title)}
                 onSelectRating={(rating) =>
                   handleSelectRating(item.title, rating)
