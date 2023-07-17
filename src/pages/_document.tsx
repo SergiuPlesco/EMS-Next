@@ -9,7 +9,7 @@ const Document = () => {
           rel="stylesheet"
         ></link>
       </Head>
-      <body>
+      <body className="inter.variable">
         <Main />
         <NextScript />
         <div id="post-modal"></div>
