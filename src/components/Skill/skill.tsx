@@ -1,5 +1,6 @@
+import { TRPCError } from "@trpc/server";
 import Image from "next/image";
-import React, { CSSProperties,useState } from "react";
+import React, { CSSProperties, useState } from "react";
 import styled from "styled-components";
 
 import { ISkill } from "@/pages";
@@ -14,6 +15,7 @@ type IProps = {
     authorId: string;
     rating: number;
   };
+  onDelete: (skillId: string) => void;
   containerStyles?: CSSProperties;
   titleStyle?: CSSProperties;
   profileStyle?: CSSProperties;
@@ -24,6 +26,7 @@ type IProps = {
 
 const Skill = ({
   fetchedSkill,
+  onDelete,
   containerStyles,
   titleStyle,
   profileStyle,
@@ -31,44 +34,27 @@ const Skill = ({
   iconStyle,
   disableAnimation = false,
 }: IProps) => {
+  const [skill, setSkill] = useState<ISkill>(fetchedSkill);
+  const [showRatingChange, setShowRatingChange] = useState<boolean>(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+
   const deleteSkill = trpc.users.deleteSkill.useMutation();
   const updateSkillRating = trpc.users.updateSKill.useMutation();
 
-  const [skill, setSkill] = useState<ISkill>(fetchedSkill);
-  // const [isHovered, setIsHovered] = useState(false);
-  const [showRatingChange, setShowRatingChange] = useState<boolean>(false);
-  // const [globalTimeout, setGlobalTimeout] = useState<any>(undefined);
-
-  // const handleSetTimeouts = (nextHoverState: boolean) => {
-  //   if (nextHoverState == true) {
-  //     const timeout = setTimeout(() => {
-  //       setIsHovered(true)
-  //     }, 150);
-
-  //     setGlobalTimeout(timeout);
-  //   }
-
-  //   if (nextHoverState == false) {
-  //     clearTimeout(globalTimeout);
-
-  //     const timeout = setTimeout(() => {
-  //       setIsHovered(false);
-  //     }, 100);
-
-  //     setGlobalTimeout(timeout);
-  //   }
-  // }
-
   const deleteUserSkill = () => {
     deleteSkill.mutate({ skillId: skill.id });
+    onDelete(skill.id);
   };
 
   const handleRatingUpdate = (skillId: string, rating: number) => {
-    // check on error
-    updateSkillRating.mutate({ rating, skillId });
+    try {
+      updateSkillRating.mutate({ rating, skillId });
 
-    setShowRatingChange(false);
-    setSkill((prev) => ({ ...prev, rating }));
+      setShowRatingChange(false);
+      setSkill((prev) => ({ ...prev, rating }));
+    } catch (err) {
+      if (err instanceof TRPCError) setApiError(err.message);
+    }
   };
 
   return (
@@ -78,10 +64,6 @@ const Skill = ({
         ...containerStyles,
         pointerEvents: disableAnimation ? "none" : "auto",
       }}
-      // onMouseEnter={() => handleSetTimeouts(true)}
-      // onMouseLeave={() => handleSetTimeouts(false)}
-      // onMouseEnter={() => setIsHovered(true)}
-      // onMouseLeave={() => setIsHovered(false)}
     >
       <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
         {!disableAnimation && (
@@ -135,28 +117,9 @@ const Skill = ({
             </>
           </RatingChangeContainer>
         )}
-
+        {apiError && <ErrorMessage>${apiError}</ErrorMessage>}
         <p style={ratingStyle}>{skill.rating}</p>
       </Rating>
-
-      {/* {
-        isHovered && (
-          <ActionOptionsContainer>
-            <SaveButton onClick={() => console.log('save')}>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <img src="/check_icon.png" alt="" style={{ height: '7px'}} />
-                <p style={{ fontSize: '11px', color: '#FFFFFF',  marginLeft: '5px'}}>Save</p>
-              </div>
-            </SaveButton>
-            <CancelButton onClick={() => console.log('cancel')}>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <img src="/x_red.png" alt="" style={{ height: '7px'}}/>
-                <p style={{ fontSize: '11px', color: '#000000', marginLeft: '5px'}}>Cancel</p>
-              </div>          
-            </CancelButton>
-          </ActionOptionsContainer>
-        )
-      } */}
     </SkillContainer>
   );
 };
@@ -203,27 +166,6 @@ const SkillImage = styled.img`
   width: 18px;
 `;
 
-// const ActionOptionsContainer = styled.div`
-//   display: flex;
-//   gap: 10px;
-// `
-
-// const SaveButton = styled.div`
-//   cursor: pointer;
-//   border-radius: 5px;
-//   background-color: #8DC63F;
-//   padding: 4px 16px 4px 16px;
-//   justify-content: space-between;
-// `
-
-// const CancelButton = styled.div`
-//   cursor: pointer;
-//   border: 1px solid #A12064;
-//   border-radius: 5px;
-//   background-color: #FFFFFF;
-//   padding: 4px 16px 4px 16px;
-// `
-
 const RatingChangeContainer = styled.div`
   z-index: 2;
   position: absolute;
@@ -238,6 +180,7 @@ const RatingChangeContainer = styled.div`
   padding: 4px 8px 4px 8px;
   transform: translate(-50%, -50%);
 `;
+
 const RatingOption = styled.div``;
 
 const RatingNumber = styled.p`
@@ -246,7 +189,6 @@ const RatingNumber = styled.p`
   }
 `;
 
-// const DeleteSkillIcon = styled.img`
-//   transition: opacity 0.3s ease;
-//   cursor: pointer;
-// `
+const ErrorMessage = styled.p`
+  color: red;
+`;

@@ -1,9 +1,15 @@
+import { Inter } from "next/font/google";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import Skill from "@/components/Skill/skill";
 import { trpc } from "@/utils/trpc";
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+});
 
 export interface ISkill {
   title: string;
@@ -18,10 +24,8 @@ const HomePage = () => {
   const { data: fetchedskills } = trpc.skills.skillByUserId.useQuery();
   const { data: fetchedtopSkills } = trpc.skills.fetchTopSkills.useQuery();
 
-  const [skills, setSkills] = useState<Array<ISkill> | []>(fetchedskills || []);
-  const [topSkills, setTopSkills] = useState<Array<ISkill> | []>(
-    fetchedtopSkills || []
-  );
+  const [skills, setSkills] = useState<Array<ISkill>>([]);
+  const [topSkills, setTopSkills] = useState<Array<ISkill>>([]);
 
   useEffect(() => {
     if (fetchedskills && fetchedtopSkills) {
@@ -30,9 +34,13 @@ const HomePage = () => {
     }
   }, [fetchedskills, fetchedtopSkills]);
 
+  const handleSkillDelete = (skillId: string) => {
+    setSkills((prev) => prev.filter((skill) => skill.id !== skillId));
+  };
+
   return (
     <>
-      <section className="profile_section">
+      <section className={inter.variable}>
         <Title>My profile</Title>
         <ProfileContainer>
           <BackgroundImage src="/profile-background.png"></BackgroundImage>
@@ -60,6 +68,7 @@ const HomePage = () => {
                         <Skill
                           key={topSkill.id}
                           fetchedSkill={topSkill}
+                          onDelete={handleSkillDelete}
                           disableAnimation={true}
                           titleStyle={{ fontSize: "10px" }}
                           profileStyle={{ width: "14px", height: "14px" }}
@@ -78,11 +87,19 @@ const HomePage = () => {
 
       <section className="skills_section">
         <Title>My skills</Title>
-        <Info>Click on a skill to make changes</Info>
+        <Info style={{ marginBottom: "35px" }}>
+          Click on a skill to make changes
+        </Info>
 
         <SkillsContainer>
           {skills?.map((skill) => {
-            return <Skill key={skill.id} fetchedSkill={skill} />;
+            return (
+              <Skill
+                key={skill.id}
+                fetchedSkill={skill}
+                onDelete={handleSkillDelete}
+              />
+            );
           })}
         </SkillsContainer>
       </section>
