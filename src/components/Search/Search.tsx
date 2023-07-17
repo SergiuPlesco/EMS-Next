@@ -6,11 +6,16 @@ interface SearchProps {
   data: Skill[];
   selectedData: string[];
   // eslint-disable-next-line no-unused-vars
-  handleSelectedItem: (title: string) => void;
+  handleSelectedItem: (value: string) => void;
   // eslint-disable-next-line no-unused-vars
-  handleCreateItem: (title: string) => void;
+  handleCreateItem: (value: string) => void;
 }
-type Skill = { id: string; title: string; authorId: string };
+type Skill = {
+  title: string;
+  id: string;
+  authorId: string;
+  rating: number;
+};
 
 const Search: React.FC<SearchProps> = ({
   data,
@@ -32,9 +37,9 @@ const Search: React.FC<SearchProps> = ({
     setMatchedItems(matches);
   };
 
-  const handleSelect = (title: string) => {
+  const handleSelect = (value: string) => {
     setSearch("");
-    handleSelectedItem(title);
+    handleSelectedItem(value);
   };
 
   const handleCreate = () => {

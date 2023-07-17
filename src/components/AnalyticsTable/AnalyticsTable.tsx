@@ -7,11 +7,11 @@ import { Rating } from "@/components/styled";
 
 const employees = [1, 2, 3];
 
-interface TableProps {
+interface AnalyticsTableProps {
   onActionClick: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
-const Table = ({ onActionClick }: TableProps) => {
+const AnalyticsTable = ({ onActionClick }: AnalyticsTableProps) => {
   return (
     <Container>
       <Header>
@@ -42,7 +42,7 @@ const Table = ({ onActionClick }: TableProps) => {
   );
 };
 
-export default Table;
+export default AnalyticsTable;
 
 const Container = styled.div`
   display: grid;
