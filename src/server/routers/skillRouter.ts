@@ -9,7 +9,7 @@ export const skillRouter = router({
       const skill = await ctx.prisma.skill.findFirst({
         where: {
           title: input.skillTitle,
-          authorId: ctx?.session?.user.id,
+          authorId: ctx?.session?.user?.id,
         },
       });
 
@@ -18,7 +18,7 @@ export const skillRouter = router({
       const newSkill = await ctx.prisma.skill.create({
         data: {
           title: input.skillTitle,
-          authorId: ctx?.session?.user.id,
+          authorId: ctx?.session?.user?.id,
           rating: input.rating,
         },
       });
