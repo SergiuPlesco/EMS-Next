@@ -38,9 +38,6 @@ const HomePage = () => {
     setSkills((prev) => prev.filter((skill) => skill.id !== skillId));
   };
 
-  if (!session) {
-    return null;
-  }
   return (
     <>
       <section className={inter.variable}>
@@ -48,9 +45,9 @@ const HomePage = () => {
         <ProfileContainer>
           <BackgroundImage src="/profile-background.png"></BackgroundImage>
           <InfoContainer>
-            <ProfileImage src={session?.user.image || ""} />
+            <ProfileImage src={session?.user?.image || ""} />
             <ProfileInfo>
-              <p>{session?.user.name}</p>
+              <p>{session?.user?.name}</p>
             </ProfileInfo>
             <BestSkillsSection>
               {topSkills.length < 3 ? (
