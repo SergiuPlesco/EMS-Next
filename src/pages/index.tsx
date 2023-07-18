@@ -38,6 +38,9 @@ const HomePage = () => {
     setSkills((prev) => prev.filter((skill) => skill.id !== skillId));
   };
 
+  if (!session) {
+    return null;
+  }
   return (
     <>
       <section className={inter.variable}>
