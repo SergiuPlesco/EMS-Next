@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import AddSkillChip from "@/components/AddSkillChip";
 import Search from "@/components/Search";
-import SkillChip from "@/components/SkillChip";
+// const searchDataFakeResponse = ["python", "react", "ruby"];
+import { Title } from "@/components/styled";
+import { trpc } from "@/utils/trpc";
 
-const searchDataFakeResponse = ["python", "react", "ruby"];
+// const searchDataFakeResponse = ["python", "react", "ruby"];
 
 interface Chip {
   title: string;
@@ -14,13 +17,16 @@ interface Chip {
 }
 
 const AddSkillPage = () => {
-  const [searchData, setSearchData] = useState<string[]>(
-    searchDataFakeResponse
-  );
+  const createSkill = trpc.skills.create.useMutation();
+  const { data, isLoading: isDataLoading } = trpc.skills.all.useQuery();
+
+  // const [searchData, setSearchData] = useState<
+  // 	{ id: string; title: string; authorId: string; rating: number }[] | undefined
+  // >(data);
   const [selectedSkillList, setSelectedSkillList] = useState<Chip[]>([]);
 
   const handleSelectedSearchItem = (title: string) => {
-    setSearchData((prev) => prev.filter((item) => item !== title));
+    // setSearchData((prev) => prev.filter((item) => item.title !== title));
 
     setSelectedSkillList((prev) => [
       ...prev,
@@ -33,13 +39,14 @@ const AddSkillPage = () => {
     ]);
   };
 
-  const handleAddChip = (title: string) => {
+  const handleAddChip = (title: string, rating: number) => {
     setSelectedSkillList((prev) => prev.filter((item) => item.title !== title));
+    createSkill.mutate({ skillTitle: title, rating });
   };
 
   const handleCancelChip = (title: string) => {
     setSelectedSkillList((prev) => prev.filter((item) => item.title !== title));
-    setSearchData((prev) => [...prev, title]);
+    // setSearchData((prev) => [...prev, title]);
   };
 
   const handleCreateSkill = (title: string) => {
@@ -73,6 +80,12 @@ const AddSkillPage = () => {
     setSelectedSkillList(newSkillList);
   };
 
+  if (isDataLoading) {
+    return <h1>Loading</h1>;
+  }
+
+  if (!data) return null;
+
   return (
     <Container>
       <div>
@@ -84,7 +97,7 @@ const AddSkillPage = () => {
       </div>
 
       <Search
-        data={searchData}
+        data={data}
         selectedData={selectedSkillList.map((item) => item.title)}
         handleSelectedItem={handleSelectedSearchItem}
         handleCreateItem={handleCreateSkill}
@@ -99,9 +112,9 @@ const AddSkillPage = () => {
 
           <ChipContainer>
             {selectedSkillList.map((item, index) => (
-              <SkillChip
+              <AddSkillChip
                 key={index}
-                onAdd={() => handleAddChip(item.title)}
+                onAdd={() => handleAddChip(item.title, item.rating)}
                 onCancel={() => handleCancelChip(item.title)}
                 onSelectRating={(rating) =>
                   handleSelectRating(item.title, rating)
@@ -123,12 +136,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
-`;
-
-const Title = styled.h1`
-  font-size: 32px;
-  font-weight: 600;
-  margin-bottom: 10px;
 `;
 
 const SkillsContainer = styled.div`

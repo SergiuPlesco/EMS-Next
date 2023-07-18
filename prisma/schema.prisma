@@ -1,29 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-generator client {
-  provider        = "prisma-client-js"
-
-}
-
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -48,11 +46,13 @@ model User {
 }
 
 model Skill {
-  id           String     @id @default(cuid())
-  value        String
-  userId       String
-  user         User       @relation(fields: [userId], references: [id])
+  id       String  @id @default(cuid())
+  title    String
+  authorId String
+  user     User?    @relation(fields: [authorId], references: [id])
+  rating   Int @default(1)
 }
+
 model VerificationToken {
   identifier String
   token      String   @unique
