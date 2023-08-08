@@ -20,7 +20,8 @@ export const userRouter = router({
     .mutation(async ({ ctx, input }) => {
       const updatedSkill = await ctx.prisma.user.update({
         where: {
-          id: ctx.session?.user.id,
+          // @ts-ignore
+          id: ctx?.session?.user.id,
         },
         data: {
           skills: {
@@ -42,6 +43,7 @@ export const userRouter = router({
     .mutation(async ({ ctx, input }) => {
       const deleteSkill = await ctx.prisma.user.update({
         where: {
+          // @ts-ignore
           id: ctx.session?.user.id,
         },
         data: {
