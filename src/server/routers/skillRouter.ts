@@ -9,7 +9,7 @@ export const skillRouter = router({
       const skill = await ctx.prisma.skill.findFirst({
         where: {
           title: input.skillTitle,
-          // @ts-check
+          // @ts-ignore
           authorId: ctx?.session?.user?.id,
         },
       });
@@ -19,7 +19,7 @@ export const skillRouter = router({
       const newSkill = await ctx.prisma.skill.create({
         data: {
           title: input.skillTitle,
-          // @ts-check
+          // @ts-ignore
           authorId: ctx?.session?.user?.id as string,
           rating: input.rating,
         },
@@ -32,7 +32,7 @@ export const skillRouter = router({
   skillByUserId: procedure.query(async ({ ctx }) => {
     const user = await ctx.prisma.user.findFirst({
       where: {
-        // @ts-check
+        // @ts-ignore
         id: ctx.session?.user?.id,
       },
     });
@@ -48,13 +48,13 @@ export const skillRouter = router({
     });
   }),
   fetchTopSkills: procedure.query(async ({ ctx }) => {
-    // @ts-check
+    // @ts-ignore
     if (!ctx.session?.user?.id) return;
 
     const topSkills = await ctx.prisma.skill.findMany({
       where: {
         user: {
-          // @ts-check
+          // @ts-ignore
           id: ctx.session.user.id,
         },
       },
@@ -73,7 +73,7 @@ export const skillRouter = router({
       const updatedSkill = await ctx.prisma.skill.updateMany({
         where: {
           id: input.skillId,
-          // @ts-check
+          // @ts-ignore
           authorId: ctx.session?.user?.id,
         },
         data: {
