@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
 import Skill from "@/components/Skill/skill";
+import UserPosition from "@/components/UserPosition/UserPosition";
 import { trpc } from "@/utils/trpc";
 
 export interface ISkill {
@@ -43,8 +44,8 @@ const Profile = () => {
           />
 
           <div>
-            <h2 className="text-3xl text-center">{session?.user?.name}</h2>
-            <p className="text-slate-500">Front End Developer</p>
+            <h2 className="text-3xl">{session?.user?.name}</h2>
+            <UserPosition />
           </div>
         </div>
         <div></div>

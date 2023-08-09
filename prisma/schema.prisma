@@ -43,6 +43,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   skills        Skill[]
+  position      String?
 }
 
 model Skill {
