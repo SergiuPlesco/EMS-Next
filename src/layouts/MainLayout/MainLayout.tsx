@@ -1,6 +1,5 @@
 import { useSession } from "next-auth/react";
 import React from "react";
-import styled from "styled-components";
 
 import Header from "@/components/Header";
 import NavigationBar from "@/components/NavigationBar";
@@ -22,21 +21,14 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     <>
       <Header />
 
-      <MainContainer>
+      <div className="flex">
         <NavigationBar />
-        <ChildrenContainer>{children}</ChildrenContainer>
-      </MainContainer>
+        <div className="w-full pt-[50px] pr-[60px] pb-0 pl-[60px]">
+          {children}
+        </div>
+      </div>
     </>
   );
 };
 
 export default MainLayout;
-
-const MainContainer = styled.main`
-  display: flex;
-`;
-
-const ChildrenContainer = styled.div`
-  width: 100%;
-  padding: 50px 60px 0 60px;
-`;
