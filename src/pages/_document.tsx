@@ -1,4 +1,3 @@
-// eslint-disable-next-line @next/next/no-document-import-in-page
 import { Head, Html, Main, NextScript } from "next/document";
 
 const Document = () => {
@@ -10,7 +9,7 @@ const Document = () => {
           rel="stylesheet"
         ></link>
       </Head>
-      <body>
+      <body className="inter.variable">
         <Main />
         <NextScript />
         <div id="post-modal"></div>
