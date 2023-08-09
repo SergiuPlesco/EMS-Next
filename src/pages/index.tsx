@@ -41,7 +41,7 @@ const HomePage = () => {
           <InfoContainer>
             <ProfileImage src={session?.user?.image || ""} />
             <ProfileInfo>
-              <p>{session?.user?.name}</p>
+              <p className="text-3xl">{session?.user?.name}</p>
             </ProfileInfo>
             <BestSkillsSection>
               {topSkills.length < 3 ? (

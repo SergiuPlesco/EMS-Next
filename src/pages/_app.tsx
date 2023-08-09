@@ -1,3 +1,5 @@
+import "@/styles/globals.css";
+
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { AppType } from "next/app";
 import type { Session } from "next-auth";
