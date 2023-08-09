@@ -5,6 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 
 import MainLayout from "@/layouts/MainLayout/MainLayout";
+import { roboto } from "@/utils/fonts";
 import { trpc } from "@/utils/trpc";
 
 const GlobalStyle = createGlobalStyle`
@@ -12,9 +13,8 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Inter;
+    font-family: ${roboto.style.fontFamily};
   }
-
 `;
 
 import theme from "@/constants/theme";

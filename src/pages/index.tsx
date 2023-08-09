@@ -1,15 +1,9 @@
-import { Inter } from "next/font/google";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import Skill from "@/components/Skill/skill";
 import { trpc } from "@/utils/trpc";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
 
 export interface ISkill {
   title: string;
@@ -40,7 +34,7 @@ const HomePage = () => {
 
   return (
     <>
-      <section className={inter.variable}>
+      <section>
         <Title>My profile</Title>
         <ProfileContainer>
           <BackgroundImage src="/profile-background.png"></BackgroundImage>
