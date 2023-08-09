@@ -3,7 +3,7 @@ import Image from "next/image";
 import React, { CSSProperties, useState } from "react";
 import styled from "styled-components";
 
-import { ISkill } from "@/pages";
+import { ISkill } from "@/types/ISkill";
 import { trpc } from "@/utils/trpc";
 
 import DeleteIcon from "../../../public/Vector.svg";

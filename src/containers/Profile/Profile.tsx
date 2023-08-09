@@ -4,14 +4,8 @@ import React, { useEffect, useState } from "react";
 
 import Skill from "@/components/Skill/skill";
 import UserPosition from "@/components/UserPosition/UserPosition";
+import { ISkill } from "@/types/ISkill";
 import { trpc } from "@/utils/trpc";
-
-export interface ISkill {
-  title: string;
-  id: string;
-  authorId: string;
-  rating: number;
-}
 
 const Profile = () => {
   const { data: session } = useSession();
