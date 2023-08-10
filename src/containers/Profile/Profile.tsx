@@ -30,9 +30,9 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex gap-10">
-      <section className="w-[30%]">
-        <div className="rounded border border-slate-300 flex gap-4 items-start p-4">
+    <div className="grid-cols-2 gap-10">
+      <section className="">
+        <div className="rounded border border-slate-300 flex flex-wrap gap-4 items-start p-4">
           <Image
             src={session?.user?.image as string}
             alt="Profile image"

@@ -5,7 +5,6 @@ import { AiFillHome } from "react-icons/ai";
 import { BsPeopleFill } from "react-icons/bs";
 import { MdAddBox } from "react-icons/md";
 import { SiSimpleanalytics } from "react-icons/si";
-import styled from "styled-components";
 
 const navigationTabs = [
   { icon: AiFillHome, path: "/", title: "Home" },
@@ -18,44 +17,28 @@ const NavigationBar = () => {
   const router = useRouter();
 
   return (
-    <Container>
+    <div className="flex flex-col gap-5 p-2 md:p-4 border-r h-[calc(100vh-65px)]">
       {navigationTabs.map((item, index) => (
-        <Tab href={item.path} key={index}>
+        <Link
+          href={item.path}
+          key={index}
+          className="flex items-center justify-center flex-col gap-2 no-underline text-[#000]"
+        >
           <item.icon
             color={router.pathname === item.path ? "#A02065" : "#E2E2E2"}
             size={28}
           />
-          <Paragraph $active={router.pathname === item.path}>
+          <p
+            className={`text-[12px] md:text-[14px] ${
+              router.pathname === item.path ? "text-[#A02065]" : "text-[#000]"
+            } `}
+          >
             {item.title}
-          </Paragraph>
-        </Tab>
+          </p>
+        </Link>
       ))}
-    </Container>
+    </div>
   );
 };
 
 export default NavigationBar;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 256px;
-  height: calc(100vh - 60px);
-  padding: 50px 42px;
-  gap: 25px;
-  border-right: 1px solid ${(props) => props.theme.border.primary};
-  box-shadow: 2px 0px 5px rgba(128, 128, 128, 0.05);
-`;
-
-const Tab = styled(Link)`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: fit-content;
-  text-decoration: none;
-  color: #000;
-`;
-
-const Paragraph = styled.p<{ $active: boolean }>`
-  color: ${(props) => (props.$active ? "#A02065" : "#000")};
-`;
