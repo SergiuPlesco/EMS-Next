@@ -1,16 +1,13 @@
 import Image from "next/image";
-import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import styled from "styled-components";
 
 import LogoImg from "@/assets/images/logo.svg";
-import ProfileImg from "@/assets/images/profile-picture.png";
 import LogoutButton from "@/components/LogoutButton/LogoutButton";
 import Switch from "@/components/Switch";
 
 const Header = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const { data: session } = useSession();
 
   const handleDarkMode = () => {
     setIsDarkMode((prev) => !prev);
@@ -23,13 +20,7 @@ const Header = () => {
 
         <ProfileContainer>
           <Switch checked={isDarkMode} handleChange={handleDarkMode} />
-          <Paragraph>Greetings, {session && session?.user?.name}</Paragraph>
-          <ProfileImage
-            src={(session && session?.user?.image) || ProfileImg}
-            width={30}
-            height={30}
-            alt="Profile"
-          />
+
           <LogoutButton />
         </ProfileContainer>
       </Container>
@@ -59,15 +50,6 @@ const ProfileContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 30px;
-`;
-
-const Paragraph = styled.p`
-  margin: 0;
-`;
-
-const ProfileImage = styled(Image)`
-  border-radius: 50%;
-  object-fit: cover;
 `;
 
 const Logo = styled(Image)`

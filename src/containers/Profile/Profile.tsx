@@ -25,20 +25,25 @@ const Profile = () => {
     setSkills((prev) => prev.filter((skill) => skill.id !== skillId));
   };
 
+  if (!session) {
+    return <h1>loading</h1>;
+  }
+
   return (
     <div className="flex gap-10">
       <section className="w-[30%]">
-        <div className="rounded border border-slate-300 flex gap-4 items-center p-4">
+        <div className="rounded border border-slate-300 flex gap-4 items-start p-4">
           <Image
             src={session?.user?.image as string}
             alt="Profile image"
             width={100}
             height={100}
             className="rounded-full"
+            priority
           />
 
           <div>
-            <h2 className="text-3xl">{session?.user?.name}</h2>
+            <h2 className="text-3xl mb-2">{session?.user?.name}</h2>
             <UserPosition />
           </div>
         </div>

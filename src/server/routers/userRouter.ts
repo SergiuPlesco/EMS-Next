@@ -56,4 +56,40 @@ export const userRouter = router({
       });
       return deleteSkill;
     }),
+  addPosition: procedure
+    .input(z.object({ positions: z.array(z.string()) }))
+    .mutation(async ({ ctx, input }) => {
+      const userPositions = await ctx.prisma.user.update({
+        where: {
+          // @ts-ignore
+          id: ctx.session?.user.id,
+        },
+        data: {
+          positions: [...input.positions],
+        },
+      });
+      return userPositions;
+    }),
+  deletePosition: procedure
+    .input(z.object({ position: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const userPositions = await ctx.prisma.user.findFirst({
+        where: {
+          // @ts-ignore
+          id: ctx.session?.user.id,
+        },
+      });
+      const updatedPositions = await ctx.prisma.user.update({
+        where: {
+          // @ts-ignore
+          id: ctx.session?.user.id,
+        },
+        data: {
+          positions: userPositions?.positions.filter(
+            (position) => position !== input.position
+          ),
+        },
+      });
+      return updatedPositions;
+    }),
 });
