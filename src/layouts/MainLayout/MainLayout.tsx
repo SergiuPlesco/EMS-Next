@@ -23,9 +23,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
       <div className="flex">
         <NavigationBar />
-        <div className="w-full pt-[50px] pr-[60px] pb-0 pl-[60px]">
-          {children}
-        </div>
+        <div className="w-full p-5 md:p-[50px]">{children}</div>
       </div>
     </>
   );

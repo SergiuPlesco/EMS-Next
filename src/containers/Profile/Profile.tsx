@@ -44,8 +44,8 @@ const Profile = () => {
 
           <div>
             <h2 className="text-3xl mb-2">{session?.user?.name}</h2>
-            <UserPosition />
           </div>
+          <UserPosition />
         </div>
         <div></div>
       </section>

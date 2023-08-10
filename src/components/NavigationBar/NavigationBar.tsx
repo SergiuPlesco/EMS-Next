@@ -29,7 +29,7 @@ const NavigationBar = () => {
             size={28}
           />
           <p
-            className={`text-[12px] md:text-[14px] ${
+            className={`text-[12px] md:text-[14px] hidden md:block ${
               router.pathname === item.path ? "text-[#A02065]" : "text-[#000]"
             } `}
           >
