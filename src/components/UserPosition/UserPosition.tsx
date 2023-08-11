@@ -1,5 +1,5 @@
 import { useSession } from "next-auth/react";
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { AiOutlineCheck } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -23,7 +23,6 @@ const UserPosition = () => {
   };
   const handleSaving = () => {
     setIsAdding(false);
-    // addPosition.mutate({ positions: [...positions] });
   };
 
   const handleChange = (e: React.FormEvent<HTMLSelectElement>) => {
@@ -44,33 +43,29 @@ const UserPosition = () => {
 
   return (
     <div className="flex flex-col items-start gap-4">
-      {positions.length === 0 ? (
-        <p className="text-slate-400 text-xs">Add your position</p>
-      ) : (
-        <div className="flex flex-col w-[250px]">
-          {positions.map((position) => {
-            return (
-              <div key={position} className="flex justify-between mb-1">
-                <p className="text-slate-500 pr-4 text-sm">{position}</p>
-                <button onClick={handleDeletePosition(position)}>
-                  <AiOutlineDelete size={16} className="text-[#a12064]" />
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      )}
+      <div className="flex flex-col w-full">
+        {positions.map((position) => {
+          return (
+            <div key={position} className="flex justify-between mb-1">
+              <p className="text-slate-500 pr-4 text-sm">{position}</p>
+              <button onClick={handleDeletePosition(position)}>
+                <AiOutlineDelete size={16} className="text-[#a12064]" />
+              </button>
+            </div>
+          );
+        })}
+      </div>
 
       {isAdding ? (
-        <div className="flex items-center justify-between w-[250px]">
+        <div className="flex items-center justify-between w-full">
           <select
             name="position"
             id="position-select"
             onChange={handleChange}
-            className="p-1 text-sm text-slate-600 rounded bg-transparent border appearance-none"
+            className="p-1 text-sm text-slate-600 rounded bg-transparent border  w-[250px]"
           >
-            <option value="" className="text-slate-400">
-              Please choose an option
+            <option value="" selected className="text-slate-400">
+              Please choose a position
             </option>
             {USER_POSITION.map((position) => {
               return (
@@ -91,7 +86,8 @@ const UserPosition = () => {
           ) : null}
         </div>
       ) : (
-        <div className="flex items-center justify-end w-[250px]">
+        <div className="flex items-center justify-end gap-2 w-full">
+          <p className="text-slate-400 text-xs">Add position</p>
           <button onClick={handelEditing}>
             <AiOutlinePlus size={16} className="text-[#8dc63f]" />
           </button>

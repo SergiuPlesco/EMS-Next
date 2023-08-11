@@ -30,25 +30,27 @@ const Profile = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-      <section className="">
-        <div className="rounded border border-slate-300 flex flex-wrap gap-4 items-start p-4">
-          <Image
-            src={session?.user?.image as string}
-            alt="Profile image"
-            width={75}
-            height={75}
-            className="rounded-full"
-            priority
-          />
+    <div className="grid grid-cols-1 lg:grid-cols-[30%_70%] gap-10">
+      <div>
+        <div className="flex gap-4 items-center mb-4">
+          <div>
+            <Image
+              src={session?.user?.image as string}
+              alt="Profile image"
+              width={75}
+              height={75}
+              className="rounded-full"
+              priority
+            />
+          </div>
 
           <div>
-            <h2 className="text-3xl mb-2">{session?.user?.name}</h2>
+            <h2 className="text-xl">{session?.user?.name}</h2>
+            <p className="text-xs text-slate-500">{session?.user?.email}</p>
           </div>
-          <UserPosition />
         </div>
-        <div></div>
-      </section>
+        <UserPosition />
+      </div>
 
       <section className="skills_section">
         <p className="text-3xl font-semibold mb-4">Skills</p>

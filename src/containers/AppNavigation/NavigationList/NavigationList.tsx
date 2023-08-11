@@ -19,12 +19,12 @@ const NavigationList = () => {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col gap-5 p-2 md:p-4 md:pt-[50px] md:border-r h-[calc(100vh-65px)]">
+    <div className="flex flex-col gap-5 p-2 md:p-4 md:pt-[25px] md:border-r h-[calc(100vh-65px)]">
       {navigationTabs.map((item, index) => (
         <Link
           href={item.path}
           key={index}
-          className="flex items-end md:justify-center pl-4 md:p-0 md:flex-col gap-2 no-underline text-[#000]"
+          className="flex items-end md:items-center md:justify-center pl-4 md:p-0 md:flex-col gap-2 no-underline text-[#000]"
         >
           <item.icon
             color={router.pathname === item.path ? "#A02065" : "#E2E2E2"}
@@ -39,7 +39,7 @@ const NavigationList = () => {
           </p>
         </Link>
       ))}
-      <div className="pl-4">
+      <div className="pl-4 md:p-0">
         <LogoutButton />
       </div>
     </div>

@@ -25,7 +25,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         <div className="hidden md:block">
           <DesktopNav />
         </div>
-        <div className="w-full p-5 md:p-[50px]">{children}</div>
+        <div className="w-full p-5 md:p-[25px]">{children}</div>
       </div>
     </>
   );
