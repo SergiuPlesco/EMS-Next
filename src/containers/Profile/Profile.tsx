@@ -30,14 +30,14 @@ const Profile = () => {
   }
 
   return (
-    <div className="grid-cols-2 gap-10">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
       <section className="">
         <div className="rounded border border-slate-300 flex flex-wrap gap-4 items-start p-4">
           <Image
             src={session?.user?.image as string}
             alt="Profile image"
-            width={100}
-            height={100}
+            width={75}
+            height={75}
             className="rounded-full"
             priority
           />

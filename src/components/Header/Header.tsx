@@ -1,10 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
-import styled from "styled-components";
 
 import LogoImg from "@/assets/images/logo.svg";
-import LogoutButton from "@/components/LogoutButton/LogoutButton";
 import Switch from "@/components/Switch";
+import MobileNav from "@/containers/AppNavigation/MobileNav/MobileNav";
 
 const Header = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -14,14 +14,17 @@ const Header = () => {
   };
 
   return (
-    <div className="border shadow-md py-0 pl-1 pr-4">
+    <div className="relative border-b shadow-md py-0 pl-1 pr-4">
       <div className="flex justify-between items-center w-full max-w-[1920px] mx-auto">
-        <Logo src={LogoImg} alt="Logo" />
+        <Link href="/">
+          <Image src={LogoImg} alt="Logo" />
+        </Link>
 
         <div className="flex items-center gap-4">
           <Switch checked={isDarkMode} handleChange={handleDarkMode} />
-
-          <LogoutButton />
+          <div className="md:hidden">
+            <MobileNav />
+          </div>
         </div>
       </div>
     </div>
@@ -29,7 +32,3 @@ const Header = () => {
 };
 
 export default Header;
-
-const Logo = styled(Image)`
-  -webkit-user-drag: none;
-`;

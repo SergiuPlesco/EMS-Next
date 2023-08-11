@@ -140,7 +140,6 @@ const SkillContainer = styled.div`
 
 const Rating = styled.div`
   cursor: pointer;
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
