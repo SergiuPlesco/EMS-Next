@@ -61,12 +61,10 @@ const UserPosition = () => {
           <select
             name="position"
             id="position-select"
+            defaultValue="Please choose a position"
             onChange={handleChange}
             className="p-1 text-sm text-slate-600 rounded bg-transparent border  w-[250px]"
           >
-            <option value="" selected className="text-slate-400">
-              Please choose a position
-            </option>
             {USER_POSITION.map((position) => {
               return (
                 <option

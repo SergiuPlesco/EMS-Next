@@ -2,7 +2,6 @@ import { useSession } from "next-auth/react";
 import React from "react";
 
 import Header from "@/components/Header";
-import DesktopNav from "@/containers/AppNavigation/DesktopNav/DesktopNav";
 
 import SignInLayout from "../SignInLayout/SignInLayout";
 
@@ -21,11 +20,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     <>
       <Header />
 
-      <div className="flex">
-        <div className="hidden md:block">
-          <DesktopNav />
-        </div>
-        <div className="w-full p-5 md:p-[25px]">{children}</div>
+      <div className="flex max-w-[1200px] mx-auto">
+        <div className="w-full p-5 md:mt-[25px]">{children}</div>
       </div>
     </>
   );
