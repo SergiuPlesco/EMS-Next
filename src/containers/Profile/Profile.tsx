@@ -30,8 +30,8 @@ const Profile = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[30%_70%] gap-10">
-      <div>
+    <div className="flex flex-col gap-16">
+      <section>
         <div className="flex gap-4 items-center mb-4">
           <div>
             <Image
@@ -50,10 +50,10 @@ const Profile = () => {
           </div>
         </div>
         <UserPosition />
-      </div>
+      </section>
 
-      <section className="skills_section">
-        <p className="text-3xl font-semibold mb-4">Skills</p>
+      <section>
+        <p className="text-2xl mb-4">Skills</p>
         <p className="text-sm font-normal mb-8">
           Click on a skill to make changes
         </p>

@@ -43,7 +43,7 @@ const UserPosition = () => {
 
   return (
     <div className="flex flex-col items-start gap-4">
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full max-w-[300px]">
         {positions.map((position) => {
           return (
             <div key={position} className="flex justify-between mb-1">
@@ -57,7 +57,7 @@ const UserPosition = () => {
       </div>
 
       {isAdding ? (
-        <div className="flex items-center justify-between w-full">
+        <div className="flex items-center justify-between w-full max-w-[300px]">
           <select
             name="position"
             id="position-select"
@@ -84,7 +84,7 @@ const UserPosition = () => {
           ) : null}
         </div>
       ) : (
-        <div className="flex items-center justify-end gap-2 w-full">
+        <div className="flex items-center justify-end gap-2 w-full max-w-[300px]">
           <p className="text-slate-400 text-xs">Add position</p>
           <button onClick={handelEditing}>
             <AiOutlinePlus size={16} className="text-[#8dc63f]" />
