@@ -30,6 +30,8 @@ const UserPosition = () => {
 
   const handleChange = (e: React.FormEvent<HTMLSelectElement>) => {
     const positionAdded = positions.includes(e.currentTarget.value);
+
+    if (e.currentTarget.value === "") return;
     if (positionAdded) return;
 
     setPositions([...positions, e.currentTarget.value]);
@@ -96,6 +98,9 @@ const UserPosition = () => {
             onChange={handleChange}
             className="p-1 text-sm text-slate-600 rounded bg-transparent border  w-[250px]"
           >
+            <option value="" className="text-sm text-slate-400">
+              Add a position
+            </option>
             {USER_POSITION.map((position) => {
               return (
                 <option
