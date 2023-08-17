@@ -3,8 +3,10 @@ import React, { useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { AiOutlineCheck } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineEdit } from "react-icons/ai";
 
 import { USER_POSITION } from "@/constants/common";
+import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
 
 const UserPosition = () => {
@@ -16,20 +18,24 @@ const UserPosition = () => {
   });
 
   const [positions, setPositions] = useState<string[]>([]);
-  const [isAdding, setIsAdding] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const handelEditing = () => {
-    setIsAdding(true);
+    setIsEditing(true);
   };
+
   const handleSaving = () => {
-    setIsAdding(false);
+    setIsEditing(false);
   };
 
   const handleChange = (e: React.FormEvent<HTMLSelectElement>) => {
+    const positionAdded = positions.includes(e.currentTarget.value);
+    if (positionAdded) return;
+
     setPositions([...positions, e.currentTarget.value]);
-    setIsAdding(false);
     addPosition.mutate({ positions: [...positions, e.currentTarget.value] });
   };
+
   const handleDeletePosition = (position: string) => () => {
     setPositions(positions.filter((pos) => pos !== position));
     deletePosition.mutate({ position });
@@ -43,25 +49,50 @@ const UserPosition = () => {
 
   return (
     <div className="flex flex-col items-start gap-4">
+      {positions.length === 0 && !isEditing && (
+        <div className="flex items-center justify-end gap-2 w-full max-w-[300px]">
+          <button
+            className="flex items-center justify-end gap-2"
+            onClick={handelEditing}
+          >
+            <p className="text-slate-400 text-xs">Add position</p>
+            <AiOutlinePlus size={16} className="text-[#8dc63f]" />
+          </button>
+        </div>
+      )}
+
       <div className="flex flex-col w-full max-w-[300px]">
-        {positions.map((position) => {
-          return (
-            <div key={position} className="flex justify-between mb-1">
-              <p className="text-slate-500 pr-4 text-sm">{position}</p>
-              <button onClick={handleDeletePosition(position)}>
-                <AiOutlineDelete size={16} className="text-[#a12064]" />
+        <div className="flex justify-between">
+          <div className="w-full">
+            {positions.map((position) => {
+              return (
+                <div key={generateId()} className="flex justify-between mb-1">
+                  <p className="text-slate-500 pr-4 text-sm">{position}</p>
+                  {isEditing ? (
+                    <button onClick={handleDeletePosition(position)}>
+                      <AiOutlineDelete size={16} className="text-[#a12064]" />
+                    </button>
+                  ) : null}
+                </div>
+              );
+            })}
+          </div>
+          {positions.length > 0 && !isEditing && (
+            <div>
+              <button onClick={handelEditing}>
+                <AiOutlineEdit size={16} className="text-slate-600" />
               </button>
             </div>
-          );
-        })}
+          )}
+        </div>
       </div>
 
-      {isAdding ? (
+      {isEditing ? (
         <div className="flex items-center justify-between w-full max-w-[300px]">
           <select
             name="position"
             id="position-select"
-            defaultValue="Please choose a position"
+            defaultValue="Add a position"
             onChange={handleChange}
             className="p-1 text-sm text-slate-600 rounded bg-transparent border  w-[250px]"
           >
@@ -77,20 +108,12 @@ const UserPosition = () => {
               );
             })}
           </select>
-          {positions.length > 0 ? (
-            <button onClick={handleSaving}>
-              <AiOutlineCheck size={16} className="text-[#662d91]" />
-            </button>
-          ) : null}
-        </div>
-      ) : (
-        <div className="flex items-center justify-end gap-2 w-full max-w-[300px]">
-          <p className="text-slate-400 text-xs">Add position</p>
-          <button onClick={handelEditing}>
-            <AiOutlinePlus size={16} className="text-[#8dc63f]" />
+
+          <button onClick={handleSaving}>
+            <AiOutlineCheck size={16} className="text-[#662d91]" />
           </button>
         </div>
-      )}
+      ) : null}
     </div>
   );
 };

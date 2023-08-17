@@ -31,8 +31,8 @@ const Profile = () => {
 
   return (
     <div className="flex flex-col gap-16">
-      <section>
-        <div className="flex gap-4 items-center mb-4">
+      <section className="">
+        <div className="flex gap-4 items-center mb-8">
           <div>
             <Image
               src={session?.user?.image as string}
