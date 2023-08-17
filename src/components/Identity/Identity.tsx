@@ -7,7 +7,7 @@ interface Props {
   userEmail: string;
 }
 
-const UserIdentity = ({ userImage, userName, userEmail }: Props) => {
+const Identity = ({ userImage, userName, userEmail }: Props) => {
   return (
     <div className="flex gap-4 items-center mb-8">
       <div>
@@ -22,11 +22,11 @@ const UserIdentity = ({ userImage, userName, userEmail }: Props) => {
       </div>
 
       <div>
-        <h2 className="text-xl">{userName}</h2>
+        <h2 className="text-xl font-semibold">{userName}</h2>
         <p className="text-xs text-slate-500">{userEmail}</p>
       </div>
     </div>
   );
 };
 
-export default UserIdentity;
+export default Identity;

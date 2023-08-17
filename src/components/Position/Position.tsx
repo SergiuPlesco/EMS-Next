@@ -3,13 +3,13 @@ import React, { useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { AiOutlineCheck } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
-import { AiOutlineEdit } from "react-icons/ai";
+import { MdModeEdit } from "react-icons/md";
 
 import { USER_POSITION } from "@/constants/common";
 import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
 
-const UserPosition = () => {
+const Position = () => {
   const { data: sesssion } = useSession();
   const addPosition = trpc.users.addPosition.useMutation();
   const deletePosition = trpc.users.deletePosition.useMutation();
@@ -82,7 +82,7 @@ const UserPosition = () => {
           {positions.length > 0 && !isEditing && (
             <div>
               <button onClick={handelEditing}>
-                <AiOutlineEdit size={16} className="text-slate-600" />
+                <MdModeEdit size={16} className="text-slate-600" />
               </button>
             </div>
           )}
@@ -123,4 +123,4 @@ const UserPosition = () => {
   );
 };
 
-export default UserPosition;
+export default Position;
