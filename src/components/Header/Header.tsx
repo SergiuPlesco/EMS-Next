@@ -20,7 +20,7 @@ const Header = () => {
       <div className="flex justify-between items-center w-full max-w-[1200px] mx-auto">
         <div className="flex items-center gap-2">
           <Link href="/" style={{ display: "block" }}>
-            <Image src={LogoImg} alt="Logo" />
+            <Image src={LogoImg} alt="Logo" width={128} height={59} />
           </Link>
           <div className="hidden md:block">
             <DesktopNav />

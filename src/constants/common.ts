@@ -16,3 +16,26 @@ export const USER_POSITION = [
 
   { value: "Human Resource Specilist", label: "Human Resource Specialist" },
 ];
+
+export const TECHNOLOGIES = [
+  { value: "ReactJs", label: "ReactJs" },
+  { value: "NextJs", label: "NextJs" },
+  { value: "VueJs", label: "VueJs" },
+  { value: "JavaScript", label: "JavaScript" },
+  { value: "PHP", label: "PHP" },
+  { value: "CSS", label: "CSS" },
+  { value: "Java", label: "Java" },
+  { value: "Laravel", label: "Laravel" },
+  { value: "NestJs", label: "NestJs" },
+  { value: "Python", label: "Python" },
+  { value: "Machine Learning", label: "Machine Learning" },
+  { value: "Project Manager", label: "Machine Learning" },
+  { value: "ExpressJs", label: "ExpressJs" },
+  { value: "NodeJs", label: "NodeJs" },
+  { value: "MySQL", label: "MySQL" },
+  { value: "PostgreSQL", label: "PostgreSQL" },
+  { value: "Jira", label: "Jira" },
+  { value: "Redux", label: "Redux" },
+  { value: "Yup", label: "Yup" },
+  { value: "React-hook-form", label: "React-hook-form" },
+];
