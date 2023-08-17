@@ -1,30 +1,14 @@
 import React from "react";
-import styled from "styled-components";
 
 import LoginButton from "@/components/LoginButton/LoginButton";
 
 const SignInLayout = () => {
   return (
-    <Container>
-      <LogoText>smartskills</LogoText>
+    <div className="flex flex-col justify-center items-center gap-4 pt-[5rem] mb-4">
+      <p className="font-bold text-2xl">smartskills</p>
       <LoginButton />
-    </Container>
+    </div>
   );
 };
 
 export default SignInLayout;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  padding-top: 5rem;
-`;
-
-const LogoText = styled.p`
-  font-weight: bold;
-  letter-spacing: 0.1rem;
-  font-size: 1.5rem;
-`;
