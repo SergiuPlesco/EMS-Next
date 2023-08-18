@@ -16,13 +16,17 @@ const Tabs = ({ elements }: Props) => {
   };
   return (
     <div>
-      <ul className="flex gap-4">
+      <ul className="flex gap-4 w-full border-b mb-8">
         {elements.map((element, index: number) => {
           return (
             <li
               key={generateId()}
               onClick={handleTabChange(index)}
-              className="cursor-pointer"
+              className={`cursor-pointer border-b mb-[-1px] p-2 ${
+                activeTab === index
+                  ? "border-[#662d91] text-[#662d91]"
+                  : "text-slate-500"
+              }`}
             >
               {element.label}
             </li>
