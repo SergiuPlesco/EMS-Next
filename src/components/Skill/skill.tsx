@@ -12,7 +12,7 @@ type IProps = {
   fetchedSkill: {
     title: string;
     id: string;
-    authorId: string;
+    authorId: string | null;
     rating: number;
   };
   onDelete: (skillId: string) => void;
