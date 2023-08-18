@@ -21,8 +21,6 @@ const Skills = () => {
   };
   return (
     <>
-      <p className="text-xl mb-4">Skills</p>
-
       <div className="w-full gap-5 flex flex-wrap">
         {skills?.map((skill) => {
           return (
