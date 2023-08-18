@@ -12,7 +12,7 @@ interface SearchProps {
 }
 type Skill = {
   title: string;
-  id: string;
+  id: number;
   authorId: string | null;
   rating: number;
 };
