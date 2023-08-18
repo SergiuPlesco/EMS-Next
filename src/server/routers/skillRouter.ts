@@ -68,7 +68,7 @@ export const skillRouter = router({
   }),
 
   updateRating: procedure
-    .input(z.object({ skillId: z.string(), ratingId: z.number() }))
+    .input(z.object({ skillId: z.number(), ratingId: z.number() }))
     .mutation(async ({ ctx, input }) => {
       const updatedSkill = await ctx.prisma.skill.updateMany({
         where: {
