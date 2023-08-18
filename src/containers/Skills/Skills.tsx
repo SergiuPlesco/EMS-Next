@@ -22,15 +22,19 @@ const Skills = () => {
   return (
     <>
       <div className="w-full gap-5 flex flex-wrap">
-        {skills?.map((skill) => {
-          return (
-            <Skill
-              key={skill.id}
-              fetchedSkill={skill}
-              onDelete={handleSkillDelete}
-            />
-          );
-        })}
+        {skills.length === 0 ? (
+          <div>no skill, add some</div>
+        ) : (
+          skills?.map((skill) => {
+            return (
+              <Skill
+                key={skill.id}
+                fetchedSkill={skill}
+                onDelete={handleSkillDelete}
+              />
+            );
+          })
+        )}
       </div>
     </>
   );
