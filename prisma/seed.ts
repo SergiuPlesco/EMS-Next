@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-import { POSITIONS } from "../src/constants/common";
+import { POSITIONS, TECHNOLOGIES } from "../src/constants/common";
 const prisma = new PrismaClient();
 
 async function main() {
@@ -8,6 +8,11 @@ async function main() {
     await prisma.position.deleteMany();
     await prisma.position.createMany({
       data: POSITIONS,
+    });
+
+    await prisma.skill.deleteMany();
+    await prisma.skill.createMany({
+      data: TECHNOLOGIES,
     });
   } catch (error) {
     return error;
