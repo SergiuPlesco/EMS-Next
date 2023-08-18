@@ -49,9 +49,14 @@ model User {
 model Skill {
   id       String  @id @default(cuid())
   title    String
-  authorId String
+  authorId String?
   user     User?    @relation(fields: [authorId], references: [id])
   rating   Int @default(1)
+}
+
+model Position {
+  id          Int  @id @default(autoincrement())
+  title       String
 }
 
 model VerificationToken {

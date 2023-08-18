@@ -5,12 +5,12 @@ import { AiOutlineCheck } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
 import { MdModeEdit } from "react-icons/md";
 
-import { USER_POSITION } from "@/constants/common";
 import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
 
 const Position = () => {
   const { data: sesssion } = useSession();
+  const { data: positionsList } = trpc.positions.all.useQuery();
   const addPosition = trpc.users.addPosition.useMutation();
   const deletePosition = trpc.users.deletePosition.useMutation();
   const user = trpc.users.getById.useQuery({
@@ -48,6 +48,10 @@ const Position = () => {
       setPositions([...user.data?.positions]);
     }
   }, [user.data?.positions]);
+
+  if (positionsList == null) {
+    return;
+  }
 
   return (
     <div className="flex flex-col items-start gap-4">
@@ -101,14 +105,14 @@ const Position = () => {
             <option value="" className="text-sm text-slate-400">
               Add a position
             </option>
-            {USER_POSITION.map((position) => {
+            {positionsList.map((position) => {
               return (
                 <option
-                  key={position.value}
-                  value={position.value}
+                  key={position.id}
+                  value={position.title}
                   className="text-sm"
                 >
-                  {position.label}
+                  {position.title}
                 </option>
               );
             })}
