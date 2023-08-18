@@ -50,7 +50,7 @@ const Position = () => {
   }, [user.data?.positions]);
 
   if (positionsList == null) {
-    return;
+    return null;
   }
 
   return (
