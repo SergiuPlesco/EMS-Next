@@ -11,11 +11,11 @@ import DeleteIcon from "../../../public/Vector.svg";
 type IProps = {
   fetchedSkill: {
     title: string;
-    id: string;
+    id: number;
     authorId: string | null;
     rating: number;
   };
-  onDelete: (skillId: string) => void;
+  onDelete: (skillId: number) => void;
   containerStyles?: CSSProperties;
   titleStyle?: CSSProperties;
   profileStyle?: CSSProperties;
@@ -46,7 +46,7 @@ const Skill = ({
     onDelete(skill.id);
   };
 
-  const handleRatingUpdate = (skillId: string, rating: number) => {
+  const handleRatingUpdate = (skillId: number, rating: number) => {
     try {
       updateSkillRating.mutate({ rating, skillId });
 

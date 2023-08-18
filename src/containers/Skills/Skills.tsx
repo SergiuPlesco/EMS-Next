@@ -16,7 +16,7 @@ const Skills = () => {
     }
   }, [fetchedskills, fetchedtopSkills]);
 
-  const handleSkillDelete = (skillId: string) => {
+  const handleSkillDelete = (skillId: number) => {
     setSkills((prev) => prev.filter((skill) => skill.id !== skillId));
   };
   return (

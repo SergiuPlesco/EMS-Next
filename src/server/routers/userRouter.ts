@@ -16,7 +16,7 @@ export const userRouter = router({
       });
     }),
   updateSKill: procedure
-    .input(z.object({ rating: z.number(), skillId: z.string() }))
+    .input(z.object({ rating: z.number(), skillId: z.number() }))
     .mutation(async ({ ctx, input }) => {
       const updatedSkill = await ctx.prisma.user.update({
         where: {
@@ -39,7 +39,7 @@ export const userRouter = router({
       return updatedSkill;
     }),
   deleteSkill: procedure
-    .input(z.object({ skillId: z.string() }))
+    .input(z.object({ skillId: z.number() }))
     .mutation(async ({ ctx, input }) => {
       const deleteSkill = await ctx.prisma.user.update({
         where: {
