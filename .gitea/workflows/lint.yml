@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Nodejs
         uses: actions/setup-node@v3
@@ -23,7 +23,7 @@ jobs:
           npm run lint                              
 
       - name: Notify
-        uses: https://github.com/teknatha136/actions-google-chat-text-message@main
+        uses: teknatha136/actions-google-chat-text-message@main
         with:
           google-chat-webhook: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
           text-message: "Smartskills Lint Checks <https://git.s4.smartdata.solutions/${{ gitea.repository }}/actions/runs/${{ gitea.run_number }}|#${{ gitea.run_number }}> for branch *${{ gitea.head_ref || gitea.ref_name }}*, *${{ gitea.event_name }}* by *${{ gitea.actor }}*\nStatus: *${{ job.status }}*"
