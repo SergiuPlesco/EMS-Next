@@ -16,4 +16,4 @@ fi
 echo "$DOCKER_TOKEN" | docker login -u administrator --password-stdin git.s4.smartdata.solutions
 
 docker pull git.s4.smartdata.solutions/smartdata/${CONTAINER_NAME}
-docker run -d --name "${CONTAINER_NAME}" -p ${CONTAINER_PORT}:3000 git.s4.smartdata.solutions/smartdata/${CONTAINER_NAME}
+docker run --restart always -d --name "${CONTAINER_NAME}" -p ${CONTAINER_PORT}:3000 git.s4.smartdata.solutions/smartdata/${CONTAINER_NAME}
