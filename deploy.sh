@@ -13,7 +13,7 @@ if [ -z "$CONTAINER_PORT" ]; then
     CONTAINER_PORT=9093
 fi
 
-echo "$DOCKER_TOKEN" | docker login -u administrator --password-stdin git.s4.smartdata.solutions
+echo "$DOCKER_TOKEN" | docker login -u administrator --password-stdin git.smartdata.solutions
 
-docker pull git.s4.smartdata.solutions/smartdata/${CONTAINER_NAME}
-docker run -d --name "${CONTAINER_NAME}" -p ${CONTAINER_PORT}:3000 git.s4.smartdata.solutions/smartdata/${CONTAINER_NAME}
+docker pull git.smartdata.solutions/smartdata/${CONTAINER_NAME}
+docker run --restart always -d --name "${CONTAINER_NAME}" -p ${CONTAINER_PORT}:3000 git.smartdata.solutions/smartdata/${CONTAINER_NAME}
