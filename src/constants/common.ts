@@ -17,7 +17,6 @@ export const POSITIONS = [
 
 export const TECHNOLOGIES = [
   { title: "ReactJs" },
-  { title: "ReactJs" },
   { title: "NextJs" },
   { title: "VueJs" },
   { title: "JavaScript" },
@@ -25,9 +24,7 @@ export const TECHNOLOGIES = [
   { title: "CSS" },
   { title: "Java" },
   { title: "Laravel" },
-  { title: "NestJs" },
   { title: "Python" },
-  { title: "Machine Learning" },
   { title: "Machine Learning" },
   { title: "ExpressJs" },
   { title: "NodeJs" },
@@ -37,4 +34,9 @@ export const TECHNOLOGIES = [
   { title: "Redux" },
   { title: "Yup" },
   { title: "React-hook-form" },
+  { title: "Project Manager" },
+  { title: "Quality Assurance" },
+  { title: "tRPC" },
+  { title: "User Experience" },
+  { title: "User Interface" },
 ];

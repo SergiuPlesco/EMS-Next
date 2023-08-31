@@ -29,6 +29,19 @@ export const skillRouter = router({
   all: procedure.query(({ ctx }) => {
     return ctx.prisma.skill.findMany();
   }),
+  searchSkill: procedure
+    .input(z.object({ searchQuery: z.string() }))
+    .query(async ({ ctx, input }) => {
+      if (input.searchQuery == "") return [];
+      return ctx.prisma.skill.findMany({
+        where: {
+          title: {
+            startsWith: input.searchQuery,
+            mode: "insensitive",
+          },
+        },
+      });
+    }),
   skillByUserId: procedure.query(async ({ ctx }) => {
     const user = await ctx.prisma.user.findFirst({
       where: {
