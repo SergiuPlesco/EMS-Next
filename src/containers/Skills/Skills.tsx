@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { AiOutlineSearch } from "react-icons/ai";
 import { AiOutlinePlus } from "react-icons/ai";
 import { AiOutlineCheck } from "react-icons/ai";
 
-import Skill from "@/components/Skill/skill";
+import Autocomplete from "@/components/Autocomplete/Autocomplete";
+import Skill from "@/components/SkillItem/SkillItem";
 // import { ISkill } from "@/types/ISkill";
 import { trpc } from "@/utils/trpc";
 
@@ -11,13 +11,19 @@ const Skills = () => {
   const [isSearchInputVisible, setIsSearchInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
-  const { data: fetchedskills } = trpc.skills.skillByUserId.useQuery();
+  const { data: fetchedskills, refetch } = trpc.skills.skillByUserId.useQuery();
 
   const { data: searchList } = trpc.skills.searchSkill.useQuery({
     searchQuery: inputValue,
   });
 
-  const addSkill = trpc.users.addSKill.useMutation();
+  // const addSkill = trpc.users.addSKill.useMutation({
+  // 	onSuccess: () => refetch(),
+  // });
+
+  const createSkill = trpc.skills.create.useMutation({
+    onSuccess: () => refetch(),
+  });
 
   const handleSearchInputVisibility = () => {
     setIsSearchInputVisible((prevState) => !prevState);
@@ -28,7 +34,7 @@ const Skills = () => {
     setInputValue(value);
   };
   const handleOnClick = (skillTitle: string) => () => {
-    addSkill.mutate({
+    createSkill.mutate({
       skillTitle,
     });
   };
@@ -63,34 +69,12 @@ const Skills = () => {
                   : "sm:w-0 sm:opacity-0 md:w-0 md:opacity-0"
               }`}
             >
-              <span className="absolute top-3 left-0 pl-2 flex items-center pointer-envents-none">
-                <AiOutlineSearch />
-              </span>
-              <input
-                type="search"
-                className={`border rounded p-2 pl-8 text-sm w-full text-slate-900 focus:border-slate-500 outline-0`}
-                placeholder="Search a skill..."
+              <Autocomplete
                 value={inputValue}
                 onChange={handleOnChange}
+                options={searchList}
+                onClick={handleOnClick}
               />
-
-              {searchList && searchList.length ? (
-                <div className="border w-full h-full rounded mt-1">
-                  <ul>
-                    {searchList.map((skill) => {
-                      return (
-                        <li
-                          key={skill.id}
-                          className="px-2 py-1 m-0 flex items-center hover:bg-slate-300 cursor-pointer"
-                          onClick={handleOnClick(skill.title)}
-                        >
-                          <p className="m-0">{skill.title}</p>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              ) : null}
             </div>
           </div>
         </div>

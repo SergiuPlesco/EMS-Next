@@ -4,7 +4,7 @@ import { procedure, router } from "../trpc";
 
 export const skillRouter = router({
   create: procedure
-    .input(z.object({ skillTitle: z.string(), rating: z.number() }))
+    .input(z.object({ skillTitle: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const skill = await ctx.prisma.skill.findFirst({
         where: {
@@ -21,7 +21,6 @@ export const skillRouter = router({
           title: input.skillTitle,
           // @ts-ignore
           authorId: ctx?.session?.user?.id as string,
-          rating: input.rating,
         },
       });
       return newSkill;

@@ -16,15 +16,24 @@ export const userRouter = router({
       });
     }),
   addSKill: procedure
-    .input(z.object({ skillTitle: z.string() }))
-    .mutation(async ({ ctx }) => {
+    .input(z.object({ skillTitle: z.string(), skillId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
       const addedSkill = await ctx.prisma.user.update({
         where: {
           // @ts-ignore
           id: ctx?.session?.user.id,
         },
         data: {
-          skills: {},
+          skills: {
+            update: {
+              where: {
+                id: 5,
+              },
+              data: {
+                title: input.skillTitle,
+              },
+            },
+          },
         },
       });
       return addedSkill;
