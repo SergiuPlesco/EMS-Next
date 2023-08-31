@@ -15,8 +15,31 @@ export const userRouter = router({
         },
       });
     }),
+  addSKill: procedure
+    .input(z.object({ skillTitle: z.string(), skillId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const addedSkill = await ctx.prisma.user.update({
+        where: {
+          // @ts-ignore
+          id: ctx?.session?.user.id,
+        },
+        data: {
+          skills: {
+            update: {
+              where: {
+                id: 5,
+              },
+              data: {
+                title: input.skillTitle,
+              },
+            },
+          },
+        },
+      });
+      return addedSkill;
+    }),
   updateSKill: procedure
-    .input(z.object({ rating: z.number(), skillId: z.string() }))
+    .input(z.object({ rating: z.number(), skillId: z.number() }))
     .mutation(async ({ ctx, input }) => {
       const updatedSkill = await ctx.prisma.user.update({
         where: {
@@ -39,7 +62,7 @@ export const userRouter = router({
       return updatedSkill;
     }),
   deleteSkill: procedure
-    .input(z.object({ skillId: z.string() }))
+    .input(z.object({ skillId: z.number() }))
     .mutation(async ({ ctx, input }) => {
       const deleteSkill = await ctx.prisma.user.update({
         where: {
@@ -55,5 +78,41 @@ export const userRouter = router({
         },
       });
       return deleteSkill;
+    }),
+  addPosition: procedure
+    .input(z.object({ positions: z.array(z.string()) }))
+    .mutation(async ({ ctx, input }) => {
+      const userPositions = await ctx.prisma.user.update({
+        where: {
+          // @ts-ignore
+          id: ctx.session?.user.id,
+        },
+        data: {
+          positions: [...input.positions],
+        },
+      });
+      return userPositions;
+    }),
+  deletePosition: procedure
+    .input(z.object({ position: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const userPositions = await ctx.prisma.user.findFirst({
+        where: {
+          // @ts-ignore
+          id: ctx.session?.user.id,
+        },
+      });
+      const updatedPositions = await ctx.prisma.user.update({
+        where: {
+          // @ts-ignore
+          id: ctx.session?.user.id,
+        },
+        data: {
+          positions: userPositions?.positions.filter(
+            (position) => position !== input.position
+          ),
+        },
+      });
+      return updatedPositions;
     }),
 });

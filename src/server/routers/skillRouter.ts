@@ -4,7 +4,7 @@ import { procedure, router } from "../trpc";
 
 export const skillRouter = router({
   create: procedure
-    .input(z.object({ skillTitle: z.string(), rating: z.number() }))
+    .input(z.object({ skillTitle: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const skill = await ctx.prisma.skill.findFirst({
         where: {
@@ -21,7 +21,6 @@ export const skillRouter = router({
           title: input.skillTitle,
           // @ts-ignore
           authorId: ctx?.session?.user?.id as string,
-          rating: input.rating,
         },
       });
       return newSkill;
@@ -29,6 +28,19 @@ export const skillRouter = router({
   all: procedure.query(({ ctx }) => {
     return ctx.prisma.skill.findMany();
   }),
+  searchSkill: procedure
+    .input(z.object({ searchQuery: z.string() }))
+    .query(async ({ ctx, input }) => {
+      if (input.searchQuery == "") return [];
+      return ctx.prisma.skill.findMany({
+        where: {
+          title: {
+            startsWith: input.searchQuery,
+            mode: "insensitive",
+          },
+        },
+      });
+    }),
   skillByUserId: procedure.query(async ({ ctx }) => {
     const user = await ctx.prisma.user.findFirst({
       where: {
@@ -68,7 +80,7 @@ export const skillRouter = router({
   }),
 
   updateRating: procedure
-    .input(z.object({ skillId: z.string(), ratingId: z.number() }))
+    .input(z.object({ skillId: z.number(), ratingId: z.number() }))
     .mutation(async ({ ctx, input }) => {
       const updatedSkill = await ctx.prisma.skill.updateMany({
         where: {
