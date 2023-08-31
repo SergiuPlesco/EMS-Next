@@ -3,14 +3,12 @@ import { useRouter } from "next/router";
 import React from "react";
 import { AiFillHome } from "react-icons/ai";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
-import { AiFillPlusSquare } from "react-icons/ai";
 import { AiOutlineAreaChart } from "react-icons/ai";
 
 import LogoutButton from "../../../components/LogoutButton/LogoutButton";
 
 const navigationTabs = [
   { icon: AiFillHome, path: "/", title: "Home" },
-  { icon: AiFillPlusSquare, path: "/add-skill", title: "Add skill" },
   { icon: AiOutlineAreaChart, path: "/analytics", title: "Analytics" },
   { icon: AiOutlineUsergroupAdd, path: "/employees", title: "Employees" },
 ];
