@@ -16,7 +16,7 @@ const Tabs = ({ elements }: Props) => {
   };
   return (
     <div>
-      <ul className="flex gap-4 w-full border-b mb-8">
+      <ul className="flex gap-4 w-full border-b mb-4 md:mb-8">
         {elements.map((element, index: number) => {
           return (
             <li
