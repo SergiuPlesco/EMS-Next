@@ -10,10 +10,12 @@ import { trpc } from "@/utils/trpc";
 
 const Position = () => {
   const { data: sesssion } = useSession();
+
   const { data: positionsList } = trpc.positions.all.useQuery();
   const addPosition = trpc.users.addPosition.useMutation();
   const deletePosition = trpc.users.deletePosition.useMutation();
   const user = trpc.users.getById.useQuery({
+    // @ts-ignore
     userId: sesssion?.user.id as string,
   });
 
