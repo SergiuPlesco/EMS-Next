@@ -35,8 +35,8 @@ const Profile = () => {
       <section className="">
         <Identity
           userImage={session?.user?.image as string}
-          userName={session?.user?.name}
-          userEmail={session?.user?.email}
+          userName={session?.user?.name || "-"}
+          userEmail={session?.user?.email || "-"}
         />
         <Position />
       </section>
