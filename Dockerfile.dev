@@ -6,12 +6,6 @@ COPY src ./src
 COPY prisma ./prisma
 COPY *.js ./
 COPY *.json ./
-# COPY package* ./
-# COPY tsconfig.json ./
-# COPY google.json ./
-# COPY next.config.js ./
-# COPY postcss.config.js ./
-# COPY tailwind.config.js ./
 RUN npm install
 RUN npm run build
 
@@ -30,7 +24,5 @@ COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
 
 EXPOSE 3000
-
-# CMD ["node", "server.js"]
 
 CMD ["sh", "-c", "node server.js"]
