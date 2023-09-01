@@ -1,15 +1,17 @@
 FROM node:lts as build
 WORKDIR /app
 COPY .env ./.env
-COPY package* ./
-COPY tsconfig.json ./
-COPY google.json ./
-COPY next.config.js ./
 COPY public ./public
 COPY src ./src
 COPY prisma ./prisma
-COPY postcss.config.js ./
-COPY tailwind.config.js ./
+COPY *.js ./
+COPY *.json ./
+# COPY package* ./
+# COPY tsconfig.json ./
+# COPY google.json ./
+# COPY next.config.js ./
+# COPY postcss.config.js ./
+# COPY tailwind.config.js ./
 RUN npm install
 RUN npm run build
 
