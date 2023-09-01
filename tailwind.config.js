@@ -1,7 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   mode: "jit",
-  purge: ["./public/**/*.html", "./src/**/*.{js,jsx,ts,tsx}"],
+  purge: [
+    "./public/**/*.html",
+    "./src/**/*.{js,jsx,ts,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+  ],
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
