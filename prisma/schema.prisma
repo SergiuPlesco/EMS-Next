@@ -44,8 +44,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   skills        UserSkill[]
-  position      UserPosition[]
-  positions     String[]
+  positions     UserPosition[]
+
 }
 
 model UserSkill {
@@ -61,7 +61,6 @@ model UserPosition {
   title    String
   authorId String?
   user     User?    @relation(fields: [authorId], references: [id])
-  rating   Int? @default(1)
 }
 
 model Positions {
