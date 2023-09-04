@@ -157,6 +157,7 @@ export const userRouter = router({
   getPositions: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.userPosition.findMany({
       where: {
+        // @ts-ignore
         authorId: ctx.session?.user.id,
       },
     });
