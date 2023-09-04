@@ -1,7 +1,7 @@
 import { procedure, router } from "../trpc";
 
-export const positionRouter = router({
+export const positionsRouter = router({
   all: procedure.query(async ({ ctx }) => {
-    return await ctx.prisma.position.findMany();
+    return await ctx.prisma.positions.findMany();
   }),
 });

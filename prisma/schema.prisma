@@ -43,11 +43,12 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  skills        Skill[]
-  positions     String[]
+  skills        UserSkill[]
+  positions     UserPosition[]
+
 }
 
-model Skill {
+model UserSkill {
   id       Int  @id @default(autoincrement())
   title    String
   authorId String?
@@ -55,8 +56,20 @@ model Skill {
   rating   Int? @default(1)
 }
 
-model Position {
+model UserPosition {
+  id       Int  @id @default(autoincrement())
+  title    String
+  authorId String?
+  user     User?    @relation(fields: [authorId], references: [id])
+}
+
+model Positions {
   id          Int  @id @default(autoincrement())
+  title       String
+}
+
+model Skills {
+  id          Int @id @default(autoincrement())
   title       String
 }
 
