@@ -1,49 +1,32 @@
-import React, { useEffect, useRef } from "react";
-import styled from "styled-components";
+import React, { useRef } from "react";
 
 interface ModalProps {
+  open: boolean;
   children: React.ReactNode;
   onClose: () => void;
 }
 
-const Modal = ({ children, onClose }: ModalProps) => {
+const Modal = ({ open, children, onClose }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
-        onClose?.();
-      }
-    };
-
-    document.addEventListener("click", handleOutsideClick);
-
-    return () => {
-      document.removeEventListener("click", handleOutsideClick);
-    };
-  }, [onClose]);
-
   return (
-    <Container>
-      <div ref={modalRef}>{children}</div>
-    </Container>
+    <div
+      className={` ${
+        open ? "flex" : "hidden"
+      } justify-center items-start md:items-center w-full h-full absolute top-0 left-0 bg-[rgba(0,0,0,0.5)]  z-[9999]`}
+    >
+      <div
+        className="bg-white w-full md:max-w-[600px] md:max-h-[900px] h-full p-2 md:rounded"
+        ref={modalRef}
+      >
+        <div className="flex justify-between items-center">
+          <p>Edit intro</p>
+          <button onClick={onClose}>close</button>
+        </div>
+        <div>{children}</div>
+      </div>
+    </div>
   );
 };
 
 export default Modal;
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-`;

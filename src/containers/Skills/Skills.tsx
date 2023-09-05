@@ -3,7 +3,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { AiOutlineCheck } from "react-icons/ai";
 
 import Autocomplete from "@/components/Autocomplete/Autocomplete";
-// import Skill from "@/components/SkillItem/SkillItem";
+import Skill from "@/components/SkillItem/SkillItem";
 // import { ISkill } from "@/types/ISkill";
 import { trpc } from "@/utils/trpc";
 
@@ -11,19 +11,15 @@ const Skills = () => {
   const [isSearchInputVisible, setIsSearchInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
-  // const { data: fetchedskills, refetch } = trpc.skills.skillByUserId.useQuery();
+  const { data: userSkills, refetch } = trpc.users.getSkills.useQuery();
 
   const { data: searchList } = trpc.skills.searchSkill.useQuery({
     searchQuery: inputValue,
   });
 
-  // const addSkill = trpc.users.addSKill.useMutation({
-  // 	onSuccess: () => refetch(),
-  // });
-
-  // const createSkill = trpc.skills.create.useMutation({
-  //   onSuccess: () => refetch(),
-  // });
+  const addSkill = trpc.users.addSKill.useMutation({
+    onSuccess: () => refetch(),
+  });
 
   const handleSearchInputVisibility = () => {
     setIsSearchInputVisible((prevState) => !prevState);
@@ -33,10 +29,10 @@ const Skills = () => {
     const value = e.target.value;
     setInputValue(value);
   };
-  const handleOnClick = () => () => {
-    // createSkill.mutate({
-    //   skillTitle,
-    // });
+  const handleOnClick = (title: string) => () => {
+    addSkill.mutate({
+      title,
+    });
   };
 
   return (
@@ -78,15 +74,15 @@ const Skills = () => {
             </div>
           </div>
         </div>
-        {/* <div className="border">
-					{fetchedskills && fetchedskills.length === 0 ? (
-						<div>no skill, add some</div>
-					) : (
-						fetchedskills?.map((skill) => {
-							return <Skill key={skill.id} skill={skill} />;
-						})
-					)}
-				</div> */}
+        <div className="border">
+          {userSkills && userSkills.length === 0 ? (
+            <div>no skill, add some</div>
+          ) : (
+            userSkills?.map((skill) => {
+              return <Skill key={skill.id} skill={skill} />;
+            })
+          )}
+        </div>
       </div>
     </>
   );
