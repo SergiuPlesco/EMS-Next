@@ -5,7 +5,7 @@ import styled from "styled-components";
 import BackgroundImage from "@/assets/images/background-profile.png";
 import CloseIcon from "@/assets/images/close-icon.svg";
 import ProfileImage from "@/assets/images/profile-picture.png";
-import Modal from "@/components/Modal";
+import Modal from "@/components/Modal/Modal";
 import SkillChip from "@/components/SkillChip";
 
 interface EmployeeModalProps {
