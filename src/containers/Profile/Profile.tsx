@@ -50,7 +50,6 @@ const Profile = () => {
             userName={session?.user?.name || "-"}
             userEmail={session?.user?.email || "-"}
           />
-          <Position />
         </div>
 
         <div className="self-start">
@@ -62,30 +61,8 @@ const Profile = () => {
       <section>
         <Tabs elements={elements} />
       </section>
-      <Modal open={isModalOpen} onClose={closeModal}>
-        <div>
-          <form action="" method="post" className="flex flex-col">
-            <label htmlFor="headLine" className="flex flex-col">
-              Headline
-              <input
-                type="text"
-                name=""
-                id="headLine"
-                className="border rounded"
-              />
-            </label>
-            <label htmlFor="headLine" className="flex flex-col">
-              Position
-              <input
-                type="text"
-                name=""
-                id="headLine"
-                className="border rounded"
-              />
-            </label>
-            <button type="submit">save</button>
-          </form>
-        </div>
+      <Modal open={isModalOpen} onClose={closeModal} title="Edit Intro">
+        <Position />
       </Modal>
     </div>
   );

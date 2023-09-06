@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { AiOutlinePlus } from "react-icons/ai";
-import { AiOutlineCheck } from "react-icons/ai";
+// import { AiOutlinePlus } from "react-icons/ai";
+// import { AiOutlineCheck } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
-import { MdModeEdit } from "react-icons/md";
 
+// import { MdModeEdit } from "react-icons/md";
 import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
 
@@ -13,30 +13,16 @@ const Position = () => {
   const addPosition = trpc.users.addPosition.useMutation();
   const deletePosition = trpc.users.deletePosition.useMutation();
 
-  const [isEditing, setIsEditing] = useState(false);
-
-  const handelEditing = () => {
-    setIsEditing(true);
-  };
-
-  const handleSaving = () => {
-    setIsEditing(false);
-  };
+  const [positions, setPositions] = useState<string[]>([]);
 
   const handleChange = (e: React.FormEvent<HTMLSelectElement>) => {
-    const positionAdded = userPositions?.find(
-      (position) => position.title === e.currentTarget.value
+    const positionAdded = positions?.find(
+      (position) => position === e.currentTarget.value
     );
 
     if (e.currentTarget.value === "") return;
     if (positionAdded) return;
-
-    addPosition.mutate(
-      { positions: [e.currentTarget.value] },
-      {
-        onSuccess: () => refetch(),
-      }
-    );
+    setPositions([...positions, e.currentTarget.value]);
   };
 
   const handleDeletePosition = (positionId: number) => () => {
@@ -48,60 +34,51 @@ const Position = () => {
     );
   };
 
+  const handleSave = () => {
+    addPosition.mutate(
+      { positions: [...positions] },
+      {
+        onSuccess: () => refetch(),
+      }
+    );
+  };
+
   if (userPositions == null) {
     return null;
   }
 
   return (
-    <div className="flex flex-col items-start gap-4">
-      {userPositions.length === 0 && !isEditing && (
-        <div className="flex items-center justify-end gap-2 w-full max-w-[300px]">
-          <button
-            className="flex items-center justify-end gap-2"
-            onClick={handelEditing}
-          >
-            <p className="text-slate-400 text-xs">Add position</p>
-            <AiOutlinePlus size={16} className="text-[#8dc63f]" />
-          </button>
-        </div>
-      )}
-
-      <div className="flex flex-col w-full max-w-[300px]">
-        <div className="flex justify-between">
-          <div className="w-full">
-            {userPositions.map((position) => {
-              return (
-                <div key={generateId()} className="flex justify-between mb-1">
-                  <p className="text-slate-500 pr-4 text-sm">
-                    {position.title}
-                  </p>
-                  {isEditing ? (
+    <>
+      <div className="flex flex-col items-start gap-4 border rounded p-2 mb-6">
+        <div className="flex flex-col w-full">
+          <div className="flex justify-between">
+            <div className="flex gap-1 flex-wrap">
+              {userPositions.map((position) => {
+                return (
+                  <div
+                    key={generateId()}
+                    className="flex justify-start w-fit mb-1 py-1 px-1 rounded bg-slate-300"
+                  >
+                    <p className="text-slate-500 pr-4 text-sm">
+                      {position.title}
+                    </p>
                     <button onClick={handleDeletePosition(position.id)}>
                       <AiOutlineDelete size={16} className="text-[#a12064]" />
                     </button>
-                  ) : null}
-                </div>
-              );
-            })}
-          </div>
-          {userPositions.length > 0 && !isEditing && (
-            <div>
-              <button onClick={handelEditing}>
-                <MdModeEdit size={16} className="text-slate-600" />
-              </button>
+                  </div>
+                );
+              })}
             </div>
-          )}
+          </div>
         </div>
-      </div>
 
-      {isEditing ? (
-        <div className="flex items-center justify-between w-full max-w-[300px]">
+        <div className="flex items-center justify-between w-full w-full">
           <select
             name="position"
             id="position-select"
-            defaultValue="Add a position"
+            defaultValue=""
             onChange={handleChange}
-            className="p-1 text-sm text-slate-600 rounded bg-transparent border  w-[250px]"
+            className="p-1 text-sm text-slate-600 rounded bg-transparent border  w-full"
           >
             <option value="" className="text-sm text-slate-400">
               Add a position
@@ -119,13 +96,18 @@ const Position = () => {
                 );
               })}
           </select>
-
-          <button onClick={handleSaving}>
-            <AiOutlineCheck size={16} className="text-[#662d91]" />
-          </button>
         </div>
-      ) : null}
-    </div>
+      </div>
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          className="border rounded px-2 pt-1 pb-2 flex items-center leading-4 text-[16px]"
+          onClick={handleSave}
+        >
+          save
+        </button>
+      </div>
+    </>
   );
 };
 
