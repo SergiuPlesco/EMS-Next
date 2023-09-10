@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import { AiOutlineClose } from "react-icons/ai";
 
 type ModalProps = {
   open: boolean;
@@ -9,6 +10,23 @@ type ModalProps = {
 
 const Modal = ({ open, children, onClose, title }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
+  const [isCloseHovered, setIsCloseHovered] = useState(false);
+
+  const handleMouseOver = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    if (e.type === "mouseover") {
+      setIsCloseHovered(true);
+    }
+  };
+
+  const handleMouseLeave = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    if (e.type === "mouseleave") {
+      setIsCloseHovered(false);
+    }
+  };
 
   return (
     <div
@@ -22,7 +40,16 @@ const Modal = ({ open, children, onClose, title }: ModalProps) => {
       >
         <div className="flex justify-between items-center mb-8">
           <p>{title}</p>
-          <button onClick={onClose}>close</button>
+          <button
+            onClick={onClose}
+            onMouseOver={handleMouseOver}
+            onMouseLeave={handleMouseLeave}
+            className={`rounded-full p-1 ${
+              isCloseHovered ? "bg-slate-300" : "bg-transparent"
+            }`}
+          >
+            <AiOutlineClose fontSize={20} />
+          </button>
         </div>
         {children}
       </div>

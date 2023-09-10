@@ -1,47 +1,67 @@
-import React, { useState } from "react";
-// import { AiOutlinePlus } from "react-icons/ai";
-// import { AiOutlineCheck } from "react-icons/ai";
+import React, { useEffect,useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 
-// import { MdModeEdit } from "react-icons/md";
 import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
 
 const Position = () => {
-  const { data: userPositions, refetch } = trpc.users.getPositions.useQuery();
+  const {
+    data: userPositions,
+    refetch,
+    isLoading: isUserPositionsLoading,
+  } = trpc.users.getPositions.useQuery();
   const { data: positionsList } = trpc.positions.all.useQuery();
-  const addPosition = trpc.users.addPosition.useMutation();
-  const deletePosition = trpc.users.deletePosition.useMutation();
+  const updatePosition = trpc.users.updatePosition.useMutation();
 
-  const [positions, setPositions] = useState<string[]>([]);
+  const [positions, setPositions] = useState<
+    { id: number | string; title: string }[]
+  >([]);
 
   const handleChange = (e: React.FormEvent<HTMLSelectElement>) => {
     const positionAdded = positions?.find(
-      (position) => position === e.currentTarget.value
+      (position) => position.title === e.currentTarget.value
     );
 
-    if (e.currentTarget.value === "") return;
-    if (positionAdded) return;
-    setPositions([...positions, e.currentTarget.value]);
+    if (e.currentTarget.value === "" || positionAdded) {
+      return; // Exit early if the value is empty or the position is already added
+    }
+
+    setPositions([
+      ...positions,
+      { id: generateId(), title: e.currentTarget.value },
+    ]);
   };
 
-  const handleDeletePosition = (positionId: number) => () => {
-    deletePosition.mutate(
-      { positionId },
-      {
-        onSuccess: () => refetch(),
-      }
+  const handleDeletePosition = (id: number | string) => () => {
+    const elementToDeleteIndex = positions.findIndex(
+      (position) => position.id === id
     );
+    if (elementToDeleteIndex !== -1) {
+      const newPositions = [...positions];
+      newPositions.splice(elementToDeleteIndex, 1);
+      setPositions(newPositions);
+    }
   };
 
   const handleSave = () => {
-    addPosition.mutate(
-      { positions: [...positions] },
+    updatePosition.mutate(
+      { positions: positions?.map((position) => position.title) || [] },
       {
         onSuccess: () => refetch(),
       }
     );
   };
+
+  useEffect(() => {
+    !isUserPositionsLoading &&
+      userPositions &&
+      setPositions(
+        userPositions.map((position) => ({
+          id: generateId(),
+          title: position.title,
+        }))
+      );
+  }, [isUserPositionsLoading, userPositions]);
 
   if (userPositions == null) {
     return null;
@@ -53,21 +73,26 @@ const Position = () => {
         <div className="flex flex-col w-full">
           <div className="flex justify-between">
             <div className="flex gap-1 flex-wrap">
-              {userPositions.map((position) => {
-                return (
-                  <div
-                    key={generateId()}
-                    className="flex justify-start w-fit mb-1 py-1 px-1 rounded bg-slate-300"
-                  >
-                    <p className="text-slate-500 pr-4 text-sm">
-                      {position.title}
-                    </p>
-                    <button onClick={handleDeletePosition(position.id)}>
-                      <AiOutlineDelete size={16} className="text-[#a12064]" />
-                    </button>
-                  </div>
-                );
-              })}
+              {positions
+                ? positions.map((position) => {
+                    return (
+                      <div
+                        key={generateId()}
+                        className="flex justify-start w-fit mb-1 py-1 px-1 rounded bg-slate-300"
+                      >
+                        <p className="text-slate-500 pr-4 text-sm">
+                          {position.title}
+                        </p>
+                        <button onClick={handleDeletePosition(position.id)}>
+                          <AiOutlineDelete
+                            size={16}
+                            className="text-[#a12064]"
+                          />
+                        </button>
+                      </div>
+                    );
+                  })
+                : null}
             </div>
           </div>
         </div>

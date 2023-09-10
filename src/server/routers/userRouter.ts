@@ -127,7 +127,7 @@ export const userRouter = router({
 
       return updatedSkill;
     }),
-  addPosition: procedure
+  updatePosition: procedure
     .input(z.object({ positions: z.array(z.string()) }))
     .mutation(async ({ ctx, input }) => {
       const newPostions = input.positions.map((position) => ({
@@ -140,6 +140,7 @@ export const userRouter = router({
         },
         data: {
           positions: {
+            deleteMany: {},
             createMany: {
               data: [...newPostions],
             },
