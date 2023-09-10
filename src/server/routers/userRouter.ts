@@ -16,7 +16,7 @@ export const userRouter = router({
       });
     }),
   addSKill: procedure
-    .input(z.object({ skillTitle: z.string(), skillId: z.number() }))
+    .input(z.object({ title: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const addedSkill = await ctx.prisma.user.update({
         where: {
@@ -25,13 +25,8 @@ export const userRouter = router({
         },
         data: {
           skills: {
-            update: {
-              where: {
-                id: 5,
-              },
-              data: {
-                title: input.skillTitle,
-              },
+            create: {
+              title: input.title,
             },
           },
         },
@@ -79,7 +74,7 @@ export const userRouter = router({
       });
       return deleteSkill;
     }),
-  skillByUserId: procedure.query(async ({ ctx }) => {
+  getSkills: procedure.query(async ({ ctx }) => {
     const user = await ctx.prisma.user.findFirst({
       where: {
         // @ts-ignore
@@ -97,7 +92,7 @@ export const userRouter = router({
       },
     });
   }),
-  fetchTopSkills: procedure.query(async ({ ctx }) => {
+  getTopSkills: procedure.query(async ({ ctx }) => {
     // @ts-ignore
     if (!ctx.session?.user?.id) return;
 
@@ -116,7 +111,6 @@ export const userRouter = router({
 
     return topSkills;
   }),
-
   updateRating: procedure
     .input(z.object({ skillId: z.number(), ratingId: z.number() }))
     .mutation(async ({ ctx, input }) => {
@@ -133,7 +127,7 @@ export const userRouter = router({
 
       return updatedSkill;
     }),
-  addPosition: procedure
+  updatePosition: procedure
     .input(z.object({ positions: z.array(z.string()) }))
     .mutation(async ({ ctx, input }) => {
       const newPostions = input.positions.map((position) => ({
@@ -146,6 +140,7 @@ export const userRouter = router({
         },
         data: {
           positions: {
+            deleteMany: {},
             createMany: {
               data: [...newPostions],
             },

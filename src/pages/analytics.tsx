@@ -3,11 +3,11 @@ import styled from "styled-components";
 
 import AnalyticsItem from "@/components/AnalyticsItem";
 import AnalyticsTable from "@/components/AnalyticsTable";
-import EmployeeModal from "@/components/EmployeeModal";
+// import EmployeeModal from "@/components/EmployeeModal";
 import { Title } from "@/components/styled";
 
 const AnalyticsPage = () => {
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
   const [showTable, setShowTable] = useState(false);
 
   const handleShowTable = () => {
@@ -16,12 +16,12 @@ const AnalyticsPage = () => {
 
   const handleOpenModal = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    setShowModal(true);
+    // setShowModal(true);
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
+  // const handleCloseModal = () => {
+  // 	setShowModal(false);
+  // };
 
   return (
     <Container>
@@ -46,7 +46,7 @@ const AnalyticsPage = () => {
         </TableContainer>
       ) : null}
 
-      {showModal ? <EmployeeModal onClose={handleCloseModal} /> : null}
+      {/* {showModal ? <EmployeeModal onClose={handleCloseModal} /> : null} */}
     </Container>
   );
 };
