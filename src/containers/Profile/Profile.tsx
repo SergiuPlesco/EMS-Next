@@ -2,14 +2,16 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { MdModeEdit } from "react-icons/md";
 
+import AddPosition from "@/components/AddPosition/AddPosition";
+import AddSkill from "@/components/AddSkill/AddSkill";
 import Identity from "@/components/Identity/Identity";
 import Modal from "@/components/Modal/Modal";
-import Position from "@/components/Position/Position";
 import Spinner from "@/components/Spinner/Spinner";
 import Tabs from "@/components/Tabs/Tabs";
 import Contact from "@/containers/Contact/Contact";
 import Projects from "@/containers/Projects/Projects";
 import Skills from "@/containers/Skills/Skills";
+import { trpc } from "@/utils/trpc";
 
 const elements = [
   {
@@ -28,6 +30,7 @@ const elements = [
 
 const Profile = () => {
   const { data: session } = useSession();
+  const { data: userPositions } = trpc.users.getPositions.useQuery();
   const [isModalOpen, setIsOpenModal] = useState(false);
 
   const openModal = () => {
@@ -42,7 +45,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex flex-col gap-16">
+    <div className="flex flex-col">
       <section className="flex justify-between">
         <div>
           <Identity
@@ -58,11 +61,25 @@ const Profile = () => {
           </button>
         </div>
       </section>
+      <section className="flex flex-wrap mb-6 gap-3">
+        {userPositions ? (
+          userPositions.map((position) => {
+            return (
+              <h3 key={position.id} className="font-semibold text-slate-600">
+                {position.title}
+              </h3>
+            );
+          })
+        ) : (
+          <p>no position? click pensil to add</p>
+        )}
+      </section>
       <section>
         <Tabs elements={elements} />
       </section>
-      <Modal open={isModalOpen} onClose={closeModal} title="Edit Intro">
-        <Position />
+      <Modal open={isModalOpen} onClose={closeModal} title="Edit Info">
+        <AddPosition />
+        <AddSkill />
       </Modal>
     </div>
   );

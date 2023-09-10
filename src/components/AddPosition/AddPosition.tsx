@@ -1,10 +1,10 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 
 import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
 
-const Position = () => {
+const AddPosition = () => {
   const {
     data: userPositions,
     refetch,
@@ -32,7 +32,7 @@ const Position = () => {
     ]);
   };
 
-  const handleDeletePosition = (id: number | string) => () => {
+  const handleDelete = (id: number | string) => () => {
     const elementToDeleteIndex = positions.findIndex(
       (position) => position.id === id
     );
@@ -78,12 +78,12 @@ const Position = () => {
                     return (
                       <div
                         key={generateId()}
-                        className="flex justify-start w-fit mb-1 py-1 px-1 rounded bg-slate-300"
+                        className="flex justify-start w-fit mb-1 py-1 px-1 rounded bg-slate-200"
                       >
                         <p className="text-slate-500 pr-4 text-sm">
                           {position.title}
                         </p>
-                        <button onClick={handleDeletePosition(position.id)}>
+                        <button onClick={handleDelete(position.id)}>
                           <AiOutlineDelete
                             size={16}
                             className="text-[#a12064]"
@@ -122,18 +122,18 @@ const Position = () => {
               })}
           </select>
         </div>
-      </div>
-      <div className="flex justify-end">
-        <button
-          type="submit"
-          className="border rounded px-2 pt-1 pb-2 flex items-center leading-4 text-[16px]"
-          onClick={handleSave}
-        >
-          save
-        </button>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="border rounded px-2 pt-1 pb-2 flex items-center leading-4 text-[16px]"
+            onClick={handleSave}
+          >
+            save
+          </button>
+        </div>
       </div>
     </>
   );
 };
 
-export default Position;
+export default AddPosition;
