@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 
 import Autocomplete from "@/components/Autocomplete/Autocomplete";
@@ -9,38 +9,36 @@ import { trpc } from "@/utils/trpc";
 const AddSkill = () => {
   const [inputValue, setInputValue] = useState("");
   const [skills, setSkills] = useState<
-    { id: number | string; title: String; rating: number | null }[]
+    { id: number | string; title: string; rating: number | null }[]
   >([]);
 
   const { data: searchList } = trpc.skills.searchSkill.useQuery({
     searchQuery: inputValue,
   });
+
   const {
     data: userSkills,
     isLoading: isUserSkillsLoading,
-    // refetch,
+    refetch,
   } = trpc.users.getSkills.useQuery();
 
-  // const addSkill = trpc.users.addSKill.useMutation({
-  // 	onSuccess: () => refetch(),
-  // });
+  const updateSkills = trpc.users.updateSKills.useMutation({
+    onSuccess: () => refetch(),
+  });
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
   };
   const handleOnClick = (title: string) => () => {
-    // addSkill.mutate({
-    // 	title,
-    // });
-
     const skillAdded = skills?.find((skill) => skill.title === title);
 
     if (title === "" || skillAdded) {
-      return; // Exit early if the value is empty or the position is already added
+      return;
     }
 
-    setSkills([...skills, { id: generateId(), title, rating: 1 }]);
+    setSkills([...skills, { id: generateId(), title, rating: 0 }]);
+    setInputValue("");
   };
   const handleDelete = (id: number | string) => () => {
     const elementToDeleteIndex = skills.findIndex(
@@ -51,6 +49,17 @@ const AddSkill = () => {
       newSkill.splice(elementToDeleteIndex, 1);
       setSkills(newSkill);
     }
+  };
+
+  const handleSave = () => {
+    updateSkills.mutate({
+      skills: [
+        ...skills.map((skill) => ({
+          title: skill.title,
+          rating: skill.rating || 0,
+        })),
+      ],
+    });
   };
   useEffect(() => {
     !isUserSkillsLoading &&
@@ -77,11 +86,12 @@ const AddSkill = () => {
                   return (
                     <div
                       key={generateId()}
-                      className="flex justify-start w-fit mb-1 py-1 px-1 rounded bg-slate-200"
+                      className="flex justify-start gap-1 w-fit mb-1 py-1 px-1 rounded bg-slate-200"
                     >
                       <p className="text-slate-500 pr-4 text-sm">
                         {skill.title}
                       </p>
+                      <p className="text-sm">{skill.rating}%</p>
                       <button onClick={handleDelete(skill.id)}>
                         <AiOutlineDelete size={16} className="text-[#a12064]" />
                       </button>
@@ -110,7 +120,7 @@ const AddSkill = () => {
         <button
           type="submit"
           className="border rounded px-2 pt-1 pb-2 flex items-center leading-4 text-[16px]"
-          // onClick={handleSave}
+          onClick={handleSave}
         >
           save
         </button>
