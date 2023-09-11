@@ -1,42 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-import Skill from "@/components/Skill/skill";
-import { ISkill } from "@/types/ISkill";
+import Skill from "@/components/SkillItem/SkillItem";
+// import { ISkill } from "@/types/ISkill";
 import { trpc } from "@/utils/trpc";
 
 const Skills = () => {
-  const { data: fetchedskills } = trpc.skills.skillByUserId.useQuery();
-  const { data: fetchedtopSkills } = trpc.skills.fetchTopSkills.useQuery();
+  const { data: userSkills } = trpc.users.getSkills.useQuery();
 
-  const [skills, setSkills] = useState<Array<ISkill>>([]);
-
-  useEffect(() => {
-    if (fetchedskills && fetchedtopSkills) {
-      setSkills(fetchedskills);
-    }
-  }, [fetchedskills, fetchedtopSkills]);
-
-  const handleSkillDelete = (skillId: number) => {
-    setSkills((prev) => prev.filter((skill) => skill.id !== skillId));
-  };
   return (
-    <>
-      <div className="w-full gap-5 flex flex-wrap">
-        {skills.length === 0 ? (
-          <div>no skill, add some</div>
-        ) : (
-          skills?.map((skill) => {
-            return (
-              <Skill
-                key={skill.id}
-                fetchedSkill={skill}
-                onDelete={handleSkillDelete}
-              />
-            );
-          })
-        )}
-      </div>
-    </>
+    <div className="border rounded p-2">
+      {userSkills && userSkills.length === 0 ? (
+        <div>no skill, add some</div>
+      ) : (
+        userSkills?.map((skill) => {
+          return <Skill key={skill.id} skill={skill} />;
+        })
+      )}
+    </div>
   );
 };
 

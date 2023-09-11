@@ -5,13 +5,13 @@ const prisma = new PrismaClient();
 
 async function main() {
   try {
-    await prisma.position.deleteMany();
-    await prisma.position.createMany({
+    await prisma.positions.deleteMany();
+    await prisma.positions.createMany({
       data: POSITIONS,
     });
 
-    await prisma.skill.deleteMany();
-    await prisma.skill.createMany({
+    await prisma.skills.deleteMany();
+    await prisma.skills.createMany({
       data: TECHNOLOGIES,
     });
   } catch (error) {
