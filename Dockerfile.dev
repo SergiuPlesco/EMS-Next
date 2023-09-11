@@ -1,17 +1,15 @@
-FROM node:lts-alpine as build
+FROM node:lts as build
 WORKDIR /app
 COPY .env ./.env
-COPY package* ./
-COPY tsconfig.json ./
-COPY google.json ./
-COPY next.config.js ./
 COPY public ./public
 COPY src ./src
 COPY prisma ./prisma
+COPY *.js ./
+COPY *.json ./
 RUN npm install
 RUN npm run build
 
-FROM node:lts-alpine
+FROM node:lts
 WORKDIR /app
 
 ENV NODE_ENV production
@@ -26,7 +24,5 @@ COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
 
 EXPOSE 3000
-
-# CMD ["node", "server.js"]
 
 CMD ["sh", "-c", "node server.js"]

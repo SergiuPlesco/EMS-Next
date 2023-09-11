@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -42,15 +43,34 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  skills        Skill[]
+  skills        UserSkill[]
+  positions     UserPosition[]
+
 }
 
-model Skill {
-  id       String  @id @default(cuid())
+model UserSkill {
+  id       Int  @id @default(autoincrement())
   title    String
-  authorId String
+  authorId String?
   user     User?    @relation(fields: [authorId], references: [id])
-  rating   Int @default(1)
+  rating   Int? @default(1)
+}
+
+model UserPosition {
+  id       Int  @id @default(autoincrement())
+  title    String
+  authorId String?
+  user     User?    @relation(fields: [authorId], references: [id])
+}
+
+model Positions {
+  id          Int  @id @default(autoincrement())
+  title       String
+}
+
+model Skills {
+  id          Int @id @default(autoincrement())
+  title       String
 }
 
 model VerificationToken {

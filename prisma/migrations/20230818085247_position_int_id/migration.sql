@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Position" ALTER COLUMN "id" DROP DEFAULT;

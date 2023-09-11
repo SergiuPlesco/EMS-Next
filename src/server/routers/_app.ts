@@ -1,10 +1,12 @@
 import { router } from "../trpc";
-import { skillRouter } from "./skillRouter";
+import { positionsRouter } from "./positionsRouter";
+import { skillsRouter } from "./skillsRouter";
 import { userRouter } from "./userRouter";
 
 export const appRouter = router({
   users: userRouter,
-  skills: skillRouter,
+  skills: skillsRouter,
+  positions: positionsRouter,
 });
 
 // export type definition of API

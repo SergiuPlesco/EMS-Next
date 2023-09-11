@@ -1,26 +1,20 @@
 import { signOut, useSession } from "next-auth/react";
 import React from "react";
-import styled from "styled-components";
+
 const LogoutButton = () => {
   const { data: session, status } = useSession();
 
   if (session && status === "authenticated") {
-    return <Button onClick={() => signOut()}>Sign out</Button>;
+    return (
+      <button
+        className="border-0 cursor-pointer flex items-center rounded py-1 px-2 text-[14px] bg-transparent shadow-[1px_1px_2px_rgba(102,44,145,0.5),-1px_-1px_2px_rgba(161,32,100,0.5)]"
+        onClick={() => signOut()}
+      >
+        Sign out
+      </button>
+    );
   }
   return null;
 };
 
 export default LogoutButton;
-
-const Button = styled.button`
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  border-radius: 4px;
-  background-color: #fff;
-  box-shadow: 1px 1px 2px rgba(70, 45, 212, 0.5),
-    -1px -1px 2px rgba(207, 23, 23, 0.5);
-  padding: 0.5rem 1rem;
-`;
