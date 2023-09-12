@@ -1,75 +1,44 @@
 import Image from "next/image";
-import { useSession } from "next-auth/react";
+import Link from "next/link";
 import React, { useState } from "react";
-import styled from "styled-components";
 
 import LogoImg from "@/assets/images/logo.svg";
-import ProfileImg from "@/assets/images/profile-picture.png";
 import LogoutButton from "@/components/LogoutButton/LogoutButton";
 import Switch from "@/components/Switch";
+import DesktopNav from "@/containers/AppNavigation/DesktopNav/DesktopNav";
+import MobileNav from "@/containers/AppNavigation/MobileNav/MobileNav";
 
 const Header = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const { data: session } = useSession();
 
   const handleDarkMode = () => {
     setIsDarkMode((prev) => !prev);
   };
 
   return (
-    <Wrapper>
-      <Container>
-        <Logo src={LogoImg} alt="Logo" />
+    <div className="relative border-b shadow-md py-0 pl-1 pr-4">
+      <div className="flex justify-between items-center w-full max-w-[1200px] mx-auto">
+        <div className="flex items-center gap-2">
+          <Link href="/" style={{ display: "block" }}>
+            <Image src={LogoImg} alt="Logo" width={128} height={59} />
+          </Link>
+          <div className="hidden md:block">
+            <DesktopNav />
+          </div>
+        </div>
 
-        <ProfileContainer>
+        <div className="flex items-center gap-3">
           <Switch checked={isDarkMode} handleChange={handleDarkMode} />
-          <Paragraph>Greetings, {session && session?.user?.name}</Paragraph>
-          <ProfileImage
-            src={(session && session?.user?.image) || ProfileImg}
-            width={30}
-            height={30}
-            alt="Profile"
-          />
-          <LogoutButton />
-        </ProfileContainer>
-      </Container>
-    </Wrapper>
+          <div className="md:hidden">
+            <MobileNav />
+          </div>
+          <div className="pl-4 hidden md:block">
+            <LogoutButton />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
 export default Header;
-
-const Wrapper = styled.div`
-  border-bottom: 1px solid ${(props) => props.theme.border.primary};
-  box-shadow: 0px 2px 5px rgba(128, 128, 128, 0.05);
-  padding: 0 2rem;
-`;
-
-const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  width: 100%;
-  max-width: 1920px;
-  margin: 0 auto;
-`;
-
-const ProfileContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 30px;
-`;
-
-const Paragraph = styled.p`
-  margin: 0;
-`;
-
-const ProfileImage = styled(Image)`
-  border-radius: 50%;
-  object-fit: cover;
-`;
-
-const Logo = styled(Image)`
-  -webkit-user-drag: none;
-`;

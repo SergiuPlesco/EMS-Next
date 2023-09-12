@@ -1,7 +1,7 @@
-import React from "react";
+import Profile from "@/containers/Profile/Profile";
 
 const HomePage = () => {
-  return <div>Content</div>;
+  return <Profile />;
 };
 
 export default HomePage;

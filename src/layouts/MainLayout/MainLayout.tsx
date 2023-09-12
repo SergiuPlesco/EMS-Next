@@ -1,9 +1,7 @@
 import { useSession } from "next-auth/react";
 import React from "react";
-import styled from "styled-components";
 
 import Header from "@/components/Header";
-import NavigationBar from "@/components/NavigationBar";
 
 import SignInLayout from "../SignInLayout/SignInLayout";
 
@@ -12,9 +10,9 @@ interface MainLayoutProps {
 }
 
 const MainLayout = ({ children }: MainLayoutProps) => {
-  const { data: session } = useSession();
+  const { status } = useSession();
 
-  if (!session) {
+  if (status === "unauthenticated") {
     return <SignInLayout />;
   }
 
@@ -22,21 +20,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     <>
       <Header />
 
-      <MainContainer>
-        <NavigationBar />
-        <ChildrenContainer>{children}</ChildrenContainer>
-      </MainContainer>
+      <div className="flex max-w-[1200px] mx-auto">
+        <div className="w-full p-5 md:mt-[25px]">{children}</div>
+      </div>
     </>
   );
 };
 
 export default MainLayout;
-
-const MainContainer = styled.main`
-  display: flex;
-`;
-
-const ChildrenContainer = styled.div`
-  width: 100%;
-  padding: 50px 60px 0 60px;
-`;
