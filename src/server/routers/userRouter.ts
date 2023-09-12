@@ -15,6 +15,7 @@ export const userRouter = router({
         },
       });
     }),
+  // add one skill, not used
   addSKill: procedure
     .input(z.object({ title: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -33,29 +34,34 @@ export const userRouter = router({
       });
       return addedSkill;
     }),
-  updateSKill: procedure
-    .input(z.object({ rating: z.number(), skillId: z.number() }))
+  updateSKills: procedure
+    .input(
+      z.object({
+        skills: z.array(z.object({ title: z.string(), rating: z.number() })),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
-      const updatedSkill = await ctx.prisma.user.update({
+      const newSkills = input.skills.map((skill) => ({
+        title: skill.title,
+        rating: skill.rating,
+      }));
+      const userSkills = await ctx.prisma.user.update({
         where: {
           // @ts-ignore
           id: ctx?.session?.user.id,
         },
         data: {
           skills: {
-            update: {
-              where: {
-                id: input.skillId,
-              },
-              data: {
-                rating: input.rating,
-              },
+            deleteMany: {},
+            createMany: {
+              data: [...newSkills],
             },
           },
         },
       });
-      return updatedSkill;
+      return userSkills;
     }),
+  // not used
   deleteSkill: procedure
     .input(z.object({ skillId: z.number() }))
     .mutation(async ({ ctx, input }) => {
@@ -111,17 +117,18 @@ export const userRouter = router({
 
     return topSkills;
   }),
+  // check if needed
   updateRating: procedure
-    .input(z.object({ skillId: z.number(), ratingId: z.number() }))
+    .input(z.object({ skillId: z.number(), rating: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const updatedSkill = await ctx.prisma.userSkill.updateMany({
+      const updatedSkill = await ctx.prisma.userSkill.update({
         where: {
           id: input.skillId,
           // @ts-ignore
           authorId: ctx.session?.user?.id,
         },
         data: {
-          rating: input.ratingId,
+          rating: input.rating,
         },
       });
 
@@ -157,6 +164,7 @@ export const userRouter = router({
       },
     });
   }),
+  // not used
   deletePosition: procedure
     .input(z.object({ positionId: z.number() }))
     .mutation(async ({ ctx, input }) => {
