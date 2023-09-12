@@ -1,5 +1,6 @@
 FROM node:lts-alpine as build
 WORKDIR /app
+COPY .env ./.env
 COPY public ./public
 COPY src ./src
 COPY prisma ./prisma
