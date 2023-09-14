@@ -1,14 +1,13 @@
 import React from "react";
 
 import Skill from "@/components/SkillItem/SkillItem";
-// import { ISkill } from "@/types/ISkill";
 import { trpc } from "@/utils/trpc";
 
 const Skills = () => {
   const { data: userSkills } = trpc.users.getSkills.useQuery();
 
   return (
-    <div className="border rounded p-2">
+    <div className="border rounded p-4">
       {userSkills && userSkills.length === 0 ? (
         <div>no skill, add some</div>
       ) : (
