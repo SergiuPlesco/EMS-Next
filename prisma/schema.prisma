@@ -54,6 +54,7 @@ model UserSkill {
   authorId String?
   user     User?    @relation(fields: [authorId], references: [id])
   rating   Int? @default(0)
+  createdAt DateTime @default(now())
 }
 
 model UserPosition {

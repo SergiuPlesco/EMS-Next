@@ -3,14 +3,18 @@ import { AiOutlineDelete } from "react-icons/ai";
 
 import Autocomplete from "@/components/Autocomplete/Autocomplete";
 import generateId from "@/utils/generateId";
-// import { ISkill } from "@/types/ISkill";
 import { trpc } from "@/utils/trpc";
+
+interface ISkill {
+  id: number | string;
+  title: string;
+  rating: number | null;
+  createdAt: string;
+}
 
 const AddSkill = () => {
   const [inputValue, setInputValue] = useState("");
-  const [skills, setSkills] = useState<
-    { id: number | string; title: string; rating: number | null }[]
-  >([]);
+  const [skills, setSkills] = useState<ISkill[]>([]);
 
   const { data: searchList } = trpc.skills.searchSkill.useQuery({
     searchQuery: inputValue,
@@ -37,7 +41,15 @@ const AddSkill = () => {
       return;
     }
 
-    setSkills([...skills, { id: generateId(), title, rating: 0 }]);
+    setSkills([
+      ...skills,
+      {
+        id: generateId(),
+        title,
+        rating: 5,
+        createdAt: new Date().toString(),
+      },
+    ]);
     setInputValue("");
   };
   const handleDelete = (id: number | string) => () => {
@@ -57,6 +69,7 @@ const AddSkill = () => {
         ...skills.map((skill) => ({
           title: skill.title,
           rating: skill.rating || 0,
+          createdAt: skill.createdAt,
         })),
       ],
     });
@@ -69,6 +82,7 @@ const AddSkill = () => {
           id: generateId(),
           title: skill.title,
           rating: skill.rating,
+          createdAt: skill.createdAt,
         }))
       );
   }, [isUserSkillsLoading, userSkills]);
