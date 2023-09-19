@@ -1,18 +1,21 @@
-FROM node:lts-alpine as build
+FROM node:lts as base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+COPY . /app
 WORKDIR /app
-COPY .env ./.env
-COPY package* ./
-COPY tsconfig.json ./
-COPY google.json ./
-COPY next.config.js ./
-COPY public ./public
-COPY src ./src
-COPY prisma ./prisma
-RUN npm install
-RUN npm run build
+RUN rm -rf .git
 
-FROM node:lts-alpine
+FROM base AS build
 WORKDIR /app
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm run build
+
+FROM base
+WORKDIR /app
+
+ENV NODE_ENV production
+
 COPY --from=build /app/.env ./
 COPY --from=build /app/next.config.js ./
 COPY --from=build /app/google.json ./
@@ -23,7 +26,5 @@ COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
 
 EXPOSE 3000
-
-# CMD ["node", "server.js"]
 
 CMD ["sh", "-c", "node server.js"]
