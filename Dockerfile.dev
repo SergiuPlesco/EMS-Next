@@ -1,4 +1,7 @@
-FROM node:lts as build
+FROM node:lts as base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 WORKDIR /app
 COPY .env ./.env
 COPY public ./public
@@ -6,10 +9,13 @@ COPY src ./src
 COPY prisma ./prisma
 COPY *.js ./
 COPY *.json ./
-RUN npm install
-RUN npm run build
 
-FROM node:lts
+FROM base AS build
+WORKDIR /app
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm run build
+
+FROM base
 WORKDIR /app
 
 ENV NODE_ENV production
