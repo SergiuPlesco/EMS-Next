@@ -11,16 +11,22 @@ jobs:
       - name: Check out
         uses: actions/checkout@v3
 
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        with:
+          version: 8
+          run_install: false
+
       - name: Setup Nodejs
         uses: actions/setup-node@v3
         with:
           node-version: lts/*
-          cache: 'npm'
+          cache: 'pnpm'
           
       - name: Lint
         run: |
-          npm install
-          npm run lint                              
+          pnpm install
+          pnpm run lint                              
 
       - name: Notify
         uses: teknatha136/actions-google-chat-text-message@main
