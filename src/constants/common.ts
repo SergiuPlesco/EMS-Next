@@ -6,13 +6,18 @@ export const POSITIONS = [
   { title: "Back End Developer" },
   { title: "Fullstack Developer" },
   {
-    title: "Quality Assurance Specialist",
+    title: "Quality Assurance Engineer",
   },
   { title: "Project Manager" },
   { title: "Data Scientist" },
   { title: "Mobile Developer" },
   { title: "Chief Accountant" },
-  { title: "Human Resource Specialist" },
+  { title: "Human Resource Manager" },
+  { title: "Devops Engineer" },
+  { title: "Recruiter" },
+  { title: "Machine Learning Engineer" },
+  { title: "Head of Frontend Department" },
+  { title: "Head of Backend Department" },
 ];
 
 export const TECHNOLOGIES = [
@@ -39,4 +44,5 @@ export const TECHNOLOGIES = [
   { title: "tRPC" },
   { title: "User Experience" },
   { title: "User Interface" },
+  { title: "WordPress" },
 ];
