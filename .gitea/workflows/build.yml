@@ -11,12 +11,15 @@ jobs:
       - name: Check out
         uses: actions/checkout@v3
 
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+
       - name: Setup Nodejs
         uses: actions/setup-node@v3
         with:
           node-version: lts/*
-          cache: 'npm'
-          
+          cache: 'pnpm'
+      
       - name: Build
         run: |
           npm install
