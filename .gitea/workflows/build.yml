@@ -22,8 +22,8 @@ jobs:
       
       - name: Build
         run: |
-          npm install
-          npm run build                                        
+          pnpm install
+          pnpm run build                                        
 
       - name: Notify
         uses: teknatha136/actions-google-chat-text-message@main
