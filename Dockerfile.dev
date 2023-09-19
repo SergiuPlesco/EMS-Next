@@ -2,14 +2,9 @@ FROM node:lts as base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
+COPY . /app
 WORKDIR /app
-COPY .env ./.env
-COPY public ./public
-COPY src ./src
-COPY prisma ./prisma
-COPY *.js ./
-COPY *.json ./
-COPY pnpm-lock.yaml ./
+RUN rm -rf .git
 
 FROM base AS build
 WORKDIR /app
