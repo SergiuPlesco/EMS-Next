@@ -15,36 +15,25 @@ export const userRouter = router({
         },
       });
     }),
-  // add one skill, not used
-  addSKill: procedure
-    .input(z.object({ title: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      const addedSkill = await ctx.prisma.user.update({
-        where: {
-          // @ts-ignore
-          id: ctx?.session?.user.id,
-        },
-        data: {
-          skills: {
-            create: {
-              title: input.title,
-            },
-          },
-        },
-      });
-      return addedSkill;
-    }),
   updateSKills: procedure
     .input(
       z.object({
-        skills: z.array(z.object({ title: z.string(), rating: z.number() })),
+        skills: z.array(
+          z.object({
+            title: z.string(),
+            rating: z.number(),
+            createdAt: z.string(),
+          })
+        ),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const newSkills = input.skills.map((skill) => ({
         title: skill.title,
         rating: skill.rating,
+        createdAt: new Date(skill.createdAt),
       }));
+
       const userSkills = await ctx.prisma.user.update({
         where: {
           // @ts-ignore
@@ -59,6 +48,7 @@ export const userRouter = router({
           },
         },
       });
+
       return userSkills;
     }),
   // not used
@@ -86,6 +76,13 @@ export const userRouter = router({
         // @ts-ignore
         id: ctx.session?.user?.id,
       },
+      // select: {
+      //   skills: {
+      //     orderBy: {
+      //       createdAt: "asc",
+      //     },
+      //   },
+      // },
     });
 
     if (!user) throw new Error("This user does not exist");
@@ -95,6 +92,9 @@ export const userRouter = router({
         user: {
           id: user.id,
         },
+      },
+      orderBy: {
+        createdAt: "asc",
       },
     });
   }),
