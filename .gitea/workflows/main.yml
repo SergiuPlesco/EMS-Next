@@ -13,6 +13,8 @@ jobs:
       - name: Build docker image
         run: |
           cp .env.production .env
+          rm -f .env.*
+          rm -rf .git
           echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u administrator --password-stdin git.smartdata.solutions
           docker build -f Dockerfile.main -t git.smartdata.solutions/smartdata/smartskills:latest .
           docker push git.smartdata.solutions/smartdata/smartskills                 
