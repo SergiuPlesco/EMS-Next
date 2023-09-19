@@ -9,6 +9,7 @@ COPY src ./src
 COPY prisma ./prisma
 COPY *.js ./
 COPY *.json ./
+COPY pnpm-lock.yaml ./
 
 FROM base AS build
 WORKDIR /app
