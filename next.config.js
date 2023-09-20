@@ -13,6 +13,7 @@ const nextConfig = {
     styledComponents: true,
   },
   output: "standalone",
+  // test test build from windows
 };
 
 module.exports = nextConfig;
