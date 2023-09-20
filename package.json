@@ -10,8 +10,7 @@
     "prepare": "husky install & npx prisma generate",
     "eslint": "eslint . --fix",
     "tscheck": "eslint . --ext .ts --fix",
-    "checkAll": "npm run eslint & npm run tscheck",
-    "preinstall": "npx only-allow pnpm"
+    "checkAll": "pnpm run eslint & pnpm run tscheck"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
