@@ -22,7 +22,7 @@ export const userRouter = router({
           z.object({
             title: z.string(),
             rating: z.number(),
-            createdAt: z.string(),
+            createdAt: z.date(),
           })
         ),
       })

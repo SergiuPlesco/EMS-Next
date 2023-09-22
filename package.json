@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "npx prisma migrate dev & next dev",
-		"build": "rm -rf .next & npx prisma migrate deploy & next build",
+		"build": "npx prisma migrate deploy & next build",
 		"start": "next start",
 		"lint": "next lint",
 		"prepare": "husky install & npx prisma generate",
