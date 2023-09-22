@@ -1,5 +1,6 @@
 import { httpBatchLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
+import superjson from "superjson";
 
 import type { AppRouter } from "@/server/routers/_app";
 
@@ -35,6 +36,8 @@ export const trpc = createTRPCNext<AppRouter>({
           },
         }),
       ],
+      transformer: superjson,
+      queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
     };
   },
   /**
