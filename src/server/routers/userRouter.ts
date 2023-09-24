@@ -15,6 +15,33 @@ export const userRouter = router({
         },
       });
     }),
+  addPhone: procedure
+    .input(
+      z.object({
+        phone: z.string().length(8),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const phone = await ctx.prisma.user.update({
+        where: {
+          id: ctx.session?.user.id,
+        },
+        data: {
+          phone: input.phone,
+        },
+      });
+      return phone;
+    }),
+  getPhone: procedure.query(async ({ ctx }) => {
+    return await ctx.prisma.user.findUnique({
+      where: {
+        id: ctx.session?.user.id,
+      },
+      select: {
+        phone: true,
+      },
+    });
+  }),
   updateSKills: procedure
     .input(
       z.object({
@@ -22,7 +49,7 @@ export const userRouter = router({
           z.object({
             title: z.string(),
             rating: z.number(),
-            createdAt: z.string(),
+            createdAt: z.date(),
           })
         ),
       })

@@ -9,7 +9,7 @@ interface ISkill {
   id: number | string;
   title: string;
   rating: number | null;
-  createdAt: string;
+  createdAt: Date;
 }
 
 const AddSkill = () => {
@@ -47,7 +47,7 @@ const AddSkill = () => {
         id: generateId(),
         title,
         rating: 5,
-        createdAt: new Date().toString(),
+        createdAt: new Date(),
       },
     ]);
     setInputValue("");
@@ -75,8 +75,7 @@ const AddSkill = () => {
     });
   };
   useEffect(() => {
-    !isUserSkillsLoading &&
-      userSkills &&
+    if (!isUserSkillsLoading && userSkills) {
       setSkills(
         userSkills.map((skill) => ({
           id: generateId(),
@@ -85,6 +84,7 @@ const AddSkill = () => {
           createdAt: skill.createdAt,
         }))
       );
+    }
   }, [isUserSkillsLoading, userSkills]);
 
   if (userSkills == null) {
