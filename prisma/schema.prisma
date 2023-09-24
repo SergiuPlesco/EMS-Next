@@ -45,7 +45,7 @@ model User {
   sessions      Session[]
   skills        UserSkill[]
   positions     UserPosition[]
-
+  phone         String?
 }
 
 model UserSkill {
