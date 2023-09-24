@@ -53,6 +53,7 @@ const Profile = () => {
             userImage={session?.user?.image as string}
             userName={session?.user?.name || "-"}
             userEmail={session?.user?.email || "-"}
+            userId={session.user.id}
           />
         </div>
 

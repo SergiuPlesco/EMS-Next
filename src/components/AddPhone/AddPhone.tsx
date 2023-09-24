@@ -3,6 +3,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import { trpc } from "@/utils/trpc";
+
 import { Button } from "../ui/button";
 import {
   Form,
@@ -19,16 +21,22 @@ const FormSchema = z.object({
 });
 
 const AddPhone = () => {
+  const { data } = trpc.users.getPhone.useQuery();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      phone: "",
+    values: {
+      phone: data?.phone || "",
     },
   });
 
+  const addPhone = trpc.users.addPhone.useMutation();
   const handleSubmit = (values: z.infer<typeof FormSchema>) => {
-    return values;
+    addPhone.mutate({
+      ...values,
+    });
   };
+
   return (
     <div className="flex flex-col items-start gap-4 border rounded p-2 mb-6">
       <Form {...form}>
@@ -55,6 +63,7 @@ const AddPhone = () => {
             <Button
               type="submit"
               className="py-0 h-7 rounded bg-blue-300 bg-smartpurple"
+              disabled={addPhone.isLoading}
             >
               Save
             </Button>
