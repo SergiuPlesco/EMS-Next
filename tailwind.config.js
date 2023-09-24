@@ -17,6 +17,9 @@ module.exports = {
     },
     extend: {
       colors: {
+        smartgreen: "var(--smart-green)",
+        smartpurple: "var(--smart-purple)",
+        smartruby: "var(--smart-ruby)",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

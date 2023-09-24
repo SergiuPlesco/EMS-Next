@@ -2,6 +2,7 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { MdModeEdit } from "react-icons/md";
 
+import AddPhone from "@/components/AddPhone/AddPhone";
 import AddPosition from "@/components/AddPosition/AddPosition";
 import AddSkill from "@/components/AddSkill/AddSkill";
 import Identity from "@/components/Identity/Identity";
@@ -78,6 +79,7 @@ const Profile = () => {
         <Tabs elements={elements} />
       </section>
       <Modal open={isModalOpen} onClose={closeModal} title="Edit Info">
+        <AddPhone />
         <AddPosition />
         <AddSkill />
       </Modal>
