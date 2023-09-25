@@ -1,8 +1,32 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { AiOutlineDelete } from "react-icons/ai";
+import { z } from "zod";
 
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
+
+import { Button } from "../ui/button";
+
+const FormSchema = z.object({
+  positions: z.array(z.string()),
+});
 
 const AddPosition = () => {
   const {
@@ -17,20 +41,19 @@ const AddPosition = () => {
     { id: number | string; title: string }[]
   >([]);
 
-  const handleChange = (e: React.FormEvent<HTMLSelectElement>) => {
-    const positionAdded = positions?.find(
-      (position) => position.title === e.currentTarget.value
-    );
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+  });
 
-    if (e.currentTarget.value === "" || positionAdded) {
-      return; // Exit early if the value is empty or the position is already added
-    }
+  // const handleChange = (e: React.FormEvent<HTMLSelectElement>) => {
+  // 	const positionAdded = positions?.find((position) => position.title === e.currentTarget.value);
 
-    setPositions([
-      ...positions,
-      { id: generateId(), title: e.currentTarget.value },
-    ]);
-  };
+  // 	if (e.currentTarget.value === "" || positionAdded) {
+  // 		return; // Exit early if the value is empty or the position is already added
+  // 	}
+
+  // 	setPositions([...positions, { id: generateId(), title: e.currentTarget.value }]);
+  // };
 
   const handleDelete = (id: number | string) => () => {
     const elementToDeleteIndex = positions.findIndex(
@@ -67,6 +90,10 @@ const AddPosition = () => {
     return null;
   }
 
+  const onSubmit = (values: z.infer<typeof FormSchema>) => {
+    return values;
+  };
+
   return (
     <>
       <div className="flex flex-col items-start gap-4 border rounded p-2 mb-6 shadow-md">
@@ -97,40 +124,88 @@ const AddPosition = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-between w-full w-full">
-          <select
-            name="position"
-            id="position-select"
-            defaultValue=""
-            onChange={handleChange}
-            className="p-1 text-sm text-slate-600 rounded bg-transparent border  w-full"
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-2 w-full z-[3]"
           >
-            <option value="" className="text-sm text-slate-400">
-              Add a position
-            </option>
-            {positionsList &&
-              positionsList.map((position: { id: number; title: string }) => {
+            <FormField
+              control={form.control}
+              name="positions"
+              render={() => {
                 return (
-                  <option
-                    key={position.id}
-                    value={position.title}
-                    className="text-sm"
-                  >
-                    {position.title}
-                  </option>
+                  <FormItem className="z-[4] relative">
+                    <FormLabel>Positions</FormLabel>
+                    <Select>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a position" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {positionsList &&
+                          positionsList.map(
+                            (position: { id: number; title: string }) => {
+                              return (
+                                <SelectItem
+                                  key={position.id}
+                                  value={position.title}
+                                  className="text-sm"
+                                >
+                                  {position.title}
+                                </SelectItem>
+                              );
+                            }
+                          )}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
                 );
-              })}
-          </select>
-        </div>
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            className="border rounded px-2 pt-1 pb-2 flex items-center leading-4 text-[16px]"
-            onClick={handleSave}
-          >
-            save
-          </button>
-        </div>
+              }}
+            />
+            <div>
+              <Button
+                type="submit"
+                className="py-0 h-7 rounded bg-blue-300 bg-smartpurple"
+                onClick={handleSave}
+              >
+                Save
+              </Button>
+            </div>
+          </form>
+        </Form>
+
+        {/* <div className="flex items-center justify-between w-full w-full">
+					<select
+						name="position"
+						id="position-select"
+						defaultValue=""
+						onChange={handleChange}
+						className="p-1 text-sm text-slate-600 rounded bg-transparent border  w-full"
+					>
+						<option value="" className="text-sm text-slate-400">
+							Add a position
+						</option>
+						{positionsList &&
+							positionsList.map((position: { id: number; title: string }) => {
+								return (
+									<option key={position.id} value={position.title} className="text-sm">
+										{position.title}
+									</option>
+								);
+							})}
+					</select>
+				</div> */}
+        {/* <div className="flex justify-end">
+					<Button
+						type="submit"
+						className="py-0 h-7 rounded bg-blue-300 bg-smartpurple"
+						onClick={handleSave}
+					>
+						Save
+					</Button>
+				</div> */}
       </div>
     </>
   );

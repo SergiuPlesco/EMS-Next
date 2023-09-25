@@ -5,6 +5,8 @@ import Autocomplete from "@/components/Autocomplete/Autocomplete";
 import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
 
+import { Button } from "../ui/button";
+
 interface ISkill {
   id: number | string;
   title: string;
@@ -131,13 +133,13 @@ const AddSkill = () => {
         </div>
       </div>
       <div className="flex justify-end">
-        <button
+        <Button
           type="submit"
-          className="border rounded px-2 pt-1 pb-2 flex items-center leading-4 text-[16px]"
+          className="py-0 h-7 rounded bg-blue-300 bg-smartpurple"
           onClick={handleSave}
         >
-          save
-        </button>
+          Save
+        </Button>
       </div>
     </div>
   );
