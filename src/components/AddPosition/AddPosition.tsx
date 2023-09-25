@@ -69,7 +69,7 @@ const AddPosition = () => {
 
   return (
     <>
-      <div className="flex flex-col items-start gap-4 border rounded p-2 mb-6">
+      <div className="flex flex-col items-start gap-4 border rounded p-2 mb-6 shadow-md">
         <div className="flex flex-col w-full">
           <div className="flex justify-between">
             <div className="flex gap-1 flex-wrap">

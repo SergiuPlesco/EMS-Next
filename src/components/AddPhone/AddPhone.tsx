@@ -40,7 +40,7 @@ const AddPhone = () => {
   };
 
   return (
-    <div className="flex flex-col items-start gap-4 border rounded p-2 mb-6">
+    <div className="flex flex-col items-start gap-4 border rounded p-2 mb-6 shadow-md">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
