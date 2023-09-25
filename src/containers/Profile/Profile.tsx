@@ -49,12 +49,7 @@ const Profile = () => {
     <div className="flex flex-col">
       <section className="flex justify-between">
         <div>
-          <Identity
-            userImage={session?.user?.image as string}
-            userName={session?.user?.name || "-"}
-            userEmail={session?.user?.email || "-"}
-            userId={session.user.id}
-          />
+          <Identity />
         </div>
 
         <div className="self-start">
@@ -73,7 +68,7 @@ const Profile = () => {
             );
           })
         ) : (
-          <p>no position? click pensil to add</p>
+          <p>no position yet</p>
         )}
       </section>
       <section>

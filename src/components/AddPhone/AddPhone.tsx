@@ -21,16 +21,18 @@ const FormSchema = z.object({
 });
 
 const AddPhone = () => {
-  const { data } = trpc.users.getPhone.useQuery();
+  const { data: user, refetch } = trpc.users.getLoggedUser.useQuery();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     values: {
-      phone: data?.phone || "",
+      phone: user?.phone || "",
     },
   });
 
-  const addPhone = trpc.users.addPhone.useMutation();
+  const addPhone = trpc.users.addPhone.useMutation({
+    onSuccess: () => refetch(),
+  });
   const handleSubmit = (values: z.infer<typeof FormSchema>) => {
     addPhone.mutate({
       ...values,

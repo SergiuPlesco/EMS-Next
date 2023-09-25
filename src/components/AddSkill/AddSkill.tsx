@@ -46,7 +46,7 @@ const AddSkill = () => {
       {
         id: generateId(),
         title,
-        rating: 5,
+        rating: 5, // default skill level 5%
         createdAt: new Date(),
       },
     ]);

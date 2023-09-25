@@ -15,6 +15,13 @@ export const userRouter = router({
         },
       });
     }),
+  getLoggedUser: procedure.query(async ({ ctx }) => {
+    return await ctx.prisma.user.findFirst({
+      where: {
+        id: ctx.session?.user.id,
+      },
+    });
+  }),
   addPhone: procedure
     .input(
       z.object({
@@ -186,7 +193,6 @@ export const userRouter = router({
   getPositions: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.userPosition.findMany({
       where: {
-        // @ts-ignore
         authorId: ctx.session?.user.id,
       },
     });
@@ -197,7 +203,6 @@ export const userRouter = router({
     .mutation(async ({ ctx, input }) => {
       const updatedPositions = await ctx.prisma.user.update({
         where: {
-          // @ts-ignore
           id: ctx.session?.user.id,
         },
         data: {
