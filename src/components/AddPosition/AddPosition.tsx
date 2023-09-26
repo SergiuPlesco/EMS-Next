@@ -25,7 +25,7 @@ import { trpc } from "@/utils/trpc";
 import { Button } from "../ui/button";
 
 const FormSchema = z.object({
-  positions: z.array(z.string()),
+  position: z.string(),
 });
 
 const AddPosition = () => {
@@ -43,17 +43,22 @@ const AddPosition = () => {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      position: "",
+    },
   });
 
-  // const handleChange = (e: React.FormEvent<HTMLSelectElement>) => {
-  // 	const positionAdded = positions?.find((position) => position.title === e.currentTarget.value);
+  const handleChange = (value: string) => {
+    const positionAdded = positions?.find(
+      (position) => position.title === value
+    );
 
-  // 	if (e.currentTarget.value === "" || positionAdded) {
-  // 		return; // Exit early if the value is empty or the position is already added
-  // 	}
+    if (value === "" || positionAdded) {
+      return; // Exit early if the value is empty or the position is already added
+    }
 
-  // 	setPositions([...positions, { id: generateId(), title: e.currentTarget.value }]);
-  // };
+    setPositions([...positions, { id: generateId(), title: value }]);
+  };
 
   const handleDelete = (id: number | string) => () => {
     const elementToDeleteIndex = positions.findIndex(
@@ -131,12 +136,15 @@ const AddPosition = () => {
           >
             <FormField
               control={form.control}
-              name="positions"
-              render={() => {
+              name="position"
+              render={({ field: { value, onChange } }) => {
                 return (
                   <FormItem className="z-[4] relative">
                     <FormLabel>Positions</FormLabel>
-                    <Select>
+                    <Select
+                      defaultValue={value}
+                      onValueChange={(e) => (onChange(e), handleChange(e))}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a position" />
