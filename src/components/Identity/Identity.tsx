@@ -3,11 +3,13 @@ import React from "react";
 
 import { trpc } from "@/utils/trpc";
 
+import Spinner from "../Spinner/Spinner";
+
 const Identity = () => {
   const { data: user, isLoading } = trpc.users.getLoggedUser.useQuery();
 
   if (isLoading) {
-    return null;
+    return <Spinner />;
   }
 
   return (

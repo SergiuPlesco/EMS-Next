@@ -52,22 +52,18 @@ const Profile = () => {
 
   return (
     <>
-      {" "}
       <div className="flex flex-col">
         <section className="flex justify-between">
           <Identity />
 
           <div className="self-start">
-            {/* <button onClick={openModal}>
-							<AiFillSetting size={24} color="var(--smart-purple)" />
-						</button> */}
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="outline">
-                  <AiFillSetting size={24} color="var(--smart-purple)" />
+                <Button variant="link" className="p-0">
+                  <AiFillSetting size={18} color="var(--smart-purple)" />
                 </Button>
               </DialogTrigger>
-              <DialogContent className="flex flex-col justify-start h-full sm:h-auto sm:max-w-[425px] overflow-y-scroll">
+              <DialogContent className="flex flex-col justify-start h-full sm:h-auto sm:max-w-[425px] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle>Edit profile</DialogTitle>
                   <DialogDescription>

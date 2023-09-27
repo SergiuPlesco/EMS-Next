@@ -38,7 +38,6 @@ export const trpc = createTRPCNext<AppRouter>({
         }),
       ],
       transformer: superjson,
-      queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
     };
   },
   /**

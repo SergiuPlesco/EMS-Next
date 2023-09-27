@@ -23,9 +23,14 @@ import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
 
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
-const FormSchema = z.object({
+const PositionsSchema = z.object({
   position: z.string(),
+});
+
+const newPositionSchema = z.object({
+  newPosition: z.string(),
 });
 
 const AddPosition = () => {
@@ -40,11 +45,19 @@ const AddPosition = () => {
   const [positions, setPositions] = useState<
     { id: number | string; title: string }[]
   >([]);
+  const [showNewPositionForm, setShowNewPositionForm] = useState(false);
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const formPositions = useForm<z.infer<typeof PositionsSchema>>({
+    resolver: zodResolver(PositionsSchema),
     defaultValues: {
       position: "",
+    },
+  });
+
+  const formNewPositon = useForm<z.infer<typeof newPositionSchema>>({
+    resolver: zodResolver(newPositionSchema),
+    defaultValues: {
+      newPosition: "",
     },
   });
 
@@ -80,6 +93,10 @@ const AddPosition = () => {
     );
   };
 
+  const handleShowNewPositionForm = () => {
+    setShowNewPositionForm((actual) => !actual);
+  };
+
   useEffect(() => {
     !isUserPositionsLoading &&
       userPositions &&
@@ -95,7 +112,7 @@ const AddPosition = () => {
     return null;
   }
 
-  const onSubmit = (values: z.infer<typeof FormSchema>) => {
+  const onSubmit = (values: z.infer<typeof PositionsSchema>) => {
     return values;
   };
 
@@ -129,13 +146,13 @@ const AddPosition = () => {
           </div>
         </div>
 
-        <Form {...form}>
+        <Form {...formPositions}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={formPositions.handleSubmit(onSubmit)}
             className="flex flex-col gap-2 w-full z-[3]"
           >
             <FormField
-              control={form.control}
+              control={formPositions.control}
               name="position"
               render={({ field: { value, onChange } }) => {
                 return (
@@ -172,48 +189,63 @@ const AddPosition = () => {
                 );
               }}
             />
-            <div>
+            <div className="flex justify-between">
               <Button
                 type="submit"
-                className="py-0 h-7 rounded bg-blue-300 bg-smartpurple"
+                className="py-0 h-7 rounded bg-smartpurple"
                 onClick={handleSave}
               >
                 Save
+              </Button>
+              <Button
+                type="submit"
+                className="py-0 h-7 rounded bg-smartgreen hover:bg-smartgreen/50"
+                onClick={handleShowNewPositionForm}
+              >
+                +
               </Button>
             </div>
           </form>
         </Form>
 
-        {/* <div className="flex items-center justify-between w-full w-full">
-					<select
-						name="position"
-						id="position-select"
-						defaultValue=""
-						onChange={handleChange}
-						className="p-1 text-sm text-slate-600 rounded bg-transparent border  w-full"
-					>
-						<option value="" className="text-sm text-slate-400">
-							Add a position
-						</option>
-						{positionsList &&
-							positionsList.map((position: { id: number; title: string }) => {
-								return (
-									<option key={position.id} value={position.title} className="text-sm">
-										{position.title}
-									</option>
-								);
-							})}
-					</select>
-				</div> */}
-        {/* <div className="flex justify-end">
-					<Button
-						type="submit"
-						className="py-0 h-7 rounded bg-blue-300 bg-smartpurple"
-						onClick={handleSave}
-					>
-						Save
-					</Button>
-				</div> */}
+        {showNewPositionForm && (
+          <div className="w-full">
+            <Form {...formNewPositon}>
+              <form
+                onSubmit={formNewPositon.handleSubmit(() => {})}
+                className="flex flex-col gap-2 w-full"
+              >
+                <FormField
+                  control={formNewPositon.control}
+                  name="newPosition"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>New Position (correct name)</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="New position"
+                            type="text"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <div>
+                  <Button
+                    type="submit"
+                    className="py-0 h-7 rounded bg-blue-300 bg-smartpurple"
+                  >
+                    Add
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </div>
+        )}
       </div>
     </>
   );
