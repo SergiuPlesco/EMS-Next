@@ -15,4 +15,13 @@ export const positionsRouter = router({
         },
       });
     }),
+  deletePosition: procedure
+    .input(z.object({ positionId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.positions.delete({
+        where: {
+          id: input.positionId,
+        },
+      });
+    }),
 });

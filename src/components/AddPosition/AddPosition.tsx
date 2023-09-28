@@ -39,8 +39,11 @@ const AddPosition = () => {
     refetch,
     isLoading: isUserPositionsLoading,
   } = trpc.users.getPositions.useQuery();
-  const { data: positionsList } = trpc.positions.all.useQuery();
+  const { data: positionsList, refetch: refetchPositionsList } =
+    trpc.positions.all.useQuery();
   const updatePosition = trpc.users.updatePosition.useMutation();
+  const createNewPosition = trpc.positions.createNewPosition.useMutation();
+  const deletePosition = trpc.positions.deletePosition.useMutation();
 
   const [positions, setPositions] = useState<
     { id: number | string; title: string }[]
@@ -88,7 +91,10 @@ const AddPosition = () => {
     updatePosition.mutate(
       { positions: positions?.map((position) => position.title) || [] },
       {
-        onSuccess: () => refetch(),
+        onSuccess: () => {
+          refetch();
+          formPositions.reset();
+        },
       }
     );
   };
@@ -112,8 +118,29 @@ const AddPosition = () => {
     return null;
   }
 
-  const onSubmit = (values: z.infer<typeof PositionsSchema>) => {
-    return values;
+  const onCreateNewPositon = (values: z.infer<typeof newPositionSchema>) => {
+    createNewPosition.mutate(
+      {
+        title: values.newPosition,
+      },
+      {
+        onSuccess: () => {
+          formNewPositon.reset();
+          refetchPositionsList();
+        },
+      }
+    );
+  };
+
+  const handleDeletePosition = (id: number) => () => {
+    deletePosition.mutate(
+      { positionId: id },
+      {
+        onSuccess: () => {
+          refetchPositionsList();
+        },
+      }
+    );
   };
 
   return (
@@ -148,7 +175,7 @@ const AddPosition = () => {
 
         <Form {...formPositions}>
           <form
-            onSubmit={formPositions.handleSubmit(onSubmit)}
+            onSubmit={formPositions.handleSubmit(() => {})}
             className="flex flex-col gap-2 w-full z-[3]"
           >
             <FormField
@@ -156,7 +183,7 @@ const AddPosition = () => {
               name="position"
               render={({ field: { value, onChange } }) => {
                 return (
-                  <FormItem className="z-[4] relative">
+                  <FormItem>
                     <FormLabel>Positions</FormLabel>
                     <Select
                       defaultValue={value}
@@ -167,18 +194,33 @@ const AddPosition = () => {
                           <SelectValue placeholder="Select a position" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="w-full">
                         {positionsList &&
                           positionsList.map(
                             (position: { id: number; title: string }) => {
                               return (
-                                <SelectItem
+                                <div
                                   key={position.id}
-                                  value={position.title}
-                                  className="text-sm"
+                                  className="flex justify-between items-center w-full"
                                 >
-                                  {position.title}
-                                </SelectItem>
+                                  <SelectItem
+                                    key={position.id}
+                                    value={position.title}
+                                    className="text-sm w-full"
+                                  >
+                                    {position.title}
+                                  </SelectItem>
+                                  <Button
+                                    variant="link"
+                                    onClick={handleDeletePosition(position.id)}
+                                    className="focus:bg-accent focus:text-accent-foreground"
+                                  >
+                                    <AiOutlineDelete
+                                      size={16}
+                                      className="text-[#a12064]"
+                                    />
+                                  </Button>
+                                </div>
                               );
                             }
                           )}
@@ -192,13 +234,12 @@ const AddPosition = () => {
             <div className="flex justify-between">
               <Button
                 type="submit"
-                className="py-0 h-7 rounded bg-smartpurple"
+                className="py-0 h-7 rounded bg-smartpurple hover:bg-smartpurple/90"
                 onClick={handleSave}
               >
                 Save
               </Button>
               <Button
-                type="submit"
                 className="py-0 h-7 rounded bg-smartgreen hover:bg-smartgreen/50"
                 onClick={handleShowNewPositionForm}
               >
@@ -212,7 +253,7 @@ const AddPosition = () => {
           <div className="w-full">
             <Form {...formNewPositon}>
               <form
-                onSubmit={formNewPositon.handleSubmit(() => {})}
+                onSubmit={formNewPositon.handleSubmit(onCreateNewPositon)}
                 className="flex flex-col gap-2 w-full"
               >
                 <FormField
