@@ -1,20 +1,29 @@
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { MdModeEdit } from "react-icons/md";
+import { AiFillSetting } from "react-icons/ai";
 
 import AddPhone from "@/components/AddPhone/AddPhone";
 import AddPosition from "@/components/AddPosition/AddPosition";
 import AddSkill from "@/components/AddSkill/AddSkill";
 import Identity from "@/components/Identity/Identity";
+import Managers from "@/components/Managers/Managers";
 import Modal from "@/components/Modal/Modal";
+import Positions from "@/components/Positions/Positions";
 import Spinner from "@/components/Spinner/Spinner";
 import Tabs from "@/components/Tabs/Tabs";
-import Contact from "@/containers/Contact/Contact";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import Projects from "@/containers/Projects/Projects";
 import Skills from "@/containers/Skills/Skills";
-import { trpc } from "@/utils/trpc";
 
-const elements = [
+const tabsElements = [
   {
     label: "Skills",
     component: <Skills />,
@@ -23,20 +32,16 @@ const elements = [
     label: "Projects",
     component: <Projects />,
   },
-  {
-    label: "Contact",
-    component: <Contact />,
-  },
 ];
 
 const Profile = () => {
   const { data: session } = useSession();
-  const { data: userPositions } = trpc.users.getPositions.useQuery();
+
   const [isModalOpen, setIsOpenModal] = useState(false);
 
-  const openModal = () => {
-    setIsOpenModal(true);
-  };
+  // const openModal = () => {
+  // 	setIsOpenModal(true);
+  // };
   const closeModal = () => {
     setIsOpenModal(false);
   };
@@ -46,45 +51,46 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex flex-col">
-      <section className="flex justify-between">
-        <div>
-          <Identity
-            userImage={session?.user?.image as string}
-            userName={session?.user?.name || "-"}
-            userEmail={session?.user?.email || "-"}
-            userId={session.user.id}
-          />
-        </div>
+    <>
+      <div className="flex flex-col">
+        <section className="flex justify-between">
+          <Identity />
 
-        <div className="self-start">
-          <button onClick={openModal}>
-            <MdModeEdit size={16} className="text-slate-400" />
-          </button>
-        </div>
-      </section>
-      <section className="flex flex-wrap mb-6 gap-3">
-        {userPositions ? (
-          userPositions.map((position) => {
-            return (
-              <h3 key={position.id} className="font-semibold text-slate-600">
-                {position.title}
-              </h3>
-            );
-          })
-        ) : (
-          <p>no position? click pensil to add</p>
-        )}
-      </section>
-      <section>
-        <Tabs elements={elements} />
-      </section>
+          <div className="self-start">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="link" className="p-0">
+                  <AiFillSetting size={18} color="var(--smart-purple)" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="flex flex-col justify-start h-full sm:h-auto sm:max-w-[425px] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Edit profile</DialogTitle>
+                  <DialogDescription>
+                    Make changes to your profile here. Save each detail.
+                  </DialogDescription>
+                </DialogHeader>
+                <AddPhone />
+                <AddPosition />
+                <AddSkill />
+              </DialogContent>
+            </Dialog>
+          </div>
+        </section>
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <Positions />
+          <Managers />
+        </section>
+        <section>
+          <Tabs elements={tabsElements} />
+        </section>
+      </div>
       <Modal open={isModalOpen} onClose={closeModal} title="Edit Info">
         <AddPhone />
         <AddPosition />
         <AddSkill />
       </Modal>
-    </div>
+    </>
   );
 };
 

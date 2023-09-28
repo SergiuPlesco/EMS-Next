@@ -5,6 +5,8 @@ import Autocomplete from "@/components/Autocomplete/Autocomplete";
 import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
 
+import { Button } from "../ui/button";
+
 interface ISkill {
   id: number | string;
   title: string;
@@ -46,7 +48,7 @@ const AddSkill = () => {
       {
         id: generateId(),
         title,
-        rating: 5,
+        rating: 5, // default skill level 5%
         createdAt: new Date(),
       },
     ]);
@@ -91,7 +93,7 @@ const AddSkill = () => {
     return null;
   }
   return (
-    <div className="flex flex-col items-start gap-4 border rounded p-2 mb-6">
+    <div className="flex flex-col items-start gap-4 border rounded p-2 mb-6 shadow-md">
       <div className="flex flex-col w-full">
         <div className="flex justify-between">
           <div className="flex gap-1 flex-wrap">
@@ -131,13 +133,13 @@ const AddSkill = () => {
         </div>
       </div>
       <div className="flex justify-end">
-        <button
+        <Button
           type="submit"
-          className="border rounded px-2 pt-1 pb-2 flex items-center leading-4 text-[16px]"
+          className="py-0 h-7 rounded bg-blue-300 bg-smartpurple"
           onClick={handleSave}
         >
-          save
-        </button>
+          Save
+        </Button>
       </div>
     </div>
   );

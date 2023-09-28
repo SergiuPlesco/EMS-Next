@@ -32,10 +32,10 @@ const Modal = ({ open, children, onClose, title }: ModalProps) => {
     <div
       className={` ${
         open ? "flex" : "hidden"
-      } justify-center md:items-center w-full h-full absolute top-0 left-0 bg-[rgba(0,0,0,0.5)]  z-[9999]`}
+      } justify-center md:items-center w-full h-full absolute top-0 left-0 bg-[rgba(0,0,0,0.5)]  z-[10]`}
     >
       <div
-        className="bg-white w-full md:max-w-[600px] md:max-h-[900px] h-full p-4 md:rounded"
+        className="bg-white w-full md:max-w-[600px] md:max-h-[900px] h-full p-4 md:rounded z-[20]"
         ref={modalRef}
       >
         <div className="flex justify-between items-center mb-8">
