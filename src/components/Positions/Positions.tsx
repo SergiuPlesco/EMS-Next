@@ -1,8 +1,13 @@
 import React from "react";
 
 import { trpc } from "@/utils/trpc";
+
+import Spinner from "../Spinner/Spinner";
 const Positions = () => {
-  const { data: userPositions } = trpc.users.getPositions.useQuery();
+  const { data: userPositions, isLoading } = trpc.users.getPositions.useQuery();
+  if (isLoading && !userPositions) {
+    return <Spinner />;
+  }
   return (
     <div className="flex flex-col">
       <p className="text-slate-500 text-sm">Positions</p>
@@ -15,7 +20,7 @@ const Positions = () => {
           );
         })
       ) : (
-        <p>no position yet</p>
+        <p>No position yet</p>
       )}
     </div>
   );

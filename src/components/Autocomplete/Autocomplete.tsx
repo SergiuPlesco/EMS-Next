@@ -1,6 +1,8 @@
 import React from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 
+import { Input } from "../ui/input";
+
 interface Autocomplete {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -14,7 +16,7 @@ const Autocomplete = ({ value, onChange, onClick, options }: Autocomplete) => {
       <span className="absolute top-3 left-0 pl-2 flex items-center pointer-envents-none">
         <AiOutlineSearch />
       </span>
-      <input
+      <Input
         type="search"
         className={`border rounded p-2 pl-8 text-sm w-full text-slate-900 focus:border-slate-500 outline-0`}
         placeholder="Search a skill..."
