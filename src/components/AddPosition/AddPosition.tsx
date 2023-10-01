@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useToast } from "@/components/ui/use-toast";
 import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
 
@@ -34,6 +35,7 @@ const newPositionSchema = z.object({
 });
 
 const AddPosition = () => {
+  const { toast } = useToast();
   const {
     data: userPositions,
     refetch,
@@ -127,6 +129,10 @@ const AddPosition = () => {
         onSuccess: () => {
           formNewPositon.reset();
           refetchPositionsList();
+          toast({
+            description: "New positon added to the list",
+            variant: "success",
+          });
         },
       }
     );
@@ -138,6 +144,16 @@ const AddPosition = () => {
       {
         onSuccess: () => {
           refetchPositionsList();
+          toast({
+            description: "Position deleted form the list",
+            variant: "success",
+          });
+        },
+        onError: (error) => {
+          toast({
+            description: error.message,
+            variant: "destructive",
+          });
         },
       }
     );
