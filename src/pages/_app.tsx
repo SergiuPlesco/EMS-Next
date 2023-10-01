@@ -6,6 +6,7 @@ import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "styled-components";
 
+import { Toaster } from "@/components/ui/toaster";
 import theme from "@/constants/theme";
 import MainLayout from "@/layouts/MainLayout/MainLayout";
 import { trpc } from "@/utils/trpc";
@@ -20,6 +21,7 @@ const MyApp: AppType<{ session: Session }> = ({
         <ReactQueryDevtools initialIsOpen={false} />
         <MainLayout>
           <Component {...pageProps} />
+          <Toaster />
         </MainLayout>
       </ThemeProvider>
     </SessionProvider>

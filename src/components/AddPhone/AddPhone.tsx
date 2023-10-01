@@ -28,6 +28,7 @@ const AddPhone = () => {
     values: {
       phone: user?.phone || "",
     },
+    mode: "all",
   });
 
   const addPhone = trpc.users.addPhone.useMutation({
