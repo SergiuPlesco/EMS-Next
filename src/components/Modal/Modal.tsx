@@ -1,59 +1,37 @@
-import React, { useRef, useState } from "react";
-import { AiOutlineClose } from "react-icons/ai";
+import { AiFillSetting } from "react-icons/ai";
+
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 type ModalProps = {
-  open: boolean;
-  children: React.ReactNode;
-  onClose: () => void;
   title?: string;
+  description?: string;
+  children: React.ReactNode;
 };
 
-const Modal = ({ open, children, onClose, title }: ModalProps) => {
-  const modalRef = useRef<HTMLDivElement>(null);
-  const [isCloseHovered, setIsCloseHovered] = useState(false);
-
-  const handleMouseOver = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    if (e.type === "mouseover") {
-      setIsCloseHovered(true);
-    }
-  };
-
-  const handleMouseLeave = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    if (e.type === "mouseleave") {
-      setIsCloseHovered(false);
-    }
-  };
-
+const Modal = ({ title, description, children }: ModalProps) => {
   return (
-    <div
-      className={` ${
-        open ? "flex" : "hidden"
-      } justify-center md:items-center w-full h-full absolute top-0 left-0 bg-[rgba(0,0,0,0.5)]  z-[10]`}
-    >
-      <div
-        className="bg-white w-full md:max-w-[600px] md:max-h-[900px] h-full p-4 md:rounded z-[20]"
-        ref={modalRef}
-      >
-        <div className="flex justify-between items-center mb-8">
-          <p>{title}</p>
-          <button
-            onClick={onClose}
-            onMouseOver={handleMouseOver}
-            onMouseLeave={handleMouseLeave}
-            className={`rounded-full p-1 ${
-              isCloseHovered ? "bg-slate-300" : "bg-transparent"
-            }`}
-          >
-            <AiOutlineClose fontSize={20} />
-          </button>
-        </div>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="link" className="p-0">
+          <AiFillSetting size={18} color="var(--smart-purple)" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="flex flex-col justify-start h-full sm:h-auto sm:max-w-[425px] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
+        </DialogHeader>
         {children}
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
