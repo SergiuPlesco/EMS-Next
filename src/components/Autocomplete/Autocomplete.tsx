@@ -1,6 +1,11 @@
 import React from "react";
 import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
 
+import { trpc } from "@/utils/trpc";
+
+import { Button } from "../ui/button";
+import { useToast } from "../ui/use-toast";
 interface Autocomplete {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -9,6 +14,30 @@ interface Autocomplete {
 }
 
 const Autocomplete = ({ value, onChange, onClick, options }: Autocomplete) => {
+  const { toast } = useToast();
+  const deleteSkill = trpc.skills.delete.useMutation();
+
+  const handleDeleteSkill = (id: number) => () => {
+    deleteSkill.mutate(
+      {
+        skillId: id,
+      },
+      {
+        onSuccess: () => {
+          toast({
+            description: "Skill deleted",
+            variant: "success",
+          });
+        },
+        onError: (error) => {
+          toast({
+            description: error.message,
+            variant: "destructive",
+          });
+        },
+      }
+    );
+  };
   return (
     <div className="flex flex-col gap-2 items-start w-full relative">
       <div className="relative w-full">
@@ -29,7 +58,10 @@ const Autocomplete = ({ value, onChange, onClick, options }: Autocomplete) => {
             <ul>
               {options.map((skill) => {
                 return (
-                  <div key={skill.id}>
+                  <div
+                    key={skill.id}
+                    className="flex justify-between items-center hover:bg-slate-300"
+                  >
                     <li
                       key={skill.id}
                       className="px-2 py-1 m-0 flex items-center hover:bg-slate-300 cursor-pointer"
@@ -37,6 +69,13 @@ const Autocomplete = ({ value, onChange, onClick, options }: Autocomplete) => {
                     >
                       <p className="m-0">{skill.title}</p>
                     </li>
+                    <Button
+                      variant="link"
+                      onClick={handleDeleteSkill(skill.id)}
+                      className="focus:bg-accent focus:text-accent-foreground"
+                    >
+                      <AiOutlineDelete size={16} className="text-[#a12064]" />
+                    </Button>
                   </div>
                 );
               })}
