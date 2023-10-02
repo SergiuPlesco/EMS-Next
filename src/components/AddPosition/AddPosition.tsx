@@ -259,7 +259,7 @@ const AddPosition = () => {
                 className="py-0 h-7 rounded bg-smartgreen hover:bg-smartgreen/50"
                 onClick={handleShowNewPositionForm}
               >
-                +
+                {showNewPositionForm ? "-" : "+"}
               </Button>
             </div>
           </form>
