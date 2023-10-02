@@ -34,7 +34,7 @@ const SkillItem = ({ skill }: { skill: IUserSkill }) => {
           type="range"
           name=""
           id=""
-          min="5"
+          min="0"
           max="100"
           step="5"
           value={rangeValue}

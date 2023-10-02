@@ -102,12 +102,10 @@ const AddSkill = () => {
                   return (
                     <div
                       key={generateId()}
-                      className="flex justify-start gap-1 w-fit mb-1 py-1 px-1 rounded bg-slate-200"
+                      className="flex justify-start items-center gap-2 w-fit mb-1 py-1 px-1 rounded bg-slate-200"
                     >
-                      <p className="text-slate-500 pr-4 text-sm">
-                        {skill.title}
-                      </p>
-                      <p className="text-sm">{skill.rating}%</p>
+                      <p className="text-slate-500 text-sm">{skill.title}</p>
+                      <p className="text-[0.5rem]">{skill.rating}%</p>
                       <button onClick={handleDelete(skill.id)}>
                         <AiOutlineDelete size={16} className="text-[#a12064]" />
                       </button>
@@ -119,19 +117,13 @@ const AddSkill = () => {
         </div>
       </div>
 
-      <div className="flex gap-2 items-start w-full">
-        <div
-          className={`relative w-full transition-all ease-in-out duration-1000 sm:w-full sm:opacity-100 md:w-full md:opacity-100
-					`}
-        >
-          <Autocomplete
-            value={inputValue}
-            onChange={handleOnChange}
-            options={searchList}
-            onClick={handleOnClick}
-          />
-        </div>
-      </div>
+      <Autocomplete
+        value={inputValue}
+        onChange={handleOnChange}
+        options={searchList}
+        onClick={handleOnClick}
+      />
+
       <div className="flex justify-end">
         <Button
           type="submit"
