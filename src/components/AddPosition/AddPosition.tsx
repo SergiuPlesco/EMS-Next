@@ -210,7 +210,7 @@ const AddPosition = () => {
                           <SelectValue placeholder="Select a position" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="w-full">
+                      <SelectContent className="w-full max-h-[300px]">
                         {positionsList &&
                           positionsList.map(
                             (position: { id: number; title: string }) => {
