@@ -1,3 +1,4 @@
+import AddManager from "@/components/AddManager/AddManager";
 import AddPhone from "@/components/AddPhone/AddPhone";
 import AddPosition from "@/components/AddPosition/AddPosition";
 import AddSkill from "@/components/AddSkill/AddSkill";
@@ -46,6 +47,7 @@ const Profile = () => {
               <AddPhone />
               <AddPosition />
               <AddSkill />
+              <AddManager />
             </Modal>
           </div>
         </section>
