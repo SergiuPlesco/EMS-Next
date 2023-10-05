@@ -64,7 +64,7 @@ const Autocomplete = ({ value, onChange, onClick, options }: Autocomplete) => {
                   >
                     <li
                       key={skill.id}
-                      className="px-2 py-1 m-0 flex items-center hover:bg-slate-300 cursor-pointer"
+                      className="px-2 py-1 m-0 flex items-center w-full hover:bg-slate-300 cursor-pointer"
                       onClick={onClick(skill.title)}
                     >
                       <p className="m-0">{skill.title}</p>
