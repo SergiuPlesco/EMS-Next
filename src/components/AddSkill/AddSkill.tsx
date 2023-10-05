@@ -144,7 +144,7 @@ const AddSkill = () => {
   useEffect(() => {
     if (!isUserSkillsLoading && userSkills) {
       setSkills(
-        userSkills.map((skill) => ({
+        userSkills.map((skill: ISkill) => ({
           id: generateId(),
           title: skill.title,
           rating: skill.rating,
