@@ -1,4 +1,5 @@
-import { prisma } from "@/server/prisma";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
 import { POSITIONS, TECHNOLOGIES } from "../src/constants/common";
 
