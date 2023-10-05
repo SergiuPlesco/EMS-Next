@@ -24,7 +24,7 @@ const Modal = ({ title, description, children }: ModalProps) => {
           <AiFillSetting size={18} color="var(--smart-purple)" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="flex flex-col justify-start h-full sm:h-auto sm:max-w-[425px] overflow-y-auto">
+      <DialogContent className="flex flex-col justify-start h-full sm:max-h-[800px] sm:max-w-[600px] overflow-y-scroll">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
