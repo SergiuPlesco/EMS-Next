@@ -49,7 +49,7 @@ model User {
   // manager       User?          @relation("UserManagers", fields: [managerId], references: [id])
   managers      User[]         @relation("UserManagers")
   members       User[]         @relation("UserManagers")
-  phone         String
+  phone         String?
 }
 
 model UserSkill {
