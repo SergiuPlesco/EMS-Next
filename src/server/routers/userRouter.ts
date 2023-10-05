@@ -206,22 +206,32 @@ export const userRouter = router({
       });
       return updatedPositions;
     }),
-  addManager: procedure
-    .input(z.object({ managerId: z.string() }))
+  updateManagers: procedure
+    .input(z.object({ managerIds: z.array(z.object({ id: z.string() })) }))
     .mutation(async ({ ctx, input }) => {
-      const userManager = await ctx.prisma.user.update({
-        where: {
-          id: ctx.session?.user.id,
-        },
-        data: {
-          managers: {
-            connect: {
-              id: input.managerId,
+      if (input.managerIds.length === 0) {
+        return await ctx.prisma.user.update({
+          where: {
+            id: ctx.session?.user.id,
+          },
+          data: {
+            managers: {
+              set: [],
             },
           },
-        },
-      });
-      return userManager;
+        });
+      } else {
+        await ctx.prisma.user.update({
+          where: {
+            id: ctx.session?.user.id,
+          },
+          data: {
+            managers: {
+              connect: input.managerIds,
+            },
+          },
+        });
+      }
     }),
   getManagers: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.user.findFirst({
