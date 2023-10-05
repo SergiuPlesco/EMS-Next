@@ -1,18 +1,22 @@
 import Image from "next/image";
 import React from "react";
 
-interface Props {
-  userImage: string;
-  userName: string;
-  userEmail: string;
-}
+import { trpc } from "@/utils/trpc";
 
-const Identity = ({ userImage, userName, userEmail }: Props) => {
+import Spinner from "../Spinner/Spinner";
+
+const Identity = () => {
+  const { data: user, isLoading } = trpc.users.getLoggedUser.useQuery();
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   return (
     <div className="flex gap-4 items-center mb-6">
       <div>
         <Image
-          src={userImage}
+          src={user?.image || ""}
           alt="Profile image"
           width={75}
           height={75}
@@ -22,8 +26,9 @@ const Identity = ({ userImage, userName, userEmail }: Props) => {
       </div>
 
       <div>
-        <h2 className="text-xl font-bold">{userName}</h2>
-        <p className="text-xs text-slate-500">{userEmail}</p>
+        <h2 className="text-xl font-bold">{user?.name}</h2>
+        <p className="text-xs text-slate-500">{user?.email}</p>
+        <p className="text-xs text-slate-500">{user?.phone} </p>
       </div>
     </div>
   );

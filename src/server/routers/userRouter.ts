@@ -15,6 +15,40 @@ export const userRouter = router({
         },
       });
     }),
+  getLoggedUser: procedure.query(async ({ ctx }) => {
+    return await ctx.prisma.user.findFirst({
+      where: {
+        id: ctx.session?.user.id,
+      },
+    });
+  }),
+  addPhone: procedure
+    .input(
+      z.object({
+        phone: z.string().length(8),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const phone = await ctx.prisma.user.update({
+        where: {
+          id: ctx.session?.user.id,
+        },
+        data: {
+          phone: input.phone,
+        },
+      });
+      return phone;
+    }),
+  getPhone: procedure.query(async ({ ctx }) => {
+    return await ctx.prisma.user.findUnique({
+      where: {
+        id: ctx.session?.user.id,
+      },
+      select: {
+        phone: true,
+      },
+    });
+  }),
   updateSKills: procedure
     .input(
       z.object({
@@ -22,7 +56,7 @@ export const userRouter = router({
           z.object({
             title: z.string(),
             rating: z.number(),
-            createdAt: z.string(),
+            createdAt: z.date(),
           })
         ),
       })
@@ -57,7 +91,6 @@ export const userRouter = router({
     .mutation(async ({ ctx, input }) => {
       const deleteSkill = await ctx.prisma.user.update({
         where: {
-          // @ts-ignore
           id: ctx.session?.user.id,
         },
         data: {
@@ -73,16 +106,8 @@ export const userRouter = router({
   getSkills: procedure.query(async ({ ctx }) => {
     const user = await ctx.prisma.user.findFirst({
       where: {
-        // @ts-ignore
         id: ctx.session?.user?.id,
       },
-      // select: {
-      //   skills: {
-      //     orderBy: {
-      //       createdAt: "asc",
-      //     },
-      //   },
-      // },
     });
 
     if (!user) throw new Error("This user does not exist");
@@ -159,7 +184,6 @@ export const userRouter = router({
   getPositions: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.userPosition.findMany({
       where: {
-        // @ts-ignore
         authorId: ctx.session?.user.id,
       },
     });
@@ -170,7 +194,6 @@ export const userRouter = router({
     .mutation(async ({ ctx, input }) => {
       const updatedPositions = await ctx.prisma.user.update({
         where: {
-          // @ts-ignore
           id: ctx.session?.user.id,
         },
         data: {
@@ -183,4 +206,31 @@ export const userRouter = router({
       });
       return updatedPositions;
     }),
+  addManager: procedure
+    .input(z.object({ managerId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const userManager = await ctx.prisma.user.update({
+        where: {
+          id: ctx.session?.user.id,
+        },
+        data: {
+          managers: {
+            connect: {
+              id: input.managerId,
+            },
+          },
+        },
+      });
+      return userManager;
+    }),
+  getManagers: procedure.query(async ({ ctx }) => {
+    return await ctx.prisma.user.findFirst({
+      where: {
+        id: ctx.session?.user.id,
+      },
+      select: {
+        managers: true,
+      },
+    });
+  }),
 });
