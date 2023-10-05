@@ -9,6 +9,7 @@ import DesktopNav from "@/containers/AppNavigation/DesktopNav/DesktopNav";
 import MobileNav from "@/containers/AppNavigation/MobileNav/MobileNav";
 
 const Header = () => {
+  // To do: dark/light mode
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   const handleDarkMode = () => {

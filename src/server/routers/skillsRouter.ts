@@ -1,24 +1,15 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { procedure, router } from "../trpc";
 
 export const skillsRouter = router({
   create: procedure
-    .input(z.object({ skillTitle: z.string() }))
+    .input(z.object({ title: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const skill = await ctx.prisma.skills.findFirst({
-        where: {
-          title: input.skillTitle,
-        },
-      });
-
-      if (skill) throw new Error("skill already exists");
-
       const newSkill = await ctx.prisma.skills.create({
         data: {
-          title: input.skillTitle,
-          // @ts-ignore
-          authorId: ctx?.session?.user?.id as string,
+          title: input.title,
         },
       });
       return newSkill;
@@ -36,6 +27,39 @@ export const skillsRouter = router({
             startsWith: input.searchQuery,
             mode: "insensitive",
           },
+        },
+      });
+    }),
+  delete: procedure
+    .input(z.object({ skillId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const skill = await ctx.prisma.positions.findUnique({
+        where: {
+          id: input.skillId,
+        },
+      });
+      const isPositionUsed = await ctx.prisma.user.findFirst({
+        where: {
+          positions: {
+            some: {
+              title: skill?.title,
+            },
+          },
+        },
+        include: {
+          positions: true,
+          skills: true,
+        },
+      });
+      if (isPositionUsed) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "The skill is in use and can't be deleted.",
+        });
+      }
+      return await ctx.prisma.positions.delete({
+        where: {
+          id: input.skillId,
         },
       });
     }),
