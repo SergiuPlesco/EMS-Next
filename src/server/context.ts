@@ -4,7 +4,7 @@ import { type Session } from "next-auth";
 
 import { getServerAuthSession } from "@/pages/api/auth/[...nextauth]";
 
-import { prisma } from "./prisma";
+import prisma from "./prisma";
 
 type CreateContextOptions = {
   session: Session | null;
