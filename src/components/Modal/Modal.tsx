@@ -14,14 +14,19 @@ type ModalProps = {
   title?: string;
   description?: string;
   children: React.ReactNode;
+  icon?: React.ReactNode;
 };
 
-const Modal = ({ title, description, children }: ModalProps) => {
+const Modal = ({ title, description, children, icon }: ModalProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="link" className="p-0">
-          <AiFillSetting size={18} color="var(--smart-purple)" />
+          {icon ? (
+            icon
+          ) : (
+            <AiFillSetting size={18} color="var(--smart-purple)" />
+          )}
         </Button>
       </DialogTrigger>
       <DialogContent className="flex flex-col justify-start h-full sm:max-h-[800px] sm:max-w-[600px] overflow-y-scroll">

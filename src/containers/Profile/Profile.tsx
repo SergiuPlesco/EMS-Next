@@ -1,5 +1,4 @@
 import AddManager from "@/components/AddManager/AddManager";
-import AddPhone from "@/components/AddPhone/AddPhone";
 import AddPosition from "@/components/AddPosition/AddPosition";
 import AddSkill from "@/components/AddSkill/AddSkill";
 import Identity from "@/components/Identity/Identity";
@@ -44,7 +43,6 @@ const Profile = () => {
               title="Edit profile"
               description="Make changes to your profile here. Save each detail."
             >
-              <AddPhone />
               <AddPosition />
               <AddSkill />
               <AddManager />
