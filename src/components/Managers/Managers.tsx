@@ -1,5 +1,5 @@
+import { PlusIcon } from "@radix-ui/react-icons";
 import React from "react";
-import { BsPencilSquare } from "react-icons/bs";
 
 import { trpc } from "@/utils/trpc";
 
@@ -19,7 +19,7 @@ const Managers = () => {
         <Modal
           title="Edit profile"
           description="Make changes to your profile here. Save each detail."
-          icon={<BsPencilSquare size={18} color="var(--smart-purple)" />}
+          icon={<PlusIcon width={16} color="var(--smart-purple)" />}
         >
           <AddManager />
         </Modal>

@@ -15,15 +15,19 @@ type ModalProps = {
   description?: string;
   children: React.ReactNode;
   icon?: React.ReactNode;
+  text?: string;
 };
 
-const Modal = ({ title, description, children, icon }: ModalProps) => {
+const Modal = ({ title, description, children, icon, text }: ModalProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="link" className="p-0">
+        <Button variant="link" className="p-0 hover:no-underline">
           {icon ? (
-            icon
+            <div className="flex justify-end items-center gap-2">
+              <p className="text-sm text-slate-500">{text ?? ""}</p>
+              {icon}
+            </div>
           ) : (
             <AiFillSetting size={18} color="var(--smart-purple)" />
           )}

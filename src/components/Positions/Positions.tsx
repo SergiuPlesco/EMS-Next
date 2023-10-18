@@ -1,15 +1,15 @@
+import { PlusIcon } from "@radix-ui/react-icons";
 import React from "react";
-import { BsPencilSquare } from "react-icons/bs";
 
 import { trpc } from "@/utils/trpc";
 
 import AddPosition from "../AddPosition/AddPosition";
 import Modal from "../Modal/Modal";
-import Spinner from "../Spinner/Spinner";
+
 const Positions = () => {
   const { data: userPositions, isLoading } = trpc.users.getPositions.useQuery();
   if (isLoading && !userPositions) {
-    return <Spinner />;
+    return null;
   }
   return (
     <div className="flex flex-col">
@@ -18,7 +18,7 @@ const Positions = () => {
         <Modal
           title="Edit profile"
           description="Make changes to your profile here. Save each detail."
-          icon={<BsPencilSquare size={18} color="var(--smart-purple)" />}
+          icon={<PlusIcon width={16} color="var(--smart-purple)" />}
         >
           <AddPosition />
         </Modal>
