@@ -4,7 +4,7 @@ import type { NextAuthOptions } from "next-auth";
 import NextAuth, { getServerSession } from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
 
-import { prisma } from "@/server/prisma";
+import prisma from "@/server/prisma";
 
 const { NEXT_PUBLIC_GOOGLE_ID = "", NEXT_PUBLIC_GOOGLE_SECRET = "" } =
   process.env; // for typescript
