@@ -1,8 +1,11 @@
+import { Pencil1Icon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import React from "react";
 
 import { trpc } from "@/utils/trpc";
 
+import AddPhone from "../AddPhone/AddPhone";
+import Modal from "../Modal/Modal";
 import Spinner from "../Spinner/Spinner";
 
 const Identity = () => {
@@ -26,7 +29,16 @@ const Identity = () => {
       </div>
 
       <div>
-        <h2 className="text-xl font-bold">{user?.name}</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl font-bold">{user?.name}</h2>
+          <Modal
+            title="Edit profile"
+            description="Make changes to your profile here. Save each detail."
+            icon={<Pencil1Icon width={16} color="var(--smart-purple)" />}
+          >
+            <AddPhone />
+          </Modal>
+        </div>
         <p className="text-xs text-slate-500">{user?.email}</p>
         <p className="text-xs text-slate-500">{user?.phone} </p>
       </div>
