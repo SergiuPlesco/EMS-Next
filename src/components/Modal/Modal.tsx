@@ -33,7 +33,7 @@ const Modal = ({ title, description, children, icon, text }: ModalProps) => {
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="flex flex-col justify-start h-full sm:max-h-[800px] sm:max-w-[600px] overflow-y-scroll">
+      <DialogContent className="flex flex-col justify-start h-full sm:h-auto sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
