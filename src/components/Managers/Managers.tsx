@@ -1,6 +1,10 @@
+import { PlusIcon } from "@radix-ui/react-icons";
 import React from "react";
 
 import { trpc } from "@/utils/trpc";
+
+import AddManager from "../AddManager/AddManager";
+import Modal from "../Modal/Modal";
 
 const Managers = () => {
   const { data: managers } = trpc.users.getManagers.useQuery();
@@ -10,7 +14,16 @@ const Managers = () => {
   }
   return (
     <div className="flex flex-col">
-      <p className="text-slate-500 text-sm">Managers</p>
+      <div className="flex justify-start items-center gap-2">
+        <p className="text-slate-500 text-sm">Managers</p>
+        <Modal
+          title="Edit profile"
+          description="Make changes to your profile here. Save each detail."
+          icon={<PlusIcon width={16} color="var(--smart-purple)" />}
+        >
+          <AddManager />
+        </Modal>
+      </div>
       {managers ? (
         managers.managers.map((manager) => {
           return (

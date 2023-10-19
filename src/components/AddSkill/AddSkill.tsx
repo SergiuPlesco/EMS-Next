@@ -92,15 +92,31 @@ const AddSkill = () => {
   };
 
   const handleSave = () => {
-    updateSkills.mutate({
-      skills: [
-        ...skills.map((skill) => ({
-          title: skill.title,
-          rating: skill.rating || 0,
-          createdAt: skill.createdAt,
-        })),
-      ],
-    });
+    updateSkills.mutate(
+      {
+        skills: [
+          ...skills.map((skill) => ({
+            title: skill.title,
+            rating: skill.rating || 0,
+            createdAt: skill.createdAt,
+          })),
+        ],
+      },
+      {
+        onSuccess: () => {
+          toast({
+            description: "Skills are updated",
+            variant: "success",
+          });
+        },
+        onError: () => {
+          toast({
+            description: "An error occured, try again",
+            variant: "destructive",
+          });
+        },
+      }
+    );
   };
 
   const handleOpenNewTagForm = () => {
@@ -128,7 +144,7 @@ const AddSkill = () => {
   useEffect(() => {
     if (!isUserSkillsLoading && userSkills) {
       setSkills(
-        userSkills.map((skill) => ({
+        userSkills.map((skill: ISkill) => ({
           id: generateId(),
           title: skill.title,
           rating: skill.rating,

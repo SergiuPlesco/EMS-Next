@@ -96,6 +96,16 @@ const AddPosition = () => {
         onSuccess: () => {
           refetch();
           formPositions.reset();
+          toast({
+            description: "Positions are updated",
+            variant: "success",
+          });
+        },
+        onError: () => {
+          toast({
+            description: "An error occured, try againg.",
+            variant: "destructive",
+          });
         },
       }
     );
