@@ -227,6 +227,7 @@ export const userRouter = router({
           },
           data: {
             managers: {
+              set: [],
               connect: input.managerIds,
             },
           },
