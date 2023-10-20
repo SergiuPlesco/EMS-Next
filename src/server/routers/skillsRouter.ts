@@ -5,25 +5,38 @@ import { procedure, router } from "../trpc";
 
 export const skillsRouter = router({
   create: procedure
-    .input(z.object({ title: z.string() }))
+    .input(z.object({ name: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const newSkill = await ctx.prisma.skills.create({
+      const newSkill = await ctx.prisma.skill.upsert({
+        where: {
+          name: input.name,
+        },
+        create: {
+          name: input.name,
+        },
+        update: {},
+      });
+      await ctx.prisma.userSkill.create({
         data: {
-          title: input.title,
+          skillId: newSkill.id,
+          userId: ctx.session?.user.id as string,
+          rating: 5,
+          name: newSkill.name,
+          createdAt: new Date(),
         },
       });
       return newSkill;
     }),
   all: procedure.query(async ({ ctx }) => {
-    return await ctx.prisma.skills.findMany();
+    return await ctx.prisma.skill.findMany();
   }),
   searchSkill: procedure
     .input(z.object({ searchQuery: z.string() }))
     .query(async ({ ctx, input }) => {
       if (input.searchQuery == "") return [];
-      return ctx.prisma.skills.findMany({
+      return ctx.prisma.skill.findMany({
         where: {
-          title: {
+          name: {
             startsWith: input.searchQuery,
             mode: "insensitive",
           },
@@ -33,7 +46,7 @@ export const skillsRouter = router({
   delete: procedure
     .input(z.object({ skillId: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const skill = await ctx.prisma.positions.findUnique({
+      const skill = await ctx.prisma.position.findUnique({
         where: {
           id: input.skillId,
         },
@@ -42,7 +55,7 @@ export const skillsRouter = router({
         where: {
           positions: {
             some: {
-              title: skill?.title,
+              name: skill?.name,
             },
           },
         },
@@ -57,7 +70,7 @@ export const skillsRouter = router({
           message: "The skill is in use and can't be deleted.",
         });
       }
-      return await ctx.prisma.positions.delete({
+      return await ctx.prisma.position.delete({
         where: {
           id: input.skillId,
         },

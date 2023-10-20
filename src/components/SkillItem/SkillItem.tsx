@@ -3,10 +3,10 @@ import React, { useState } from "react";
 import { trpc } from "@/utils/trpc";
 
 export interface IUserSkill {
-  title: string;
+  name: string;
   id: number;
   rating: number | null;
-  authorId: string | null;
+  userId: string | null;
 }
 
 const SkillItem = ({ skill }: { skill: IUserSkill }) => {
@@ -26,7 +26,7 @@ const SkillItem = ({ skill }: { skill: IUserSkill }) => {
     <div>
       <div className="flex flex-col mb-4">
         <div className="flex justify-between mb-2">
-          <p>{skill.title}</p>
+          <p>{skill.name}</p>
           <p>{rangeValue}%</p>
         </div>
 

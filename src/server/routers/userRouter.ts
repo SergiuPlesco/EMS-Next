@@ -25,7 +25,7 @@ export const userRouter = router({
   addPhone: procedure
     .input(
       z.object({
-        phone: z.string().length(8),
+        phone: z.string().length(9),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -63,9 +63,10 @@ export const userRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const newSkills = input.skills.map((skill) => ({
-        title: skill.title,
+        name: skill.title,
         rating: skill.rating,
         createdAt: new Date(skill.createdAt),
+        skillId: 5,
       }));
 
       const userSkills = await ctx.prisma.user.update({
@@ -150,7 +151,7 @@ export const userRouter = router({
         where: {
           id: input.skillId,
           // @ts-ignore
-          authorId: ctx.session?.user?.id,
+          userId: ctx.session?.user?.id,
         },
         data: {
           rating: input.rating,
@@ -163,7 +164,7 @@ export const userRouter = router({
     .input(z.object({ positions: z.array(z.string()) }))
     .mutation(async ({ ctx, input }) => {
       const newPostions = input.positions.map((position) => ({
-        title: position,
+        name: position,
       }));
       const userPositions = await ctx.prisma.user.update({
         where: {
@@ -184,7 +185,7 @@ export const userRouter = router({
   getPositions: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.userPosition.findMany({
       where: {
-        authorId: ctx.session?.user.id,
+        userId: ctx.session?.user.id,
       },
     });
   }),
