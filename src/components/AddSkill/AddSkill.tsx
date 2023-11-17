@@ -37,6 +37,8 @@ const AddSkill = () => {
   // });
 
   const createSkill = trpc.skills.create.useMutation();
+  const deleteSkill = trpc.skills.delete.useMutation();
+  const deleteSkillFromUser = trpc.users.deleteSkill.useMutation();
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -62,7 +64,7 @@ const AddSkill = () => {
     setInputValue("");
     refetch();
   };
-  const handleDelete = (id: number | string) => () => {
+  const handleDeleteFromUser = (id: number) => () => {
     const elementToDeleteIndex = skills.findIndex(
       (position) => position.id === id
     );
@@ -71,6 +73,21 @@ const AddSkill = () => {
       newSkill.splice(elementToDeleteIndex, 1);
       setSkills(newSkill);
     }
+    deleteSkillFromUser.mutate(
+      {
+        skillId: id,
+      },
+      {
+        onSuccess: () => {
+          toast({
+            description: "Skill deleted form your list",
+            variant: "success",
+          });
+
+          utils.users.getSkills.invalidate();
+        },
+      }
+    );
   };
 
   const onCreateNewSkill = () => {
@@ -86,6 +103,28 @@ const AddSkill = () => {
           });
 
           utils.users.getSkills.invalidate();
+        },
+      }
+    );
+  };
+
+  const handleDeleteSkill = (id: number) => () => {
+    deleteSkill.mutate(
+      {
+        skillId: id,
+      },
+      {
+        onSuccess: () => {
+          toast({
+            description: "Skill deleted",
+            variant: "success",
+          });
+        },
+        onError: (error) => {
+          toast({
+            description: error.message,
+            variant: "destructive",
+          });
         },
       }
     );
@@ -122,7 +161,7 @@ const AddSkill = () => {
                     >
                       <p className="text-slate-500 text-sm">{skill.name}</p>
                       <p className="text-[0.5rem]">{skill.rating}%</p>
-                      <button onClick={handleDelete(skill.id)}>
+                      <button onClick={handleDeleteFromUser(skill.id)}>
                         <AiOutlineDelete size={16} className="text-[#a12064]" />
                       </button>
                     </div>
@@ -138,16 +177,10 @@ const AddSkill = () => {
         onChange={handleOnChange}
         options={searchList}
         onClick={handleOnClick}
+        onDelete={handleDeleteSkill}
       />
 
       <div className="flex gap-2 mb-4">
-        {/* <Button
-          type="submit"
-          className="py-0 h-7 rounded bg-blue-300 bg-smartpurple"
-          onClick={onSave}
-        >
-          Save
-        </Button> */}
         <Button
           type="submit"
           className="py-0 h-7 rounded bg-blue-300 bg-smartgreen"

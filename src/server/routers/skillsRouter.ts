@@ -46,31 +46,32 @@ export const skillsRouter = router({
   delete: procedure
     .input(z.object({ skillId: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const skill = await ctx.prisma.position.findUnique({
+      const skill = await ctx.prisma.skill.findUnique({
         where: {
           id: input.skillId,
         },
       });
-      const isPositionUsed = await ctx.prisma.user.findFirst({
+
+      const userWithSkill = await ctx.prisma.user.findFirst({
         where: {
-          positions: {
+          skills: {
             some: {
               name: skill?.name,
             },
           },
         },
         include: {
-          positions: true,
           skills: true,
         },
       });
-      if (isPositionUsed) {
+
+      if (userWithSkill) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "The skill is in use and can't be deleted.",
+          message: "The skill is used and can't be deleted.",
         });
       }
-      return await ctx.prisma.position.delete({
+      return await ctx.prisma.skill.delete({
         where: {
           id: input.skillId,
         },

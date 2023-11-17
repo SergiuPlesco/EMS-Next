@@ -58,7 +58,7 @@ model UserSkill {
   skillId   Int
   userId    String?
   rating    Int
-  name String
+  name      String
   skill     Skill   @relation(fields: [skillId], references: [id])
   user      User?   @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
