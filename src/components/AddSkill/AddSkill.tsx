@@ -11,7 +11,7 @@ import { Button } from "../ui/button";
 export interface ISkill {
   id: number;
   name: string;
-  rating: number;
+  rating: number | null;
   createdAt: Date;
 }
 
@@ -19,6 +19,8 @@ const AddSkill = () => {
   const { toast } = useToast();
   const [inputValue, setInputValue] = useState("");
   const [skills, setSkills] = useState<ISkill[]>([]);
+
+  const utils = trpc.useContext();
 
   const { data: searchList } = trpc.skills.searchSkill.useQuery({
     searchQuery: inputValue,
@@ -40,6 +42,7 @@ const AddSkill = () => {
     const value = e.target.value;
     setInputValue(value);
   };
+
   const handleOnClick = (title: string) => () => {
     const skillAdded = skills?.find((skill) => skill.name === title);
 
@@ -81,15 +84,11 @@ const AddSkill = () => {
             description: "New skill added to the list",
             variant: "success",
           });
+
+          utils.users.getSkills.invalidate();
         },
       }
     );
-  };
-
-  const onSave = () => {
-    createSkill.mutate({
-      name: "",
-    });
   };
 
   useEffect(() => {
@@ -142,13 +141,13 @@ const AddSkill = () => {
       />
 
       <div className="flex gap-2 mb-4">
-        <Button
+        {/* <Button
           type="submit"
           className="py-0 h-7 rounded bg-blue-300 bg-smartpurple"
           onClick={onSave}
         >
           Save
-        </Button>
+        </Button> */}
         <Button
           type="submit"
           className="py-0 h-7 rounded bg-blue-300 bg-smartgreen"
