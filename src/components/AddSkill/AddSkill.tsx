@@ -26,19 +26,13 @@ const AddSkill = () => {
     searchQuery: inputValue,
   });
 
-  const {
-    data: userSkills,
-    isLoading: isUserSkillsLoading,
-    refetch,
-  } = trpc.users.getSkills.useQuery();
-
-  // const updateSkills = trpc.users.updateSKills.useMutation({
-  //   onSuccess: () => refetch(),
-  // });
+  const { data: userSkills, isLoading: isUserSkillsLoading } =
+    trpc.users.getSkills.useQuery();
 
   const createSkill = trpc.skills.create.useMutation();
   const deleteSkill = trpc.skills.delete.useMutation();
   const deleteSkillFromUser = trpc.users.deleteSkill.useMutation();
+  const addSkillToUser = trpc.users.addSKill.useMutation();
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -61,8 +55,22 @@ const AddSkill = () => {
         createdAt: new Date(),
       },
     ]);
-    setInputValue("");
-    refetch();
+    addSkillToUser.mutate(
+      {
+        name: title,
+      },
+      {
+        onSuccess: () => {
+          setInputValue("");
+          toast({
+            description: `${title} added to your list`,
+            variant: "success",
+          });
+
+          utils.users.getSkills.invalidate();
+        },
+      }
+    );
   };
   const handleDeleteFromUser = (id: number) => () => {
     const elementToDeleteIndex = skills.findIndex(
@@ -97,6 +105,7 @@ const AddSkill = () => {
       },
       {
         onSuccess: () => {
+          setInputValue("");
           toast({
             description: "New skill added to the list",
             variant: "success",
@@ -108,7 +117,7 @@ const AddSkill = () => {
     );
   };
 
-  const handleDeleteSkill = (id: number) => () => {
+  const handleDeleteSkillFromList = (id: number) => () => {
     deleteSkill.mutate(
       {
         skillId: id,
@@ -177,7 +186,7 @@ const AddSkill = () => {
         onChange={handleOnChange}
         options={searchList}
         onClick={handleOnClick}
-        onDelete={handleDeleteSkill}
+        onDelete={handleDeleteSkillFromList}
       />
 
       <div className="flex gap-2 mb-4">

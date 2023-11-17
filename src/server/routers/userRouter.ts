@@ -49,36 +49,37 @@ export const userRouter = router({
       },
     });
   }),
-  updateSKills: procedure
+  addSKill: procedure
     .input(
       z.object({
-        skills: z.array(
-          z.object({
-            title: z.string(),
-            rating: z.number(),
-            createdAt: z.date(),
-          })
-        ),
+        name: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const newSkills = input.skills.map((skill) => ({
-        name: skill.title,
-        rating: skill.rating,
-        createdAt: new Date(skill.createdAt),
-        skillId: 5,
-      }));
+      const skill = await ctx.prisma.skill.findUnique({
+        where: {
+          name: input.name,
+        },
+      });
+      if (!skill) return;
+      const userSkill = await ctx.prisma.userSkill.create({
+        data: {
+          skillId: skill?.id,
+          userId: ctx.session?.user.id,
+          name: skill?.name,
+          rating: 5,
+        },
+      });
 
       const userSkills = await ctx.prisma.user.update({
         where: {
           // @ts-ignore
-          id: ctx?.session?.user.id,
+          id: ctx.session?.user.id,
         },
         data: {
           skills: {
-            deleteMany: {},
-            createMany: {
-              data: [...newSkills],
+            connect: {
+              id: userSkill?.id,
             },
           },
         },
@@ -86,7 +87,6 @@ export const userRouter = router({
 
       return userSkills;
     }),
-  // not used
   deleteSkill: procedure
     .input(z.object({ skillId: z.number() }))
     .mutation(async ({ ctx, input }) => {
