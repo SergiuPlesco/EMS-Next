@@ -121,7 +121,7 @@ const AddPosition = () => {
       setPositions(
         userPositions.map((position) => ({
           id: generateId(),
-          title: position.title,
+          title: position.name,
         }))
       );
   }, [isUserPositionsLoading, userPositions]);
