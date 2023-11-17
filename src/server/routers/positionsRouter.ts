@@ -5,21 +5,21 @@ import { procedure, router } from "../trpc";
 
 export const positionsRouter = router({
   all: procedure.query(async ({ ctx }) => {
-    return await ctx.prisma.positions.findMany();
+    return await ctx.prisma.position.findMany();
   }),
   createNewPosition: procedure
     .input(z.object({ title: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      return await ctx.prisma.positions.create({
+      return await ctx.prisma.position.create({
         data: {
-          title: input.title,
+          name: input.title,
         },
       });
     }),
   deletePosition: procedure
     .input(z.object({ positionId: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const positonTitle = await ctx.prisma.positions.findUnique({
+      const positonTitle = await ctx.prisma.position.findUnique({
         where: {
           id: input.positionId,
         },
@@ -28,7 +28,7 @@ export const positionsRouter = router({
         where: {
           positions: {
             some: {
-              title: positonTitle?.title,
+              name: positonTitle?.name,
             },
           },
         },
@@ -43,7 +43,7 @@ export const positionsRouter = router({
           message: "The position is in use and can't be deleted.",
         });
       }
-      return await ctx.prisma.positions.delete({
+      return await ctx.prisma.position.delete({
         where: {
           id: input.positionId,
         },
