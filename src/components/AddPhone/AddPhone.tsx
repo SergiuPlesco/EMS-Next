@@ -18,7 +18,7 @@ import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
 
 const FormSchema = z.object({
-  phone: z.string().length(8),
+  phone: z.string().length(9),
 });
 
 const AddPhone = () => {
