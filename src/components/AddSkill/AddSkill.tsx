@@ -99,6 +99,13 @@ const AddSkill = () => {
   };
 
   const onCreateNewSkill = () => {
+    if (!inputValue) {
+      toast({
+        description: "What skill are you adding?",
+        variant: "destructive",
+      });
+      return;
+    }
     createSkill.mutate(
       {
         name: inputValue,
@@ -128,6 +135,7 @@ const AddSkill = () => {
             description: "Skill deleted",
             variant: "success",
           });
+          utils.skills.searchSkill.invalidate();
         },
         onError: (error) => {
           toast({
