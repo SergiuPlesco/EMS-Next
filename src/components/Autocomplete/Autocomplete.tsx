@@ -9,7 +9,7 @@ interface Autocomplete {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClick: (par1: string) => () => void;
   options: any[] | undefined;
-  onDelete?: (id: number) => () => void | undefined;
+  onDelete?: (id: number, name: string) => () => void | undefined;
 }
 
 const Autocomplete = ({
@@ -53,7 +53,7 @@ const Autocomplete = ({
                     {onDelete && (
                       <Button
                         variant="link"
-                        onClick={onDelete(option.id)}
+                        onClick={onDelete(option.id, option.name)}
                         className="focus:bg-accent focus:text-accent-foreground"
                       >
                         <AiOutlineDelete size={16} className="text-[#a12064]" />

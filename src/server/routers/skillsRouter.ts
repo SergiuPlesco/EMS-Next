@@ -68,7 +68,7 @@ export const skillsRouter = router({
       if (userWithSkill) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "The skill is used and can't be deleted.",
+          message: `${skill?.name} is used and can't be deleted.`,
         });
       }
       return await ctx.prisma.skill.delete({
