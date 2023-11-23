@@ -77,12 +77,6 @@ const AddSkill = () => {
     );
   };
   const handleDeleteFromUser = (id: number, name: string) => () => {
-    // const elementToDeleteIndex = skills.findIndex((skill) => skill.id === id);
-    // if (elementToDeleteIndex !== -1) {
-    //   const newSkill = [...skills];
-    //   newSkill.splice(elementToDeleteIndex, 1);
-    //   setSkills(newSkill);
-    // }
     deleteSkillFromUser.mutate(
       {
         skillId: id,
