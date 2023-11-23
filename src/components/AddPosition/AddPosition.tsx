@@ -121,7 +121,7 @@ const AddPosition = () => {
       setPositions(
         userPositions.map((position) => ({
           id: generateId(),
-          title: position.title,
+          title: position.name,
         }))
       );
   }, [isUserPositionsLoading, userPositions]);
@@ -223,7 +223,7 @@ const AddPosition = () => {
                       <SelectContent className="w-full max-h-[300px]">
                         {positionsList &&
                           positionsList.map(
-                            (position: { id: number; title: string }) => {
+                            (position: { id: number; name: string }) => {
                               return (
                                 <div
                                   key={position.id}
@@ -231,10 +231,10 @@ const AddPosition = () => {
                                 >
                                   <SelectItem
                                     key={position.id}
-                                    value={position.title}
+                                    value={position.name}
                                     className="text-sm w-full"
                                   >
-                                    {position.title}
+                                    {position.name}
                                   </SelectItem>
                                   <Button
                                     variant="link"

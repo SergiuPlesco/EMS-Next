@@ -8,7 +8,6 @@ import { trpc } from "@/utils/trpc";
 
 const Skills = () => {
   const { data: userSkills } = trpc.users.getSkills.useQuery();
-
   return (
     <div>
       <div className="flex justify-end items-center">
@@ -27,6 +26,7 @@ const Skills = () => {
         ) : (
           userSkills?.map((skill) => {
             return <Skill key={skill.id} skill={skill} />;
+            return null;
           })
         )}
       </div>
