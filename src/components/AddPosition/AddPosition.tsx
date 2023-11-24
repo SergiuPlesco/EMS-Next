@@ -1,84 +1,40 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { AiOutlineDelete } from "react-icons/ai";
-import { z } from "zod";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
 
+import Autocomplete from "../Autocomplete/Autocomplete";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-
-const PositionsSchema = z.object({
-  position: z.string(),
-});
-
-const newPositionSchema = z.object({
-  newPosition: z.string(),
-});
 
 const AddPosition = () => {
   const { toast } = useToast();
-  const {
-    data: userPositions,
-    refetch,
-    isLoading: isUserPositionsLoading,
-  } = trpc.users.getPositions.useQuery();
-  const { data: positionsList, refetch: refetchPositionsList } =
-    trpc.positions.all.useQuery();
-  const updatePosition = trpc.users.updatePosition.useMutation();
-  const createNewPosition = trpc.positions.createNewPosition.useMutation();
-  const deletePosition = trpc.positions.deletePosition.useMutation();
+  const utils = trpc.useContext();
+  const [inputValue, setInputValue] = useState("");
 
-  const [positions, setPositions] = useState<
-    { id: number | string; title: string }[]
-  >([]);
-  const [showNewPositionForm, setShowNewPositionForm] = useState(false);
+  const [positions, setPositions] = useState<{ id: number; name: string }[]>(
+    []
+  );
 
-  const formPositions = useForm<z.infer<typeof PositionsSchema>>({
-    resolver: zodResolver(PositionsSchema),
-    defaultValues: {
-      position: "",
-    },
+  const { data: userPositions, isLoading: isUserPositionsLoading } =
+    trpc.users.getPositions.useQuery();
+
+  const { data: searchList } = trpc.positions.search.useQuery({
+    searchQuery: inputValue,
   });
 
-  const formNewPositon = useForm<z.infer<typeof newPositionSchema>>({
-    resolver: zodResolver(newPositionSchema),
-    defaultValues: {
-      newPosition: "",
-    },
-  });
+  const addPositionToUser = trpc.users.addPosition.useMutation();
+  const deletePositionFromUser = trpc.users.deletePosition.useMutation();
+  const createNewPosition = trpc.positions.create.useMutation();
+  const deletePosition = trpc.positions.delete.useMutation();
 
-  const handleChange = (value: string) => {
-    const positionAdded = positions?.find(
-      (position) => position.title === value
-    );
-
-    if (value === "" || positionAdded) {
-      return; // Exit early if the value is empty or the position is already added
-    }
-
-    setPositions([...positions, { id: generateId(), title: value }]);
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
   };
 
-  const handleDelete = (id: number | string) => () => {
+  const handleDeleteFromUser = (id: number, name: string) => () => {
     const elementToDeleteIndex = positions.findIndex(
       (position) => position.id === id
     );
@@ -87,77 +43,87 @@ const AddPosition = () => {
       newPositions.splice(elementToDeleteIndex, 1);
       setPositions(newPositions);
     }
-  };
-
-  const handleSave = () => {
-    updatePosition.mutate(
-      { positions: positions?.map((position) => position.title) || [] },
+    deletePositionFromUser.mutate(
       {
-        onSuccess: () => {
-          refetch();
-          formPositions.reset();
-          toast({
-            description: "Positions are updated",
-            variant: "success",
-          });
-        },
-        onError: () => {
-          toast({
-            description: "An error occured, try againg.",
-            variant: "destructive",
-          });
-        },
-      }
-    );
-  };
-
-  const handleShowNewPositionForm = () => {
-    setShowNewPositionForm((actual) => !actual);
-  };
-
-  useEffect(() => {
-    !isUserPositionsLoading &&
-      userPositions &&
-      setPositions(
-        userPositions.map((position) => ({
-          id: generateId(),
-          title: position.name,
-        }))
-      );
-  }, [isUserPositionsLoading, userPositions]);
-
-  if (userPositions == null) {
-    return null;
-  }
-
-  const onCreateNewPositon = (values: z.infer<typeof newPositionSchema>) => {
-    createNewPosition.mutate(
-      {
-        title: values.newPosition,
+        positionId: id,
       },
       {
         onSuccess: () => {
-          formNewPositon.reset();
-          refetchPositionsList();
           toast({
-            description: "New positon added to the list",
+            description: `${name} deleted`,
             variant: "success",
           });
+          utils.users.getPositions.invalidate();
         },
       }
     );
   };
 
-  const handleDeletePosition = (id: number) => () => {
+  const handleOnSelect = (name: string) => () => {
+    const positionAdded = positions?.find((position) => position.name === name);
+
+    if (name === "" || positionAdded) {
+      toast({
+        description: `${name} is already in your list`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setPositions([
+      ...positions,
+      {
+        id: Number(generateId()),
+        name,
+      },
+    ]);
+    addPositionToUser.mutate(
+      {
+        name,
+      },
+      {
+        onSuccess: () => {
+          setInputValue("");
+          toast({
+            description: `${name} added to your positions`,
+            variant: "success",
+          });
+          utils.users.getPositions.invalidate();
+        },
+        onError: () => {},
+      }
+    );
+  };
+
+  const onCreateNewPositon = () => {
+    createNewPosition.mutate(
+      {
+        name: inputValue,
+      },
+      {
+        onSuccess: () => {
+          setInputValue("");
+          toast({
+            description: `${inputValue} added to the list`,
+            variant: "success",
+          });
+          utils.users.getPositions.invalidate();
+        },
+      }
+    );
+  };
+
+  const handleDeletePositionFromList = (id: number, name: string) => () => {
     deletePosition.mutate(
       { positionId: id },
       {
         onSuccess: () => {
-          refetchPositionsList();
+          setInputValue("");
           toast({
-            description: "Position deleted form the list",
+            description: `${name} deleted form the list`,
             variant: "success",
           });
+          utils.positions.search.invalidate();
         },
         onError: (error) => {
           toast({
@@ -168,6 +134,21 @@ const AddPosition = () => {
       }
     );
   };
+
+  useEffect(() => {
+    !isUserPositionsLoading &&
+      userPositions &&
+      setPositions(
+        userPositions.map((position) => ({
+          id: position.id,
+          name: position.name,
+        }))
+      );
+  }, [isUserPositionsLoading, userPositions]);
+
+  if (userPositions == null) {
+    return null;
+  }
 
   return (
     <>
@@ -183,9 +164,14 @@ const AddPosition = () => {
                         className="flex justify-start w-fit mb-1 py-1 px-1 rounded bg-slate-200"
                       >
                         <p className="text-slate-500 pr-4 text-sm">
-                          {position.title}
+                          {position.name}
                         </p>
-                        <button onClick={handleDelete(position.id)}>
+                        <button
+                          onClick={handleDeleteFromUser(
+                            position.id,
+                            position.name
+                          )}
+                        >
                           <AiOutlineDelete
                             size={16}
                             className="text-[#a12064]"
@@ -198,121 +184,23 @@ const AddPosition = () => {
             </div>
           </div>
         </div>
+        <Autocomplete
+          value={inputValue}
+          onChange={handleOnChange}
+          options={searchList}
+          onSelect={handleOnSelect}
+          onDelete={handleDeletePositionFromList}
+        />
 
-        <Form {...formPositions}>
-          <form
-            onSubmit={formPositions.handleSubmit(() => {})}
-            className="flex flex-col gap-2 w-full z-[3]"
+        <div className="flex gap-2 mb-4">
+          <Button
+            type="submit"
+            className="py-0 h-7 rounded bg-blue-300 bg-smartgreen"
+            onClick={onCreateNewPositon}
           >
-            <FormField
-              control={formPositions.control}
-              name="position"
-              render={({ field: { value, onChange } }) => {
-                return (
-                  <FormItem>
-                    <FormLabel>Positions</FormLabel>
-                    <Select
-                      defaultValue={value}
-                      onValueChange={(e) => (onChange(e), handleChange(e))}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a position" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="w-full max-h-[300px]">
-                        {positionsList &&
-                          positionsList.map(
-                            (position: { id: number; name: string }) => {
-                              return (
-                                <div
-                                  key={position.id}
-                                  className="flex justify-between items-center w-full"
-                                >
-                                  <SelectItem
-                                    key={position.id}
-                                    value={position.name}
-                                    className="text-sm w-full"
-                                  >
-                                    {position.name}
-                                  </SelectItem>
-                                  <Button
-                                    variant="link"
-                                    onClick={handleDeletePosition(position.id)}
-                                    className="focus:bg-accent focus:text-accent-foreground"
-                                  >
-                                    <AiOutlineDelete
-                                      size={16}
-                                      className="text-[#a12064]"
-                                    />
-                                  </Button>
-                                </div>
-                              );
-                            }
-                          )}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
-            <div className="flex justify-between">
-              <Button
-                type="submit"
-                className="py-0 h-7 rounded bg-smartpurple hover:bg-smartpurple/90"
-                onClick={handleSave}
-              >
-                Save
-              </Button>
-              <Button
-                className="py-0 h-7 rounded bg-smartgreen hover:bg-smartgreen/50"
-                onClick={handleShowNewPositionForm}
-              >
-                {showNewPositionForm ? "-" : "+"}
-              </Button>
-            </div>
-          </form>
-        </Form>
-
-        {showNewPositionForm && (
-          <div className="w-full">
-            <Form {...formNewPositon}>
-              <form
-                onSubmit={formNewPositon.handleSubmit(onCreateNewPositon)}
-                className="flex flex-col gap-2 w-full"
-              >
-                <FormField
-                  control={formNewPositon.control}
-                  name="newPosition"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>New Position (correct name)</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="New position"
-                            type="text"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <div>
-                  <Button
-                    type="submit"
-                    className="py-0 h-7 rounded bg-blue-300 bg-smartpurple"
-                  >
-                    Add
-                  </Button>
-                </div>
-              </form>
-            </Form>
-          </div>
-        )}
+            Add
+          </Button>
+        </div>
       </div>
     </>
   );

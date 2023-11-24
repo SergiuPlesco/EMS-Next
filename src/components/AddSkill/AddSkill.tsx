@@ -22,7 +22,7 @@ const AddSkill = () => {
 
   const utils = trpc.useContext();
 
-  const { data: searchList } = trpc.skills.searchSkill.useQuery({
+  const { data: searchList } = trpc.skills.search.useQuery({
     searchQuery: inputValue,
   });
 
@@ -39,13 +39,13 @@ const AddSkill = () => {
     setInputValue(value);
   };
 
-  const handleOnClick = (name: string) => () => {
+  const handleOnSelect = (name: string) => () => {
     const skillAdded = skills?.find((skill) => skill.name === name);
 
     if (name === "" || skillAdded) {
       toast({
         description: `${name} is already in your list`,
-        variant: "success",
+        variant: "destructive",
       });
       return;
     }
@@ -131,7 +131,7 @@ const AddSkill = () => {
             description: `${name} is deleted form the list`,
             variant: "success",
           });
-          utils.skills.searchSkill.invalidate();
+          utils.skills.search.invalidate();
         },
         onError: (error) => {
           toast({
@@ -191,7 +191,7 @@ const AddSkill = () => {
         value={inputValue}
         onChange={handleOnChange}
         options={searchList}
-        onClick={handleOnClick}
+        onSelect={handleOnSelect}
         onDelete={handleDeleteSkillFromList}
       />
 

@@ -7,7 +7,7 @@ import { Button } from "../ui/button";
 interface Autocomplete {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onClick: (name: string) => () => void;
+  onSelect: (name: string) => () => void;
   options: any[] | undefined;
   onDelete?: (id: number, name: string) => () => void | undefined;
 }
@@ -15,7 +15,7 @@ interface Autocomplete {
 const Autocomplete = ({
   value,
   onChange,
-  onClick,
+  onSelect,
   options,
   onDelete,
 }: Autocomplete) => {
@@ -28,7 +28,7 @@ const Autocomplete = ({
         <input
           type="search"
           className={`border rounded p-2 pl-8 text-sm w-full text-slate-900 focus:border-slate-500 outline-0`}
-          placeholder="Search a skill or create a new one..."
+          placeholder="Search or create a new one..."
           value={value}
           onChange={onChange}
         />
@@ -46,7 +46,7 @@ const Autocomplete = ({
                     <li
                       key={option.id}
                       className="px-2 py-1 m-0 flex items-center w-full hover:bg-slate-300 cursor-pointer"
-                      onClick={onClick(option.name)}
+                      onClick={onSelect(option.name)}
                     >
                       <p className="m-0">{option.name}</p>
                     </li>
