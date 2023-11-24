@@ -4,43 +4,68 @@ import { z } from "zod";
 import { procedure, router } from "../trpc";
 
 export const positionsRouter = router({
+  create: procedure
+    .input(z.object({ name: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const newPosition = await ctx.prisma.position.upsert({
+        where: {
+          name: input.name,
+        },
+        create: {
+          name: input.name,
+        },
+        update: {},
+      });
+
+      await ctx.prisma.userPosition.create({
+        data: {
+          positionId: newPosition.id,
+          userId: ctx.session?.user.id,
+          name: newPosition.name,
+        },
+      });
+      return newPosition;
+    }),
   all: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.position.findMany();
   }),
-  createNewPosition: procedure
-    .input(z.object({ title: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      return await ctx.prisma.position.create({
-        data: {
-          name: input.title,
+  search: procedure
+    .input(z.object({ searchQuery: z.string() }))
+    .query(async ({ ctx, input }) => {
+      if (input.searchQuery == "") return [];
+      return ctx.prisma.position.findMany({
+        where: {
+          name: {
+            startsWith: input.searchQuery,
+            mode: "insensitive",
+          },
         },
       });
     }),
-  deletePosition: procedure
+  delete: procedure
     .input(z.object({ positionId: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const positonTitle = await ctx.prisma.position.findUnique({
+      const position = await ctx.prisma.position.findUnique({
         where: {
           id: input.positionId,
         },
       });
-      const isPositionUsed = await ctx.prisma.user.findFirst({
+      const userWithPosition = await ctx.prisma.user.findFirst({
         where: {
           positions: {
             some: {
-              name: positonTitle?.name,
+              name: position?.name,
             },
           },
         },
         include: {
           positions: true,
-          skills: true,
         },
       });
-      if (isPositionUsed) {
+      if (userWithPosition) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "The position is in use and can't be deleted.",
+          message: `${position?.name} is used and can't be deleted.`,
         });
       }
       return await ctx.prisma.position.delete({

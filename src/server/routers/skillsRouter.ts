@@ -30,7 +30,7 @@ export const skillsRouter = router({
   all: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.skill.findMany();
   }),
-  searchSkill: procedure
+  search: procedure
     .input(z.object({ searchQuery: z.string() }))
     .query(async ({ ctx, input }) => {
       if (input.searchQuery == "") return [];

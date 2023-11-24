@@ -53,36 +53,36 @@ model User {
   employmentDate DateTime?
 }
 
-model UserSkill {
-  id        Int     @id @default(autoincrement())
-  skillId   Int
-  userId    String?
-  rating    Int
-  name      String
-  skill     Skill   @relation(fields: [skillId], references: [id])
-  user      User?   @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
-}
-
 model Skill {
   id    Int         @id @default(autoincrement())
   name  String      @unique
   users UserSkill[]
 }
 
-model UserPosition {
-  id          Int       @id @default(autoincrement())
-  name        String
-  userId      String
-  positionsId Int?
-  user        User      @relation(fields: [userId], references: [id])
-  position    Position? @relation(fields: [positionsId], references: [id])
+model UserSkill {
+  id        Int      @id @default(autoincrement())
+  skillId   Int
+  userId    String?
+  rating    Int
+  name      String
+  skill     Skill    @relation(fields: [skillId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
 }
 
 model Position {
   id    Int            @id @default(autoincrement())
-  name  String
+  name  String         @unique
   users UserPosition[]
+}
+
+model UserPosition {
+  id         Int       @id @default(autoincrement())
+  name       String
+  userId     String?
+  positionId Int?
+  user       User?     @relation(fields: [userId], references: [id])
+  position   Position? @relation(fields: [positionId], references: [id])
 }
 
 model Project {
