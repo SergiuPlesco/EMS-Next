@@ -26,7 +26,6 @@ const Skills = () => {
         ) : (
           userSkills?.map((skill) => {
             return <Skill key={skill.id} skill={skill} />;
-            return null;
           })
         )}
       </div>

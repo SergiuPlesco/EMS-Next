@@ -22,7 +22,7 @@ const AddSkill = () => {
 
   const utils = trpc.useContext();
 
-  const { data: searchList } = trpc.skills.searchSkill.useQuery({
+  const { data: searchList } = trpc.skills.search.useQuery({
     searchQuery: inputValue,
   });
 
@@ -39,10 +39,14 @@ const AddSkill = () => {
     setInputValue(value);
   };
 
-  const handleOnClick = (title: string) => () => {
-    const skillAdded = skills?.find((skill) => skill.name === title);
+  const handleOnSelect = (name: string) => () => {
+    const skillAdded = skills?.find((skill) => skill.name === name);
 
-    if (title === "" || skillAdded) {
+    if (name === "" || skillAdded) {
+      toast({
+        description: `${name} is already in your list`,
+        variant: "destructive",
+      });
       return;
     }
 
@@ -50,20 +54,20 @@ const AddSkill = () => {
       ...skills,
       {
         id: Number(generateId()),
-        name: title,
+        name,
         rating: 5, // default skill level 5%
         createdAt: new Date(),
       },
     ]);
     addSkillToUser.mutate(
       {
-        name: title,
+        name,
       },
       {
         onSuccess: () => {
           setInputValue("");
           toast({
-            description: `${title} added to your list`,
+            description: `${name} added to your list`,
             variant: "success",
           });
 
@@ -72,15 +76,7 @@ const AddSkill = () => {
       }
     );
   };
-  const handleDeleteFromUser = (id: number) => () => {
-    const elementToDeleteIndex = skills.findIndex(
-      (position) => position.id === id
-    );
-    if (elementToDeleteIndex !== -1) {
-      const newSkill = [...skills];
-      newSkill.splice(elementToDeleteIndex, 1);
-      setSkills(newSkill);
-    }
+  const handleDeleteFromUser = (id: number, name: string) => () => {
     deleteSkillFromUser.mutate(
       {
         skillId: id,
@@ -88,7 +84,7 @@ const AddSkill = () => {
       {
         onSuccess: () => {
           toast({
-            description: "Skill deleted form your list",
+            description: `${name} deleted form your list`,
             variant: "success",
           });
 
@@ -101,7 +97,7 @@ const AddSkill = () => {
   const onCreateNewSkill = () => {
     if (!inputValue) {
       toast({
-        description: "What skill are you adding?",
+        description: "What are you adding?",
         variant: "destructive",
       });
       return;
@@ -114,7 +110,7 @@ const AddSkill = () => {
         onSuccess: () => {
           setInputValue("");
           toast({
-            description: "New skill added to the list",
+            description: `${inputValue} added to the list`,
             variant: "success",
           });
 
@@ -124,7 +120,7 @@ const AddSkill = () => {
     );
   };
 
-  const handleDeleteSkillFromList = (id: number) => () => {
+  const handleDeleteSkillFromList = (id: number, name: string) => () => {
     deleteSkill.mutate(
       {
         skillId: id,
@@ -132,10 +128,10 @@ const AddSkill = () => {
       {
         onSuccess: () => {
           toast({
-            description: "Skill deleted",
+            description: `${name} is deleted form the list`,
             variant: "success",
           });
-          utils.skills.searchSkill.invalidate();
+          utils.skills.search.invalidate();
         },
         onError: (error) => {
           toast({
@@ -178,7 +174,9 @@ const AddSkill = () => {
                     >
                       <p className="text-slate-500 text-sm">{skill.name}</p>
                       <p className="text-[0.5rem]">{skill.rating}%</p>
-                      <button onClick={handleDeleteFromUser(skill.id)}>
+                      <button
+                        onClick={handleDeleteFromUser(skill.id, skill.name)}
+                      >
                         <AiOutlineDelete size={16} className="text-[#a12064]" />
                       </button>
                     </div>
@@ -193,7 +191,7 @@ const AddSkill = () => {
         value={inputValue}
         onChange={handleOnChange}
         options={searchList}
-        onClick={handleOnClick}
+        onSelect={handleOnSelect}
         onDelete={handleDeleteSkillFromList}
       />
 

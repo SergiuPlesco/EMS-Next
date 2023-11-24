@@ -30,7 +30,7 @@ export const skillsRouter = router({
   all: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.skill.findMany();
   }),
-  searchSkill: procedure
+  search: procedure
     .input(z.object({ searchQuery: z.string() }))
     .query(async ({ ctx, input }) => {
       if (input.searchQuery == "") return [];
@@ -68,7 +68,7 @@ export const skillsRouter = router({
       if (userWithSkill) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "The skill is used and can't be deleted.",
+          message: `${skill?.name} is used and can't be deleted.`,
         });
       }
       return await ctx.prisma.skill.delete({

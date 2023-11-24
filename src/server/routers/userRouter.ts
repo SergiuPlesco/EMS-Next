@@ -6,6 +6,19 @@ export const userRouter = router({
   all: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.user.findMany();
   }),
+  search: procedure
+    .input(z.object({ searchQuery: z.string() }))
+    .query(async ({ ctx, input }) => {
+      if (input.searchQuery === "") return [];
+      return await ctx.prisma.user.findMany({
+        where: {
+          name: {
+            startsWith: input.searchQuery,
+            mode: "insensitive",
+          },
+        },
+      });
+    }),
   getById: procedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -90,7 +103,7 @@ export const userRouter = router({
   deleteSkill: procedure
     .input(z.object({ skillId: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const deleteSkill = await ctx.prisma.user.update({
+      const deletedSkill = await ctx.prisma.user.update({
         where: {
           id: ctx.session?.user.id,
         },
@@ -102,7 +115,7 @@ export const userRouter = router({
           },
         },
       });
-      return deleteSkill;
+      return deletedSkill;
     }),
   getSkills: procedure.query(async ({ ctx }) => {
     const user = await ctx.prisma.user.findFirst({
@@ -143,7 +156,6 @@ export const userRouter = router({
 
     return topSkills;
   }),
-  // check if needed
   updateRating: procedure
     .input(z.object({ skillId: z.number(), rating: z.number() }))
     .mutation(async ({ ctx, input }) => {
@@ -160,40 +172,42 @@ export const userRouter = router({
 
       return updatedSkill;
     }),
-  updatePosition: procedure
-    .input(z.object({ positions: z.array(z.string()) }))
+
+  addPosition: procedure
+    .input(z.object({ name: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const newPostions = input.positions.map((position) => ({
-        name: position,
-      }));
+      const position = await ctx.prisma.position.findUnique({
+        where: {
+          name: input.name,
+        },
+      });
+      if (!position) return;
+      const userPosition = await ctx.prisma.userPosition.create({
+        data: {
+          positionId: position.id,
+          userId: ctx.session?.user.id,
+          name: position.name,
+        },
+      });
       const userPositions = await ctx.prisma.user.update({
         where: {
-          // @ts-ignore
           id: ctx.session?.user.id,
         },
         data: {
           positions: {
-            deleteMany: {},
-            createMany: {
-              data: [...newPostions],
+            connect: {
+              id: userPosition.id,
             },
           },
         },
       });
       return userPositions;
     }),
-  getPositions: procedure.query(async ({ ctx }) => {
-    return await ctx.prisma.userPosition.findMany({
-      where: {
-        userId: ctx.session?.user.id,
-      },
-    });
-  }),
-  // not used
+
   deletePosition: procedure
     .input(z.object({ positionId: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const updatedPositions = await ctx.prisma.user.update({
+      const deletedPosition = await ctx.prisma.user.update({
         where: {
           id: ctx.session?.user.id,
         },
@@ -205,35 +219,74 @@ export const userRouter = router({
           },
         },
       });
-      return updatedPositions;
+      return deletedPosition;
     }),
-  updateManagers: procedure
-    .input(z.object({ managerIds: z.array(z.object({ id: z.string() })) }))
+  getPositions: procedure.query(async ({ ctx }) => {
+    const user = await ctx.prisma.user.findFirst({
+      where: {
+        id: ctx.session?.user?.id,
+      },
+    });
+
+    if (!user) throw new Error("This user does not exist");
+
+    const allUserPositions = await ctx.prisma.userPosition.findMany({
+      where: {
+        user: {
+          id: user.id,
+        },
+      },
+    });
+
+    return allUserPositions;
+  }),
+  addManager: procedure
+    .input(z.object({ name: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      if (input.managerIds.length === 0) {
-        return await ctx.prisma.user.update({
-          where: {
-            id: ctx.session?.user.id,
-          },
-          data: {
-            managers: {
-              set: [],
+      const user = await ctx.prisma.user.findFirst({
+        where: {
+          name: input.name,
+        },
+      });
+
+      if (!user) return;
+
+      await ctx.prisma.user.update({
+        where: {
+          id: ctx.session?.user.id,
+        },
+        data: {
+          managers: {
+            connect: {
+              id: user.id,
             },
           },
-        });
-      } else {
-        await ctx.prisma.user.update({
-          where: {
-            id: ctx.session?.user.id,
-          },
-          data: {
-            managers: {
-              set: [],
-              connect: input.managerIds,
+        },
+      });
+    }),
+  deleteManager: procedure
+    .input(z.object({ name: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.prisma.user.findFirst({
+        where: {
+          name: input.name,
+        },
+      });
+
+      if (!user) return;
+
+      await ctx.prisma.user.update({
+        where: {
+          id: ctx.session?.user.id,
+        },
+        data: {
+          managers: {
+            disconnect: {
+              id: user.id,
             },
           },
-        });
-      }
+        },
+      });
     }),
   getManagers: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.user.findFirst({

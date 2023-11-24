@@ -7,17 +7,19 @@ import { Button } from "../ui/button";
 interface Autocomplete {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onClick: (par1: string) => () => void;
+  onSelect: (name: string) => () => void;
   options: any[] | undefined;
-  onDelete?: (id: number) => () => void | undefined;
+  onDelete?: (id: number, name: string) => () => void | undefined;
+  placeholder?: string;
 }
 
 const Autocomplete = ({
   value,
   onChange,
-  onClick,
+  onSelect,
   options,
   onDelete,
+  placeholder = "Search or create a new one...",
 }: Autocomplete) => {
   return (
     <div className="flex flex-col gap-2 items-start w-full relative">
@@ -28,7 +30,7 @@ const Autocomplete = ({
         <input
           type="search"
           className={`border rounded p-2 pl-8 text-sm w-full text-slate-900 focus:border-slate-500 outline-0`}
-          placeholder="Search a skill..."
+          placeholder={placeholder}
           value={value}
           onChange={onChange}
         />
@@ -46,14 +48,14 @@ const Autocomplete = ({
                     <li
                       key={option.id}
                       className="px-2 py-1 m-0 flex items-center w-full hover:bg-slate-300 cursor-pointer"
-                      onClick={onClick(option.name)}
+                      onClick={onSelect(option.name)}
                     >
                       <p className="m-0">{option.name}</p>
                     </li>
                     {onDelete && (
                       <Button
                         variant="link"
-                        onClick={onDelete(option.id)}
+                        onClick={onDelete(option.id, option.name)}
                         className="focus:bg-accent focus:text-accent-foreground"
                       >
                         <AiOutlineDelete size={16} className="text-[#a12064]" />
