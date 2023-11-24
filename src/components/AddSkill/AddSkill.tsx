@@ -97,7 +97,7 @@ const AddSkill = () => {
   const onCreateNewSkill = () => {
     if (!inputValue) {
       toast({
-        description: "What skill are you adding?",
+        description: "What are you adding?",
         variant: "destructive",
       });
       return;

@@ -96,6 +96,13 @@ const AddPosition = () => {
   };
 
   const onCreateNewPositon = () => {
+    if (!inputValue) {
+      toast({
+        description: "What are you adding?",
+        variant: "destructive",
+      });
+      return;
+    }
     createNewPosition.mutate(
       {
         name: inputValue,

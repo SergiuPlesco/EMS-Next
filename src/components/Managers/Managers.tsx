@@ -17,8 +17,8 @@ const Managers = () => {
       <div className="flex justify-start items-center gap-2">
         <p className="text-slate-500 text-sm">Managers</p>
         <Modal
-          title="Edit profile"
-          description="Make changes to your profile here. Save each detail."
+          title="Edit managers"
+          description="Search and add your project manager/s"
           icon={<PlusIcon width={16} color="var(--smart-purple)" />}
         >
           <AddManager />
