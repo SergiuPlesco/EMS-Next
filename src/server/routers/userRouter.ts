@@ -6,6 +6,19 @@ export const userRouter = router({
   all: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.user.findMany();
   }),
+  search: procedure
+    .input(z.object({ searchQuery: z.string() }))
+    .query(async ({ ctx, input }) => {
+      if (input.searchQuery === "") return [];
+      return await ctx.prisma.user.findMany({
+        where: {
+          name: {
+            startsWith: input.searchQuery,
+            mode: "insensitive",
+          },
+        },
+      });
+    }),
   getById: procedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -227,33 +240,53 @@ export const userRouter = router({
 
     return allUserPositions;
   }),
-  updateManagers: procedure
-    .input(z.object({ managerIds: z.array(z.object({ id: z.string() })) }))
+  addManager: procedure
+    .input(z.object({ name: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      if (input.managerIds.length === 0) {
-        return await ctx.prisma.user.update({
-          where: {
-            id: ctx.session?.user.id,
-          },
-          data: {
-            managers: {
-              set: [],
+      const user = await ctx.prisma.user.findFirst({
+        where: {
+          name: input.name,
+        },
+      });
+
+      if (!user) return;
+
+      await ctx.prisma.user.update({
+        where: {
+          id: ctx.session?.user.id,
+        },
+        data: {
+          managers: {
+            connect: {
+              id: user.id,
             },
           },
-        });
-      } else {
-        await ctx.prisma.user.update({
-          where: {
-            id: ctx.session?.user.id,
-          },
-          data: {
-            managers: {
-              set: [],
-              connect: input.managerIds,
+        },
+      });
+    }),
+  deleteManager: procedure
+    .input(z.object({ name: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.prisma.user.findFirst({
+        where: {
+          name: input.name,
+        },
+      });
+
+      if (!user) return;
+
+      await ctx.prisma.user.update({
+        where: {
+          id: ctx.session?.user.id,
+        },
+        data: {
+          managers: {
+            disconnect: {
+              id: user.id,
             },
           },
-        });
-      }
+        },
+      });
     }),
   getManagers: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.user.findFirst({

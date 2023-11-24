@@ -10,6 +10,7 @@ interface Autocomplete {
   onSelect: (name: string) => () => void;
   options: any[] | undefined;
   onDelete?: (id: number, name: string) => () => void | undefined;
+  placeholder?: string;
 }
 
 const Autocomplete = ({
@@ -18,6 +19,7 @@ const Autocomplete = ({
   onSelect,
   options,
   onDelete,
+  placeholder = "Search or create a new one...",
 }: Autocomplete) => {
   return (
     <div className="flex flex-col gap-2 items-start w-full relative">
@@ -28,7 +30,7 @@ const Autocomplete = ({
         <input
           type="search"
           className={`border rounded p-2 pl-8 text-sm w-full text-slate-900 focus:border-slate-500 outline-0`}
-          placeholder="Search or create a new one..."
+          placeholder={placeholder}
           value={value}
           onChange={onChange}
         />
