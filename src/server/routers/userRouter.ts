@@ -13,7 +13,7 @@ export const userRouter = router({
       return await ctx.prisma.user.findMany({
         where: {
           name: {
-            startsWith: input.searchQuery,
+            contains: input.searchQuery,
             mode: "insensitive",
           },
         },
