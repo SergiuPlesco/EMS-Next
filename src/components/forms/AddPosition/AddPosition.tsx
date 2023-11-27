@@ -94,7 +94,7 @@ const AddPosition = () => {
     );
   };
 
-  const onCreateNewPositon = () => {
+  const handleCreateNewPosition = () => {
     if (!inputValue) {
       toast({
         description: "What are you adding?",
@@ -196,13 +196,14 @@ const AddPosition = () => {
           options={searchList}
           onSelect={handleOnSelect}
           onDelete={handleDeletePositionFromList}
+          onEnter={handleCreateNewPosition}
         />
 
         <div className="flex gap-2 mb-4">
           <Button
             type="submit"
             className="py-0 h-7 rounded bg-blue-300 bg-smartgreen"
-            onClick={onCreateNewPositon}
+            onClick={handleCreateNewPosition}
           >
             Add
           </Button>
