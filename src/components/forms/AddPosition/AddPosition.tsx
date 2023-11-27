@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 
+import Autocomplete from "@/components/Autocomplete/Autocomplete";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
-
-import Autocomplete from "../Autocomplete/Autocomplete";
-import { Button } from "../ui/button";
 
 const AddPosition = () => {
   const { toast } = useToast();

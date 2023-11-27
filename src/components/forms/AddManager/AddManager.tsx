@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 
+import Autocomplete from "@/components/Autocomplete/Autocomplete";
 import { useToast } from "@/components/ui/use-toast";
 import { trpc } from "@/utils/trpc";
-
-import Autocomplete from "../Autocomplete/Autocomplete";
 
 const AddManager = () => {
   const { toast } = useToast();
@@ -48,16 +47,6 @@ const AddManager = () => {
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const positionAdded = managers?.find((position) => position.id === value);
-
-    // if (value === "" || positionAdded) {
-    //   return; // Exit early if the value is empty or the position is already added
-    // }
-
-    // const manager = userList?.find((manager) => manager.id === value);
-    // if (!manager) return;
-
-    // setManagers([...managers, { id: manager.id, name: manager.name }]);
     const value = e.target.value;
     setInputValue(value);
   };
