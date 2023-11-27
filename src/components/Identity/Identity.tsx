@@ -2,9 +2,9 @@ import { Pencil1Icon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import React from "react";
 
+import AddPhone from "@/components/forms/AddPhone/AddPhone";
 import { trpc } from "@/utils/trpc";
 
-import AddPhone from "../AddPhone/AddPhone";
 import Modal from "../Modal/Modal";
 import Spinner from "../Spinner/Spinner";
 

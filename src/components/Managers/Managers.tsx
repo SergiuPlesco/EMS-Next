@@ -1,9 +1,9 @@
 import { PlusIcon } from "@radix-ui/react-icons";
 import React from "react";
 
+import AddManager from "@/components/forms/AddManager/AddManager";
 import { trpc } from "@/utils/trpc";
 
-import AddManager from "../AddManager/AddManager";
 import Modal from "../Modal/Modal";
 
 const Managers = () => {
