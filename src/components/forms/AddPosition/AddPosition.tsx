@@ -121,7 +121,7 @@ const AddPosition = () => {
 
   const handleDeletePositionFromList = (id: number, name: string) => () => {
     deletePosition.mutate(
-      { positionId: id },
+      { positionId: id, name },
       {
         onSuccess: () => {
           setInputValue("");

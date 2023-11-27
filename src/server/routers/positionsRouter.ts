@@ -1,4 +1,4 @@
-import { TRPCError } from "@trpc/server";
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 
 import { procedure, router } from "../trpc";
@@ -43,35 +43,48 @@ export const positionsRouter = router({
       });
     }),
   delete: procedure
-    .input(z.object({ positionId: z.number() }))
+    .input(z.object({ positionId: z.number(), name: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const position = await ctx.prisma.position.findUnique({
-        where: {
-          id: input.positionId,
-        },
-      });
-      const userWithPosition = await ctx.prisma.user.findFirst({
-        where: {
-          positions: {
-            some: {
-              name: position?.name,
-            },
+      // const position = await ctx.prisma.position.findUnique({
+      //   where: {
+      //     id: input.positionId,
+      //   },
+      // });
+      // const userWithPosition = await ctx.prisma.user.findFirst({
+      //   where: {
+      //     positions: {
+      //       some: {
+      //         name: position?.name,
+      //       },
+      //     },
+      //   },
+      //   include: {
+      //     positions: true,
+      //   },
+      // });
+      // if (userWithPosition) {
+      //   throw new TRPCError({
+      //     code: "CONFLICT",
+      //     message: `${position?.name} is used and can't be deleted.`,
+      //   });
+      // }
+      try {
+        return await ctx.prisma.position.delete({
+          where: {
+            id: input.positionId,
           },
-        },
-        include: {
-          positions: true,
-        },
-      });
-      if (userWithPosition) {
-        throw new TRPCError({
-          code: "CONFLICT",
-          message: `${position?.name} is used and can't be deleted.`,
         });
+      } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          if (error.code === "P2003") {
+            throw {
+              ...error,
+              message: `${input.name} is used and can't be deleted.`,
+            };
+          } else {
+            throw error;
+          }
+        }
       }
-      return await ctx.prisma.position.delete({
-        where: {
-          id: input.positionId,
-        },
-      });
     }),
 });
