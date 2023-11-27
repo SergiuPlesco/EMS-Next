@@ -123,9 +123,11 @@ const AddSkill = () => {
     deleteSkill.mutate(
       {
         skillId: id,
+        name,
       },
       {
         onSuccess: () => {
+          setInputValue("");
           toast({
             description: `${name} is deleted form the list`,
             variant: "success",
