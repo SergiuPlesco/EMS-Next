@@ -45,29 +45,6 @@ export const positionsRouter = router({
   delete: procedure
     .input(z.object({ positionId: z.number(), name: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      // const position = await ctx.prisma.position.findUnique({
-      //   where: {
-      //     id: input.positionId,
-      //   },
-      // });
-      // const userWithPosition = await ctx.prisma.user.findFirst({
-      //   where: {
-      //     positions: {
-      //       some: {
-      //         name: position?.name,
-      //       },
-      //     },
-      //   },
-      //   include: {
-      //     positions: true,
-      //   },
-      // });
-      // if (userWithPosition) {
-      //   throw new TRPCError({
-      //     code: "CONFLICT",
-      //     message: `${position?.name} is used and can't be deleted.`,
-      //   });
-      // }
       try {
         return await ctx.prisma.position.delete({
           where: {
@@ -76,6 +53,8 @@ export const positionsRouter = router({
         });
       } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          // "Foreign key constraint failed on the field: {field_name}"
+          // https://www.prisma.io/docs/reference/api-reference/error-reference#error-codes
           if (error.code === "P2003") {
             throw {
               ...error,
