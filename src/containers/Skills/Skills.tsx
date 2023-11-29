@@ -1,14 +1,13 @@
 import { PlusIcon } from "@radix-ui/react-icons";
 import React from "react";
 
-import AddSkill from "@/components/AddSkill/AddSkill";
+import AddSkill from "@/components/forms/AddSkill/AddSkill";
 import Modal from "@/components/Modal/Modal";
 import Skill from "@/components/SkillItem/SkillItem";
 import { trpc } from "@/utils/trpc";
 
 const Skills = () => {
   const { data: userSkills } = trpc.users.getSkills.useQuery();
-
   return (
     <div>
       <div className="flex justify-end items-center">

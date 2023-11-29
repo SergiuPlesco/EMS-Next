@@ -2,41 +2,31 @@ import React from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
 
-import { trpc } from "@/utils/trpc";
-
 import { Button } from "../ui/button";
-import { useToast } from "../ui/use-toast";
+
 interface Autocomplete {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onClick: (par1: string) => () => void;
+  onSelect: (name: string) => () => void;
   options: any[] | undefined;
+  onDelete?: (id: number, name: string) => () => void | undefined;
+  placeholder?: string;
+  onEnter?: () => void;
 }
 
-const Autocomplete = ({ value, onChange, onClick, options }: Autocomplete) => {
-  const { toast } = useToast();
-  const deleteSkill = trpc.skills.delete.useMutation();
-
-  const handleDeleteSkill = (id: number) => () => {
-    deleteSkill.mutate(
-      {
-        skillId: id,
-      },
-      {
-        onSuccess: () => {
-          toast({
-            description: "Skill deleted",
-            variant: "success",
-          });
-        },
-        onError: (error) => {
-          toast({
-            description: error.message,
-            variant: "destructive",
-          });
-        },
-      }
-    );
+const Autocomplete = ({
+  value,
+  onChange,
+  onSelect,
+  options,
+  onDelete,
+  placeholder = "Search or create a new one...",
+  onEnter,
+}: Autocomplete) => {
+  const handleOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (onEnter && e.code === "Enter") {
+      onEnter();
+    }
   };
   return (
     <div className="flex flex-col gap-2 items-start w-full relative">
@@ -47,35 +37,38 @@ const Autocomplete = ({ value, onChange, onClick, options }: Autocomplete) => {
         <input
           type="search"
           className={`border rounded p-2 pl-8 text-sm w-full text-slate-900 focus:border-slate-500 outline-0`}
-          placeholder="Search a skill..."
+          placeholder={placeholder}
           value={value}
           onChange={onChange}
+          onKeyDown={handleOnKeyDown}
         />
       </div>
       <div className="absolute top-[100%] w-full bg-[#ffffff]">
         {options && options.length ? (
           <div className="border w-full h-full rounded mt-1">
             <ul>
-              {options.map((skill) => {
+              {options.map((option) => {
                 return (
                   <div
-                    key={skill.id}
+                    key={option.id}
                     className="flex justify-between items-center hover:bg-slate-300"
                   >
                     <li
-                      key={skill.id}
+                      key={option.id}
                       className="px-2 py-1 m-0 flex items-center w-full hover:bg-slate-300 cursor-pointer"
-                      onClick={onClick(skill.title)}
+                      onClick={onSelect(option.name)}
                     >
-                      <p className="m-0">{skill.title}</p>
+                      <p className="m-0">{option.name}</p>
                     </li>
-                    <Button
-                      variant="link"
-                      onClick={handleDeleteSkill(skill.id)}
-                      className="focus:bg-accent focus:text-accent-foreground"
-                    >
-                      <AiOutlineDelete size={16} className="text-[#a12064]" />
-                    </Button>
+                    {onDelete && (
+                      <Button
+                        variant="link"
+                        onClick={onDelete(option.id, option.name)}
+                        className="focus:bg-accent focus:text-accent-foreground"
+                      >
+                        <AiOutlineDelete size={16} className="text-[#a12064]" />
+                      </Button>
+                    )}
                   </div>
                 );
               })}
