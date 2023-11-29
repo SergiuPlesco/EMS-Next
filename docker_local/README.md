@@ -84,3 +84,11 @@ docker-compose down -v
 - The pgAdmin port is mapped to 5050. You can change this in the docker-compose.yml file if needed.
 - The PostgreSQL port is mapped to 5432. You can change this in the docker-compose.yml file if needed.
 - The PostgreSQL data is persisted in a Docker volume named postgres-data. This ensures that your data is retained even if you stop and restart the containers.
+
+## Error starting pgadmin
+
+- Run: docker rm "container_id"
+
+## Error starting postgres_db
+
+- Run: sudo service postgresql stop
