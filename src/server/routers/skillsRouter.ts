@@ -1,4 +1,4 @@
-import { TRPCError } from "@trpc/server";
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 
 import { procedure, router } from "../trpc";
@@ -44,37 +44,27 @@ export const skillsRouter = router({
       });
     }),
   delete: procedure
-    .input(z.object({ skillId: z.number() }))
+    .input(z.object({ skillId: z.number(), name: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const skill = await ctx.prisma.skill.findUnique({
-        where: {
-          id: input.skillId,
-        },
-      });
-
-      const userWithSkill = await ctx.prisma.user.findFirst({
-        where: {
-          skills: {
-            some: {
-              name: skill?.name,
-            },
+      try {
+        return await ctx.prisma.skill.delete({
+          where: {
+            id: input.skillId,
           },
-        },
-        include: {
-          skills: true,
-        },
-      });
-
-      if (userWithSkill) {
-        throw new TRPCError({
-          code: "CONFLICT",
-          message: `${skill?.name} is used and can't be deleted.`,
         });
+      } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          // "Foreign key constraint failed on the field: {field_name}"
+          // https://www.prisma.io/docs/reference/api-reference/error-reference#error-codes
+          if (error.code === "P2003") {
+            throw {
+              ...error,
+              message: `${input.name} is used and can't be deleted.`,
+            };
+          } else {
+            throw error;
+          }
+        }
       }
-      return await ctx.prisma.skill.delete({
-        where: {
-          id: input.skillId,
-        },
-      });
     }),
 });

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 
+import Autocomplete from "@/components/Autocomplete/Autocomplete";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
-
-import Autocomplete from "../Autocomplete/Autocomplete";
-import { Button } from "../ui/button";
 
 const AddPosition = () => {
   const { toast } = useToast();
@@ -95,7 +94,7 @@ const AddPosition = () => {
     );
   };
 
-  const onCreateNewPositon = () => {
+  const handleCreateNewPosition = () => {
     if (!inputValue) {
       toast({
         description: "What are you adding?",
@@ -122,7 +121,7 @@ const AddPosition = () => {
 
   const handleDeletePositionFromList = (id: number, name: string) => () => {
     deletePosition.mutate(
-      { positionId: id },
+      { positionId: id, name },
       {
         onSuccess: () => {
           setInputValue("");
@@ -197,13 +196,14 @@ const AddPosition = () => {
           options={searchList}
           onSelect={handleOnSelect}
           onDelete={handleDeletePositionFromList}
+          onEnter={handleCreateNewPosition}
         />
 
         <div className="flex gap-2 mb-4">
           <Button
             type="submit"
             className="py-0 h-7 rounded bg-blue-300 bg-smartgreen"
-            onClick={onCreateNewPositon}
+            onClick={handleCreateNewPosition}
           >
             Add
           </Button>

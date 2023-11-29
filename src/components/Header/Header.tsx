@@ -1,21 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 
 import LogoImg from "@/assets/images/logo.svg";
 import LogoutButton from "@/components/LogoutButton/LogoutButton";
-import Switch from "@/components/Switch";
 import DesktopNav from "@/containers/AppNavigation/DesktopNav/DesktopNav";
 import MobileNav from "@/containers/AppNavigation/MobileNav/MobileNav";
 
 const Header = () => {
-  // To do: dark/light mode
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  const handleDarkMode = () => {
-    setIsDarkMode((prev) => !prev);
-  };
-
   return (
     <div className="relative border-b shadow-md py-0 pl-1 pr-4">
       <div className="flex justify-between items-center w-full max-w-[1200px] mx-auto">
@@ -29,7 +21,6 @@ const Header = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <Switch checked={isDarkMode} handleChange={handleDarkMode} />
           <div className="md:hidden">
             <MobileNav />
           </div>

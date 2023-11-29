@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 
 import Autocomplete from "@/components/Autocomplete/Autocomplete";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
-
-import { Button } from "../ui/button";
 
 export interface ISkill {
   id: number;
@@ -94,7 +93,7 @@ const AddSkill = () => {
     );
   };
 
-  const onCreateNewSkill = () => {
+  const handleCreateNewSkill = () => {
     if (!inputValue) {
       toast({
         description: "What are you adding?",
@@ -124,9 +123,11 @@ const AddSkill = () => {
     deleteSkill.mutate(
       {
         skillId: id,
+        name,
       },
       {
         onSuccess: () => {
+          setInputValue("");
           toast({
             description: `${name} is deleted form the list`,
             variant: "success",
@@ -193,13 +194,14 @@ const AddSkill = () => {
         options={searchList}
         onSelect={handleOnSelect}
         onDelete={handleDeleteSkillFromList}
+        onEnter={handleCreateNewSkill}
       />
 
       <div className="flex gap-2 mb-4">
         <Button
           type="submit"
           className="py-0 h-7 rounded bg-blue-300 bg-smartgreen"
-          onClick={onCreateNewSkill}
+          onClick={handleCreateNewSkill}
         >
           Add
         </Button>

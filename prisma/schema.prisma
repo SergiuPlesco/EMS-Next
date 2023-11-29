@@ -80,9 +80,9 @@ model UserPosition {
   id         Int       @id @default(autoincrement())
   name       String
   userId     String?
-  positionId Int?
+  positionId Int
   user       User?     @relation(fields: [userId], references: [id])
-  position   Position? @relation(fields: [positionId], references: [id])
+  position   Position @relation(fields: [positionId], references: [id])
 }
 
 model Project {

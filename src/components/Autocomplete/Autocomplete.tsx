@@ -11,6 +11,7 @@ interface Autocomplete {
   options: any[] | undefined;
   onDelete?: (id: number, name: string) => () => void | undefined;
   placeholder?: string;
+  onEnter?: () => void;
 }
 
 const Autocomplete = ({
@@ -20,7 +21,13 @@ const Autocomplete = ({
   options,
   onDelete,
   placeholder = "Search or create a new one...",
+  onEnter,
 }: Autocomplete) => {
+  const handleOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (onEnter && e.code === "Enter") {
+      onEnter();
+    }
+  };
   return (
     <div className="flex flex-col gap-2 items-start w-full relative">
       <div className="relative w-full">
@@ -33,6 +40,7 @@ const Autocomplete = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
+          onKeyDown={handleOnKeyDown}
         />
       </div>
       <div className="absolute top-[100%] w-full bg-[#ffffff]">

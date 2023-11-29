@@ -1,9 +1,9 @@
 import { PlusIcon } from "@radix-ui/react-icons";
 import React from "react";
 
+import AddPosition from "@/components/forms/AddPosition/AddPosition";
 import { trpc } from "@/utils/trpc";
 
-import AddPosition from "../AddPosition/AddPosition";
 import Modal from "../Modal/Modal";
 
 const Positions = () => {

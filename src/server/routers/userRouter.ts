@@ -10,14 +10,18 @@ export const userRouter = router({
     .input(z.object({ searchQuery: z.string() }))
     .query(async ({ ctx, input }) => {
       if (input.searchQuery === "") return [];
-      return await ctx.prisma.user.findMany({
+      const result = await ctx.prisma.user.findMany({
         where: {
           name: {
-            startsWith: input.searchQuery,
+            contains: input.searchQuery,
             mode: "insensitive",
           },
         },
       });
+      const excludedLoggedUser = result.filter(
+        (user) => user.id !== ctx.session?.user.id
+      );
+      return excludedLoggedUser;
     }),
   getById: procedure
     .input(z.object({ userId: z.string() }))
