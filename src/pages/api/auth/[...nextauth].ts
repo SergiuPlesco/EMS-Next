@@ -2,8 +2,9 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { type GetServerSidePropsContext } from "next";
 import type { NextAuthOptions } from "next-auth";
 import NextAuth, { getServerSession } from "next-auth/next";
-import GoogleProvider from "next-auth/providers/google";
+import Google from "next-auth/providers/google";
 
+import { adminEmails } from "@/constants/common";
 import prisma from "@/server/prisma";
 
 const { NEXT_PUBLIC_GOOGLE_ID = "", NEXT_PUBLIC_GOOGLE_SECRET = "" } =
@@ -12,19 +13,29 @@ const { NEXT_PUBLIC_GOOGLE_ID = "", NEXT_PUBLIC_GOOGLE_SECRET = "" } =
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
-    GoogleProvider({
+    Google({
       clientId: NEXT_PUBLIC_GOOGLE_ID,
       clientSecret: NEXT_PUBLIC_GOOGLE_SECRET,
+      async profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+          role: adminEmails.includes(profile.email) ? "superadmin" : "user",
+        };
+      },
     }),
   ],
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: async ({ session, user }) => {
+      return {
+        ...session,
+        user: {
+          ...user,
+        },
+      };
+    },
   },
   secret: "sfj46jfg24564dfjgsdfg45", // required in produtction, see next-auth docs
 };
