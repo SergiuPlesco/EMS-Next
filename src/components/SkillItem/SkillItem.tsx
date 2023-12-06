@@ -39,7 +39,7 @@ const SkillItem = ({ skill }: { skill: IUserSkill }) => {
           step="5"
           value={rangeValue}
           onChange={handleChange}
-          className=""
+          className="accent-[--smart-purple]"
         />
       </div>
     </div>

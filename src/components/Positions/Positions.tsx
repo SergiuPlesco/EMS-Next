@@ -15,26 +15,23 @@ const Positions = () => {
   return (
     <div className="flex flex-col">
       <div className="flex justify-start items-center gap-2">
-        <p className="text-slate-500 text-sm">Positions</p>
         <Modal
           title="Edit positions"
           description="Search or create"
           icon={<PlusIcon width={16} color="var(--smart-purple)" />}
+          text="Add/Remove positions"
         >
           <AddPosition />
         </Modal>
       </div>
-      {userPositions?.length > 0 ? (
+      {userPositions?.length > 0 &&
         userPositions.map((position) => {
           return (
             <h3 key={position.id} className="font-semibold text-slate-600">
               {position.name}
             </h3>
           );
-        })
-      ) : (
-        <p className="text-sm text-slate-400">Add position</p>
-      )}
+        })}
     </div>
   );
 };
