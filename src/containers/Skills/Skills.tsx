@@ -15,20 +15,21 @@ const Skills = () => {
           title="Edit profile"
           description="Make changes to your profile here. Save each detail."
           icon={<PlusIcon width={16} color="var(--smart-purple)" />}
-          text={"Add a skill"}
+          text={"Add/Remove Skills"}
         >
           <AddSkill />
         </Modal>
       </div>
-      <div className="border rounded p-4">
-        {userSkills && userSkills.length === 0 ? (
-          <div>no skill, add some</div>
-        ) : (
-          userSkills?.map((skill) => {
-            return <Skill key={skill.id} skill={skill} />;
-          })
-        )}
-      </div>
+
+      {userSkills &&
+        userSkills.length > 0 &&
+        userSkills?.map((skill) => {
+          return (
+            <div key={skill.id} className="border rounded p-4 mb-2">
+              <Skill skill={skill} />
+            </div>
+          );
+        })}
     </div>
   );
 };

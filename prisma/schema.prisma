@@ -51,6 +51,7 @@ model User {
   projects       Project[]
   certificates   Certificate[]
   employmentDate DateTime?
+  role           String?      @default("user")
 }
 
 model Skill {
