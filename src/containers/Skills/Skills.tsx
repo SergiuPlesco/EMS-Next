@@ -12,8 +12,8 @@ const Skills = () => {
     <>
       <div className="flex justify-end items-center">
         <Modal
-          title="Edit profile"
-          description="Make changes to your profile here. Save each detail."
+          title="Skills"
+          description="Search, add, delete or create a new one."
           icon={<PlusIcon width={16} color="var(--smart-purple)" />}
           text={"Add/Remove Skills"}
         >

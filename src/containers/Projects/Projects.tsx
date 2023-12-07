@@ -1,6 +1,7 @@
 import { PlusIcon } from "@radix-ui/react-icons";
 import React from "react";
 
+import CreateProject from "@/components/forms/CreateProject/CreateProject";
 import Modal from "@/components/Modal/Modal";
 
 const sample = [
@@ -46,12 +47,12 @@ const Projects = () => {
     <>
       <div className="flex justify-end items-center">
         <Modal
-          title="Edit profile"
-          description="Make changes to your profile here. Save each detail."
+          title="Projects"
+          description="Add a new project."
           icon={<PlusIcon width={16} color="var(--smart-purple)" />}
           text={"Add/Remove Projects"}
         >
-          {/* <AddSkill /> */}
+          <CreateProject />
         </Modal>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

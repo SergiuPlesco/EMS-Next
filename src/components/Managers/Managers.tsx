@@ -19,7 +19,7 @@ const Managers = () => {
           title="Edit managers"
           description="Search and add your project manager/s"
           icon={<PlusIcon width={16} color="var(--smart-purple)" />}
-          text="Add/Remove managers"
+          text="Add/Remove Managers"
         >
           <AddManager />
         </Modal>
