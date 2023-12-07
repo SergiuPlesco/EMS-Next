@@ -9,7 +9,7 @@ import { trpc } from "@/utils/trpc";
 const Skills = () => {
   const { data: userSkills } = trpc.users.getSkills.useQuery();
   return (
-    <div>
+    <>
       <div className="flex justify-end items-center">
         <Modal
           title="Edit profile"
@@ -21,16 +21,18 @@ const Skills = () => {
         </Modal>
       </div>
 
-      {userSkills &&
-        userSkills.length > 0 &&
-        userSkills?.map((skill) => {
-          return (
-            <div key={skill.id} className="border rounded p-4 mb-2">
-              <Skill skill={skill} />
-            </div>
-          );
-        })}
-    </div>
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {userSkills &&
+          userSkills.length > 0 &&
+          userSkills?.map((skill) => {
+            return (
+              <div key={skill.id} className="border rounded p-4">
+                <Skill skill={skill} />
+              </div>
+            );
+          })}
+      </div>
+    </>
   );
 };
 

@@ -25,7 +25,9 @@ const Modal = ({ title, description, children, icon, text }: ModalProps) => {
         <Button variant="link" className="p-0 hover:no-underline">
           {icon ? (
             <div className="flex justify-end items-center gap-2">
-              <p className="text-sm text-slate-500">{text ?? ""}</p>
+              <p className="text-[10px] font-normal text-slate-500">
+                {text ?? ""}
+              </p>
               {icon}
             </div>
           ) : (

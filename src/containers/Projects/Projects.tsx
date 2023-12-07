@@ -1,4 +1,7 @@
+import { PlusIcon } from "@radix-ui/react-icons";
 import React from "react";
+
+import Modal from "@/components/Modal/Modal";
 
 const sample = [
   {
@@ -40,28 +43,40 @@ const sample = [
 
 const Projects = () => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {sample.map((project) => {
-        return (
-          <div
-            key={project.id}
-            className="flex flex-col gap-2 border rounded p-4"
-          >
-            <div>
-              <p className="text-xl font-medium text-slate-700">
-                {project.name}
-              </p>
+    <>
+      <div className="flex justify-end items-center">
+        <Modal
+          title="Edit profile"
+          description="Make changes to your profile here. Save each detail."
+          icon={<PlusIcon width={16} color="var(--smart-purple)" />}
+          text={"Add/Remove Projects"}
+        >
+          {/* <AddSkill /> */}
+        </Modal>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {sample.map((project) => {
+          return (
+            <div
+              key={project.id}
+              className="flex flex-col gap-2 border rounded p-4"
+            >
+              <div>
+                <p className="text-xl font-medium text-[--smart-purple]">
+                  {project.name}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-slate-500">{project.period}</p>
+              </div>
+              <div>
+                <p className="text-slate-600">{project.description}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-xs">{project.period}</p>
-            </div>
-            <div>
-              <p className="text-slate-600">{project.description}</p>
-            </div>
-          </div>
-        );
-      })}
-    </div>
+          );
+        })}
+      </div>
+    </>
   );
 };
 
