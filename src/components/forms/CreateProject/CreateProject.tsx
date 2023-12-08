@@ -1,12 +1,15 @@
+import "react-datepicker/dist/react-datepicker.css";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import React from "react";
+import DatePicker from "react-datepicker";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -16,20 +19,21 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
-const FormSchema = z.object({
-  name: z.string(),
-  startDate: z.date(),
-  endDate: z.date(),
-  description: z.string(),
-});
+const FormSchema = z
+  .object({
+    name: z.string(),
+    startDate: z.date(),
+    endDate: z.date(),
+    isPresent: z.boolean().optional(),
+    description: z.string(),
+  })
+  .refine((schema) => schema.startDate <= schema.endDate, {
+    message: "Start Date must be before End Date.",
+    path: ["endDate"],
+  });
 
 export default function CreateProject() {
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -54,6 +58,30 @@ export default function CreateProject() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-2 w-full"
         >
+          <FormField
+            control={form.control}
+            name="isPresent"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormControl>
+                    <div className="my-2 ">
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+
+                      <FormLabel className="ml-2">
+                        I am currently assigned to this project
+                      </FormLabel>
+                    </div>
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div className="w-full">
               <FormField
@@ -61,39 +89,35 @@ export default function CreateProject() {
                 name="startDate"
                 render={({ field }) => {
                   return (
-                    <FormItem>
-                      <FormLabel>Start Date</FormLabel>
+                    <FormItem className="space-y-0">
+                      <FormLabel className="">Start Date</FormLabel>
                       <FormControl>
-                        <Popover>
-                          <PopoverTrigger asChild>
+                        <DatePicker
+                          selected={field.value}
+                          onChange={field.onChange}
+                          showMonthYearPicker
+                          showFullMonthYearPicker
+                          dateFormat="MMMM, yyyy"
+                          popperPlacement="bottom"
+                          className="w-full mt-2"
+                          customInput={
                             <Button
                               id="date"
                               variant={"outline"}
                               className={cn(
-                                "w-full justify-start text-left font-normal",
+                                "justify-start text-left font-normal",
                                 !field.value && "text-muted-foreground"
                               )}
                             >
                               <CalendarIcon className="mr-2 h-4 w-4" />
                               {field.value ? (
-                                format(field.value, "PPP")
+                                format(field.value, "MMMM, yyyy")
                               ) : (
                                 <span>Pick a date</span>
                               )}
                             </Button>
-                          </PopoverTrigger>
-                          <PopoverContent
-                            className="w-auto h-full p-0"
-                            align="start"
-                          >
-                            <Calendar
-                              initialFocus
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                            />
-                          </PopoverContent>
-                        </Popover>
+                          }
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -107,39 +131,35 @@ export default function CreateProject() {
                 name="endDate"
                 render={({ field }) => {
                   return (
-                    <FormItem>
+                    <FormItem className="space-y-0">
                       <FormLabel>End Date</FormLabel>
                       <FormControl>
-                        <Popover>
-                          <PopoverTrigger asChild>
+                        <DatePicker
+                          selected={field.value}
+                          onChange={field.onChange}
+                          showMonthYearPicker
+                          showFullMonthYearPicker
+                          popperPlacement="bottom"
+                          dateFormat="MMMM, yyyy"
+                          className="w-full mt-2"
+                          customInput={
                             <Button
                               id="date"
                               variant={"outline"}
                               className={cn(
-                                "w-full justify-start text-left font-normal",
+                                "justify-start text-left font-normal",
                                 !field.value && "text-muted-foreground"
                               )}
                             >
                               <CalendarIcon className="mr-2 h-4 w-4" />
                               {field.value ? (
-                                format(field.value, "PPP")
+                                format(field.value, "MMMM, yyyy")
                               ) : (
                                 <span>Pick a date</span>
                               )}
                             </Button>
-                          </PopoverTrigger>
-                          <PopoverContent
-                            className="w-auto h-full p-0"
-                            align="start"
-                          >
-                            <Calendar
-                              initialFocus
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                            />
-                          </PopoverContent>
-                        </Popover>
+                          }
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -178,7 +198,6 @@ export default function CreateProject() {
               );
             }}
           />
-
           <div>
             <Button
               type="submit"

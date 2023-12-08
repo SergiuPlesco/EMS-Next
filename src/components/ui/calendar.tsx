@@ -1,6 +1,17 @@
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
+import {
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "@radix-ui/react-icons";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@radix-ui/react-select";
 import * as React from "react";
-import { DayPicker } from "react-day-picker";
+import { DayPicker, DropdownProps } from "react-day-picker";
 
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -16,6 +27,7 @@ function Calendar({
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
+      weekStartsOn={1}
       className={cn("p-3", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
@@ -55,13 +67,56 @@ function Calendar({
         day_range_middle:
           "aria-selected:bg-accent aria-selected:text-accent-foreground",
         day_hidden: "invisible",
+        vhidden: "hidden",
+        caption_dropdowns: "flex justify-start w-full",
         ...classNames,
       }}
       components={{
         IconLeft: () => <ChevronLeftIcon className="h-4 w-4" />,
         IconRight: () => <ChevronRightIcon className="h-4 w-4" />,
+        Dropdown: ({ value, onChange, children }: DropdownProps) => {
+          const options = React.Children.toArray(
+            children
+          ) as React.ReactElement<React.HTMLProps<HTMLOptionElement>>[];
+
+          const selected = options.find((child) => child.props.value === value);
+
+          const handleChange = (value: string) => {
+            const changeEvent = {
+              target: { value },
+            } as React.ChangeEvent<HTMLSelectElement>;
+            onChange?.(changeEvent);
+          };
+
+          return (
+            <Select
+              value={value?.toString()}
+              onValueChange={(value) => {
+                handleChange(value);
+              }}
+            >
+              <SelectTrigger className="focus:ring-0 mr-4 flex gap-2 items-center">
+                <SelectValue>{selected?.props?.children}</SelectValue>
+                <ChevronDownIcon className="h-4 w-4" />
+              </SelectTrigger>
+              <SelectContent
+                position="popper"
+                className="z-50 p-4 h-72 overflow-y-scroll bg-white rounded border"
+              >
+                {options.map((option, id: number) => (
+                  <SelectItem
+                    key={`${option.props.value}-${id}`}
+                    value={option.props.value?.toString() ?? ""}
+                    className="cursor-pointer"
+                  >
+                    {option.props.children}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          );
+        },
       }}
-      weekStartsOn={1}
       {...props}
     />
   );
