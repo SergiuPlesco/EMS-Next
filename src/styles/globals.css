@@ -78,11 +78,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-.react-datepicker-wrapper {
-  width: 100%;
-}
-
-.react-datepicker__navigation-icon::before {
-  top: 13px !important;
-}

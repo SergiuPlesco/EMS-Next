@@ -83,7 +83,7 @@ export default function CreateProject() {
             }}
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <div className="w-full">
+            <div className="w-full [&_.react-datepicker-wrapper]:w-full [&_span::before]:top-[13px]">
               <FormField
                 control={form.control}
                 name="startDate"
@@ -125,7 +125,7 @@ export default function CreateProject() {
                 }}
               />
             </div>
-            <div className="w-full">
+            <div className="w-full [&_.react-datepicker-wrapper]:w-full [&_span::before]:top-[13px]">
               <FormField
                 control={form.control}
                 name="endDate"
@@ -141,7 +141,7 @@ export default function CreateProject() {
                           showFullMonthYearPicker
                           popperPlacement="bottom"
                           dateFormat="MMMM, yyyy"
-                          className="w-full mt-2"
+                          className="w-full mt-2 [&_.react-datepicker__navigation-icon]:p-[50px]"
                           customInput={
                             <Button
                               id="date"
