@@ -20,36 +20,84 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
+import { trpc } from "@/utils/trpc";
 
 const FormSchema = z
   .object({
-    name: z.string(),
+    name: z.string().min(1, "Name is required"),
     startDate: z.date(),
-    endDate: z.date(),
-    isPresent: z.boolean().optional(),
+    endDate: z.date().nullable(),
+    isPresent: z.boolean(),
     description: z.string(),
   })
-  .refine((schema) => schema.startDate <= schema.endDate, {
-    message: "Start Date must be before End Date.",
-    path: ["endDate"],
-  });
+  .refine(
+    (data) => {
+      const { startDate, endDate, isPresent } = data;
+
+      if (isPresent) {
+        return startDate != null && endDate == null;
+      }
+      if (!isPresent && startDate && endDate) {
+        return startDate <= endDate;
+      }
+    },
+    {
+      message: "Invalid date range. Please check the start and end dates.",
+      path: ["endDate"],
+    }
+  );
 
 export default function CreateProject() {
+  const { toast } = useToast();
+  const utils = trpc.useContext();
+  const createProject = trpc.projects.create.useMutation();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: "",
       startDate: new Date(),
       endDate: new Date(),
+      isPresent: false,
       description: "",
     },
     mode: "all",
   });
 
+  const handleCreateNewProject = (data: z.infer<typeof FormSchema>) => {
+    if (!data) return;
+    createProject.mutate(
+      {
+        name: data.name,
+        description: data.description,
+        startDate: data.startDate,
+        endDate: data.endDate,
+      },
+      {
+        onSuccess: () => {
+          toast({
+            description: "New project created.",
+            variant: "success",
+          });
+          utils.projects.getAll.invalidate();
+          form.reset();
+        },
+        onError: () => {
+          toast({
+            description: "Something went wrong. Try again.",
+            variant: "destructive",
+          });
+        },
+      }
+    );
+  };
+
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    return data;
+    handleCreateNewProject(data);
   }
+  const isPresent = form.getValues().isPresent;
 
   return (
     <div className="flex flex-col items-start gap-4 border rounded p-2 mb-6 shadow-md">
@@ -65,10 +113,18 @@ export default function CreateProject() {
               return (
                 <FormItem>
                   <FormControl>
-                    <div className="my-2 ">
+                    <div className="my-2 flex items-center">
                       <Checkbox
+                        className="data-[state=checked]:bg-[--smart-purple] border-[--smart-purple]"
                         checked={field.value}
-                        onCheckedChange={field.onChange}
+                        onCheckedChange={(isChecked) => {
+                          field.onChange(isChecked);
+                          if (isChecked) {
+                            form.setValue("endDate", null);
+                          } else {
+                            form.setValue("endDate", new Date());
+                          }
+                        }}
                       />
 
                       <FormLabel className="ml-2">
@@ -102,7 +158,7 @@ export default function CreateProject() {
                           className="w-full mt-2"
                           customInput={
                             <Button
-                              id="date"
+                              type="button"
                               variant={"outline"}
                               className={cn(
                                 "justify-start text-left font-normal",
@@ -135,16 +191,18 @@ export default function CreateProject() {
                       <FormLabel>End Date</FormLabel>
                       <FormControl>
                         <DatePicker
+                          disabled={isPresent}
                           selected={field.value}
                           onChange={field.onChange}
                           showMonthYearPicker
                           showFullMonthYearPicker
+                          popperClassName="absolute top-0"
                           popperPlacement="bottom"
                           dateFormat="MMMM, yyyy"
-                          className="w-full mt-2 [&_.react-datepicker__navigation-icon]:p-[50px]"
+                          className="w-full mt-2"
                           customInput={
                             <Button
-                              id="date"
+                              type="button"
                               variant={"outline"}
                               className={cn(
                                 "justify-start text-left font-normal",
@@ -176,7 +234,12 @@ export default function CreateProject() {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Project name" type="text" {...field} />
+                    <Input
+                      autoFocus={false}
+                      placeholder="Project name"
+                      type="text"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

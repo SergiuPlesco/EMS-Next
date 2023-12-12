@@ -48,10 +48,10 @@ model User {
   positions      UserPosition[]
   managers       User[]         @relation("UserManagers")
   members        User[]         @relation("UserManagers")
-  projects       Project[]
+  projects       UserProject[]
   certificates   Certificate[]
   employmentDate DateTime?
-  role           String?      @default("user")
+  role           String?        @default("user")
 }
 
 model Skill {
@@ -78,19 +78,30 @@ model Position {
 }
 
 model UserPosition {
-  id         Int       @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   name       String
   userId     String?
   positionId Int
-  user       User?     @relation(fields: [userId], references: [id])
+  user       User?    @relation(fields: [userId], references: [id])
   position   Position @relation(fields: [positionId], references: [id])
 }
 
 model Project {
-  id          Int    @id @default(autoincrement())
-  name        String
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  users       UserProject[]
+}
+
+model UserProject {
+  id        Int      @id @default(autoincrement())
+  name      String
   description String
-  users       User[]
+  startDate   DateTime?
+  endDate     DateTime?
+  userId    String?
+  projectId Int
+  user      User?    @relation(fields: [userId], references: [id])
+  project   Project? @relation(fields: [projectId], references: [id])
 }
 
 model Certificate {
