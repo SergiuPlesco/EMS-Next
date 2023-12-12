@@ -30,7 +30,7 @@ const Projects = () => {
                 className="flex flex-col gap-2 border rounded p-4"
               >
                 <div>
-                  <p className="text-xl font-medium text-[--smart-purple]">
+                  <p className="text-lg font-medium text-[--smart-purple]">
                     {project.name}
                   </p>
                 </div>
@@ -48,7 +48,9 @@ const Projects = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-slate-600">{project.description}</p>
+                  <p className="text-slate-600 text-sm">
+                    {project.description}
+                  </p>
                 </div>
               </div>
             );

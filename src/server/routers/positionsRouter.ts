@@ -33,10 +33,10 @@ export const positionsRouter = router({
     .input(z.object({ searchQuery: z.string() }))
     .query(async ({ ctx, input }) => {
       if (input.searchQuery == "") return [];
-      return ctx.prisma.position.findMany({
+      return await ctx.prisma.position.findMany({
         where: {
           name: {
-            startsWith: input.searchQuery,
+            contains: input.searchQuery,
             mode: "insensitive",
           },
         },

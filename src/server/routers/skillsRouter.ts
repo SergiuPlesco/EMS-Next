@@ -34,7 +34,7 @@ export const skillsRouter = router({
     .input(z.object({ searchQuery: z.string() }))
     .query(async ({ ctx, input }) => {
       if (input.searchQuery == "") return [];
-      return ctx.prisma.skill.findMany({
+      return await ctx.prisma.skill.findMany({
         where: {
           name: {
             startsWith: input.searchQuery,

@@ -43,4 +43,17 @@ export const projectRouter = router({
       },
     });
   }),
+  search: procedure
+    .input(z.object({ searchQuery: z.string() }))
+    .query(async ({ ctx, input }) => {
+      if (input.searchQuery === "") return [];
+      return await ctx.prisma.project.findMany({
+        where: {
+          name: {
+            contains: input.searchQuery,
+            mode: "insensitive",
+          },
+        },
+      });
+    }),
 });
