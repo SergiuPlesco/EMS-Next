@@ -19,7 +19,7 @@ const Positions = () => {
           title="Edit positions"
           description="Search or create"
           icon={<PlusIcon width={16} color="var(--smart-purple)" />}
-          text="Add/Remove positions"
+          text="Add/Remove Positions"
         >
           <AddPosition />
         </Modal>
