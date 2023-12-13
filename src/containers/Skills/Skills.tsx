@@ -15,7 +15,11 @@ const Skills = () => {
           title="Skills"
           description="Search, add, delete or create a new one."
           icon={<PlusIcon width={16} color="var(--smart-purple)" />}
-          text={"Add/Remove Skills"}
+          text={
+            <p className="text-[10px] font-normal text-slate-500">
+              Add/Remove Skills
+            </p>
+          }
         >
           <AddSkill />
         </Modal>
