@@ -6,6 +6,14 @@ import CreateProject from "@/components/forms/CreateProject/CreateProject";
 import EditProject from "@/components/forms/EditProject/EditProject";
 import Modal from "@/components/Modal/Modal";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -73,34 +81,38 @@ const Projects = () => {
                   <p className="text-lg font-medium text-[--smart-purple]">
                     {project.name}
                   </p>
-
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      <DotsVerticalIcon />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem asChild>
-                        <Modal
-                          title="Projects"
-                          description="Edit project."
-                          text={
-                            <p className="text-md px-2 py-1 font-medium text-slate-500">
-                              Edit
-                            </p>
-                          }
+                  <Dialog>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <DotsVerticalIcon />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem asChild>
+                          <DialogTrigger className="w-full text-md font-medium text-slate-500">
+                            Edit
+                          </DialogTrigger>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          className="text-red-500"
+                          onClick={handleDeleteProject(
+                            project.id,
+                            project.name
+                          )}
                         >
-                          <EditProject projectId={project.id} />
-                        </Modal>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        className="text-red-500"
-                        onClick={handleDeleteProject(project.id, project.name)}
-                      >
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Projects</DialogTitle>
+                        <DialogDescription>Edit project.</DialogDescription>
+                      </DialogHeader>
+                      <EditProject projectId={project.id} />
+                    </DialogContent>
+                  </Dialog>
                 </div>
                 <div className="flex justify-start items-center gap-1">
                   <p className="text-xs text-slate-500">
