@@ -1,5 +1,3 @@
-import { AiFillSetting } from "react-icons/ai";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,22 +13,26 @@ type ModalProps = {
   description?: string;
   children: React.ReactNode;
   icon?: React.ReactNode;
-  text?: string;
+  text?: React.ReactNode | string;
+  open?: boolean | undefined;
 };
 
-const Modal = ({ title, description, children, icon, text }: ModalProps) => {
+const Modal = ({
+  title,
+  description,
+  children,
+  icon,
+  text,
+  open,
+}: ModalProps) => {
   return (
-    <Dialog>
+    <Dialog open={open}>
       <DialogTrigger asChild>
         <Button variant="link" className="p-0 hover:no-underline">
-          {icon ? (
-            <div className="flex justify-end items-center gap-2">
-              <p className="text-sm text-slate-500">{text ?? ""}</p>
-              {icon}
-            </div>
-          ) : (
-            <AiFillSetting size={18} color="var(--smart-purple)" />
-          )}
+          <div className="flex justify-end items-center gap-2">
+            {text ? text : ""}
+            {icon ? icon : null}
+          </div>
         </Button>
       </DialogTrigger>
       <DialogContent className="flex flex-col justify-start h-full sm:h-auto sm:max-w-[600px]">
