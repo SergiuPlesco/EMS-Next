@@ -8,7 +8,7 @@ import { Input } from "../ui/input";
 interface Autocomplete {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSelect: (name: string) => () => void;
+  onSelect: (name: string) => void;
   options: any[] | undefined;
   onDelete?: (id: number, name: string) => () => void | undefined;
   placeholder?: string;
@@ -46,18 +46,18 @@ const Autocomplete = ({
       </div>
       <div className="absolute top-[100%] w-full bg-[#ffffff]">
         {options && options.length ? (
-          <div className="border w-full h-full rounded mt-1">
-            <ul>
+          <div className="border w-full h-full rounded mt-1 shadow-lg">
+            <ul className="flex flex-col gap-1 m-1">
               {options.map((option) => {
                 return (
                   <div
                     key={option.id}
-                    className="flex justify-between items-center hover:bg-slate-300"
+                    className="flex justify-between items-center  bg-slate-100 hover:bg-slate-300"
                   >
                     <li
                       key={option.id}
                       className="px-2 py-1 m-0 flex items-center w-full hover:bg-slate-300 cursor-pointer"
-                      onClick={onSelect(option.name)}
+                      onClick={() => onSelect(option.name)}
                     >
                       <p className="m-0">{option.name}</p>
                     </li>

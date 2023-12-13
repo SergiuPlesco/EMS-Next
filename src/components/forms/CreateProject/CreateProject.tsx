@@ -75,7 +75,7 @@ export default function CreateProject() {
     if (!data) return;
     createProject.mutate(
       {
-        name: data.name,
+        name: String(data.name).trim(),
         description: data.description,
         startDate: data.startDate,
         endDate: data.endDate,
@@ -83,20 +83,25 @@ export default function CreateProject() {
       {
         onSuccess: () => {
           toast({
-            description: "New project created.",
+            description: `${data.name} has been added.`,
             variant: "success",
           });
           utils.projects.getAll.invalidate();
           form.reset();
         },
-        onError: () => {
+        onError: (error) => {
           toast({
-            description: "Something went wrong. Try again.",
+            description: `${error.message}`,
             variant: "destructive",
           });
         },
       }
     );
+  };
+
+  const handleSelect = (name: string) => {
+    form.setValue("name", name);
+    setSearchQuery("");
   };
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -248,7 +253,7 @@ export default function CreateProject() {
                       }}
                       options={searchList}
                       // form setValue
-                      onSelect={() => () => {}}
+                      onSelect={handleSelect}
                     />
                   </FormControl>
                   <FormMessage />
