@@ -1,8 +1,9 @@
-import { DotsVerticalIcon,PlusIcon } from "@radix-ui/react-icons";
+import { DotsVerticalIcon, PlusIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import React from "react";
 
 import CreateProject from "@/components/forms/CreateProject/CreateProject";
+import EditProject from "@/components/forms/EditProject/EditProject";
 import Modal from "@/components/Modal/Modal";
 import {
   DropdownMenu,
@@ -17,6 +18,7 @@ import { trpc } from "@/utils/trpc";
 const Projects = () => {
   const { toast } = useToast();
   const utils = trpc.useContext();
+
   const { data: userProjects } = trpc.projects.getAll.useQuery();
   const deleteProject = trpc.users.deleteProject.useMutation();
   const handleDeleteProject = (id: number, name: string) => () => {
@@ -41,6 +43,7 @@ const Projects = () => {
       }
     );
   };
+
   return (
     <>
       <div className="flex justify-end items-center">
@@ -48,7 +51,11 @@ const Projects = () => {
           title="Projects"
           description="Add a new project."
           icon={<PlusIcon width={16} color="var(--smart-purple)" />}
-          text={"Add/Remove Projects"}
+          text={
+            <p className="text-[10px] font-normal text-slate-500">
+              Add/Remove Projects
+            </p>
+          }
         >
           <CreateProject />
         </Modal>
@@ -66,12 +73,25 @@ const Projects = () => {
                   <p className="text-lg font-medium text-[--smart-purple]">
                     {project.name}
                   </p>
+
                   <DropdownMenu>
                     <DropdownMenuTrigger>
                       <DotsVerticalIcon />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Modal
+                          title="Projects"
+                          description="Edit project."
+                          text={
+                            <p className="text-md px-2 py-1 font-medium text-slate-500">
+                              Edit
+                            </p>
+                          }
+                        >
+                          <EditProject projectId={project.id} />
+                        </Modal>
+                      </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
                         className="text-red-500"

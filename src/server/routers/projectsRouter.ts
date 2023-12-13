@@ -57,6 +57,9 @@ export const projectRouter = router({
           id: ctx.session?.user.id,
         },
       },
+      orderBy: {
+        startDate: "desc",
+      },
     });
   }),
   search: procedure
@@ -69,6 +72,38 @@ export const projectRouter = router({
             contains: input.searchQuery,
             mode: "insensitive",
           },
+        },
+      });
+    }),
+  getById: procedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.userProject.findFirst({
+        where: {
+          projectId: input.id,
+          userId: ctx.session?.user.id,
+        },
+      });
+    }),
+  update: procedure
+    .input(
+      z.object({
+        name: z.string().min(1, "Name is required"),
+        description: z.string(),
+        startDate: z.date(),
+        endDate: z.date().nullable(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.userProject.update({
+        where: {
+          name: input.name,
+          userId: ctx.session?.user.id,
+        },
+        data: {
+          description: input.description,
+          startDate: input.startDate,
+          endDate: input.endDate,
         },
       });
     }),
