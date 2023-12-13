@@ -87,21 +87,21 @@ model UserPosition {
 }
 
 model Project {
-  id          Int           @id @default(autoincrement())
-  name        String        @unique
-  users       UserProject[]
+  id    Int           @id @default(autoincrement())
+  name  String        @unique
+  users UserProject[]
 }
 
 model UserProject {
-  id        Int      @id @default(autoincrement())
-  name      String
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
   description String
   startDate   DateTime?
   endDate     DateTime?
-  userId    String?
-  projectId Int
-  user      User?    @relation(fields: [userId], references: [id])
-  project   Project? @relation(fields: [projectId], references: [id])
+  userId      String?
+  projectId   Int
+  user        User?     @relation(fields: [userId], references: [id])
+  project     Project?  @relation(fields: [projectId], references: [id])
 }
 
 model Certificate {

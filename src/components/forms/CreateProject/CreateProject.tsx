@@ -3,11 +3,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
+import { useState } from "react";
 import React from "react";
 import DatePicker from "react-datepicker";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import Autocomplete from "@/components/Autocomplete/Autocomplete";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -18,7 +20,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
@@ -53,6 +54,10 @@ export default function CreateProject() {
   const { toast } = useToast();
   const utils = trpc.useContext();
   const createProject = trpc.projects.create.useMutation();
+  const [searchQuery, setSearchQuery] = useState("");
+  const { data: searchList } = trpc.projects.search.useQuery({
+    searchQuery,
+  });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -70,7 +75,7 @@ export default function CreateProject() {
     if (!data) return;
     createProject.mutate(
       {
-        name: data.name,
+        name: String(data.name).trim(),
         description: data.description,
         startDate: data.startDate,
         endDate: data.endDate,
@@ -78,20 +83,25 @@ export default function CreateProject() {
       {
         onSuccess: () => {
           toast({
-            description: "New project created.",
+            description: `${data.name} has been added.`,
             variant: "success",
           });
           utils.projects.getAll.invalidate();
           form.reset();
         },
-        onError: () => {
+        onError: (error) => {
           toast({
-            description: "Something went wrong. Try again.",
+            description: `${error.message}`,
             variant: "destructive",
           });
         },
       }
     );
+  };
+
+  const handleSelect = (name: string) => {
+    form.setValue("name", name);
+    setSearchQuery("");
   };
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -234,11 +244,16 @@ export default function CreateProject() {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input
-                      autoFocus={false}
-                      placeholder="Project name"
-                      type="text"
-                      {...field}
+                    <Autocomplete
+                      value={field.value}
+                      //
+                      onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                        field.onChange(e);
+                      }}
+                      options={searchList}
+                      // form setValue
+                      onSelect={handleSelect}
                     />
                   </FormControl>
                   <FormMessage />
@@ -254,7 +269,10 @@ export default function CreateProject() {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Project description" {...field} />
+                    <Textarea
+                      placeholder="Start writing about your role in this project and more..."
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

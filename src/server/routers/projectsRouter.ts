@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 
 import { procedure, router } from "../trpc";
@@ -13,26 +14,41 @@ export const projectRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const newProject = await ctx.prisma.project.upsert({
-        where: {
-          name: input.name,
-        },
-        create: {
-          name: input.name,
-        },
-        update: {},
-      });
-      await ctx.prisma.userProject.create({
-        data: {
-          projectId: newProject.id,
-          userId: ctx.session?.user.id,
-          name: newProject.name,
-          description: input.description,
-          startDate: input.startDate,
-          endDate: input.endDate,
-        },
-      });
-      return newProject;
+      try {
+        const newProject = await ctx.prisma.project.upsert({
+          where: {
+            name: input.name,
+          },
+          create: {
+            name: input.name,
+          },
+          update: {},
+        });
+
+        return await ctx.prisma.userProject.create({
+          data: {
+            projectId: newProject.id,
+            userId: ctx.session?.user.id,
+            name: newProject.name,
+            description: input.description,
+            startDate: input.startDate,
+            endDate: input.endDate,
+          },
+        });
+      } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          // "Unique constraint failed on the {constraint}"
+          // https://www.prisma.io/docs/orm/reference/error-reference#p2002
+          if (error.code === "P2002") {
+            throw {
+              ...error,
+              message: `${input.name} is already added.`,
+            };
+          } else {
+            throw error;
+          }
+        }
+      }
     }),
   getAll: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.userProject.findMany({
@@ -43,4 +59,17 @@ export const projectRouter = router({
       },
     });
   }),
+  search: procedure
+    .input(z.object({ searchQuery: z.string() }))
+    .query(async ({ ctx, input }) => {
+      if (input.searchQuery === "") return [];
+      return await ctx.prisma.project.findMany({
+        where: {
+          name: {
+            contains: input.searchQuery,
+            mode: "insensitive",
+          },
+        },
+      });
+    }),
 });
