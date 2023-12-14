@@ -4,7 +4,11 @@ import { procedure, router } from "../trpc";
 
 export const userRouter = router({
   all: procedure.query(async ({ ctx }) => {
-    return await ctx.prisma.user.findMany();
+    return await ctx.prisma.user.findMany({
+      include: {
+        positions: true,
+      },
+    });
   }),
   search: procedure
     .input(z.object({ searchQuery: z.string() }))
@@ -22,6 +26,55 @@ export const userRouter = router({
         (user) => user.id !== ctx.session?.user.id
       );
       return excludedLoggedUser;
+    }),
+  filter: procedure
+    .input(z.object({ searchQuery: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.user.findMany({
+        where: {
+          OR: [
+            {
+              name: {
+                contains: input.searchQuery,
+                mode: "insensitive",
+              },
+            },
+            {
+              skills: {
+                some: {
+                  name: {
+                    contains: input.searchQuery,
+                    mode: "insensitive",
+                  },
+                },
+              },
+            },
+            {
+              positions: {
+                some: {
+                  name: {
+                    contains: input.searchQuery,
+                    mode: "insensitive",
+                  },
+                },
+              },
+            },
+            {
+              projects: {
+                some: {
+                  name: {
+                    contains: input.searchQuery,
+                    mode: "insensitive",
+                  },
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          positions: true,
+        },
+      });
     }),
   getById: procedure
     .input(z.object({ userId: z.string() }))
