@@ -2,16 +2,28 @@ import Image from "next/image";
 import { useState } from "react";
 
 import Spinner from "@/components/Spinner/Spinner";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { trpc } from "@/utils/trpc";
 const EmployeesPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   // const { data: users, isLoading } = trpc.users.all.useQuery();
   const { data: filteredUsers, isLoading } = trpc.users.filter.useQuery({
     searchQuery,
+    page: currentPage,
   });
   const handleSetSearchQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
+    page: currentPage;
+  };
+  const handleNextPage = () => {
+    setCurrentPage((prev) => prev + 1);
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage === 1) return;
+    setCurrentPage((prev) => prev - 1);
   };
 
   return (
@@ -63,6 +75,10 @@ const EmployeesPage = () => {
               );
             })
           )}
+        </div>
+        <div className="flex gap-4">
+          <Button onClick={handlePreviousPage}>prev</Button>
+          <Button onClick={handleNextPage}>next</Button>
         </div>
       </div>
     </div>

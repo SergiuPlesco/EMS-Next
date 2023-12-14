@@ -28,9 +28,12 @@ export const userRouter = router({
       return excludedLoggedUser;
     }),
   filter: procedure
-    .input(z.object({ searchQuery: z.string() }))
+    .input(z.object({ searchQuery: z.string(), page: z.number() }))
     .query(async ({ ctx, input }) => {
+      const skipPages = 10 * Number(input.page) - 10;
       return await ctx.prisma.user.findMany({
+        skip: skipPages,
+        take: 10,
         where: {
           OR: [
             {
