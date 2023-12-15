@@ -93,7 +93,10 @@ export const userRouter = router({
         pagination: {
           currentPage: input.page,
           perPage: input.perPage,
-          total: Math.floor((totalUsers + input.perPage - 1) / input.perPage),
+          totalPages:
+            totalUsers < input.perPage
+              ? 1
+              : Math.ceil(totalUsers / input.perPage),
         },
       };
     }),

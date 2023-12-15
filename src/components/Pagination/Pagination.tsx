@@ -25,7 +25,7 @@ export default function Pagination(props: IProps) {
   );
 
   return (
-    <div className="mx-auto w-96 flex flex-row justify-center">
+    <div className="mx-auto max-w-96 flex flex-row justify-center">
       {count > 1 && (
         <Button
           variant="ghost"
