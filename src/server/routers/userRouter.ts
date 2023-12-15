@@ -28,56 +28,74 @@ export const userRouter = router({
       return excludedLoggedUser;
     }),
   filter: procedure
-    .input(z.object({ searchQuery: z.string(), page: z.number() }))
+    .input(
+      z.object({
+        searchQuery: z.string(),
+        page: z.number(),
+        perPage: z.number(),
+      })
+    )
     .query(async ({ ctx, input }) => {
-      const skipPages = 10 * Number(input.page) - 10;
-      return await ctx.prisma.user.findMany({
-        skip: skipPages,
-        take: 10,
-        where: {
-          OR: [
-            {
-              name: {
-                contains: input.searchQuery,
-                mode: "insensitive",
+      const skipPages = input.perPage * Number(input.page) - input.perPage;
+
+      const [users, totalUsers] = await ctx.prisma.$transaction([
+        ctx.prisma.user.findMany({
+          skip: skipPages,
+          take: input.perPage,
+          where: {
+            OR: [
+              {
+                name: {
+                  contains: input.searchQuery,
+                  mode: "insensitive",
+                },
               },
-            },
-            {
-              skills: {
-                some: {
-                  name: {
-                    contains: input.searchQuery,
-                    mode: "insensitive",
+              {
+                skills: {
+                  some: {
+                    name: {
+                      contains: input.searchQuery,
+                      mode: "insensitive",
+                    },
                   },
                 },
               },
-            },
-            {
-              positions: {
-                some: {
-                  name: {
-                    contains: input.searchQuery,
-                    mode: "insensitive",
+              {
+                positions: {
+                  some: {
+                    name: {
+                      contains: input.searchQuery,
+                      mode: "insensitive",
+                    },
                   },
                 },
               },
-            },
-            {
-              projects: {
-                some: {
-                  name: {
-                    contains: input.searchQuery,
-                    mode: "insensitive",
+              {
+                projects: {
+                  some: {
+                    name: {
+                      contains: input.searchQuery,
+                      mode: "insensitive",
+                    },
                   },
                 },
               },
-            },
-          ],
+            ],
+          },
+          include: {
+            positions: true,
+          },
+        }),
+        ctx.prisma.user.count(),
+      ]);
+      return {
+        users,
+        pagination: {
+          currentPage: input.page,
+          perPage: input.perPage,
+          total: Math.floor((totalUsers + input.perPage - 1) / input.perPage),
         },
-        include: {
-          positions: true,
-        },
-      });
+      };
     }),
   getById: procedure
     .input(z.object({ userId: z.string() }))
