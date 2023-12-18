@@ -58,9 +58,9 @@ const UserInfoForm = ({ user }: { user: User }) => {
     mode: "all",
   });
 
-  const addPhone = trpc.users.userInfo.useMutation();
+  const updateInfo = trpc.users.userInfo.useMutation();
   const handleSubmit = (values: z.infer<typeof FormSchema>) => {
-    addPhone.mutate(
+    updateInfo.mutate(
       {
         ...values,
       },
@@ -185,7 +185,7 @@ const UserInfoForm = ({ user }: { user: User }) => {
             <Button
               type="submit"
               className="py-0 h-7 rounded bg-blue-300 bg-smartpurple"
-              disabled={addPhone.isLoading}
+              disabled={updateInfo.isLoading}
             >
               Save
             </Button>
