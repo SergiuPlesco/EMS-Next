@@ -38,7 +38,7 @@ const AddSkill = () => {
     setInputValue(value);
   };
 
-  const handleOnSelect = (name: string) => () => {
+  const handleOnSelect = (name: string) => {
     const skillAdded = skills?.find((skill) => skill.name === name);
 
     if (name === "" || skillAdded) {

@@ -58,7 +58,7 @@ const AddPosition = () => {
     );
   };
 
-  const handleOnSelect = (name: string) => () => {
+  const handleOnSelect = (name: string) => {
     const positionAdded = positions?.find((position) => position.name === name);
 
     if (name === "" || positionAdded) {

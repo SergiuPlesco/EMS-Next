@@ -52,6 +52,7 @@ model User {
   certificates   Certificate[]
   employmentDate DateTime?
   role           String?        @default("user")
+  availability   Availability   @default(FULLTIME)
 }
 
 model Skill {
@@ -120,4 +121,10 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum Availability {
+  FULLTIME
+  PARTTIME
+  NOTAVAILABLE
 }
