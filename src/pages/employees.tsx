@@ -3,17 +3,36 @@ import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 import Pagination from "@/components/Pagination/Pagination";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { trpc } from "@/utils/trpc";
 
+const AvailabilityEnum = ["FULLTIME", "PARTTIME", "NOTAVAILABLE"] as const;
+type Availability = (typeof AvailabilityEnum)[number];
+const AvailabilityItems = [
+  {
+    value: AvailabilityEnum[0],
+    label: "Full Time",
+  },
+  {
+    value: AvailabilityEnum[1],
+    label: "Part Time",
+  },
+  {
+    value: AvailabilityEnum[2],
+    label: "Not Available",
+  },
+];
 const EmployeesPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [availability, setAvailability] = useState<Availability[]>([]);
 
   const { data, isLoading, isFetching } = trpc.users.filter.useQuery({
     searchQuery,
     page: currentPage,
     perPage: 12,
+    availability,
   });
 
   const debounced = useDebouncedCallback(
@@ -40,7 +59,34 @@ const EmployeesPage = () => {
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-[minmax(0,200px),1fr] gap-10">
-        <div>filters</div>
+        <div>
+          <h2 className="font-medium mb-4">Availability</h2>
+          <div>
+            {AvailabilityItems.map((item) => {
+              return (
+                <div
+                  key={item.value}
+                  className="flex justify-start gap-2 items-center"
+                >
+                  <Checkbox
+                    value={item.value}
+                    checked={availability.includes(item.value)}
+                    onCheckedChange={(checked) => {
+                      return checked
+                        ? setAvailability([...availability, item.value])
+                        : setAvailability(
+                            availability?.filter(
+                              (value) => value !== item.value
+                            )
+                          );
+                    }}
+                  />
+                  <p>{item.label}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
         <div className="flex flex-col justify-center items-center gap-5">
           {isLoading || isFetching ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
@@ -82,7 +128,7 @@ const EmployeesPage = () => {
                             width="200"
                             height="250"
                             quality={100}
-                            className="w-full h-full rounded-t-md "
+                            className="w-full h-full rounded-t-md"
                           />
                         </div>
                         <div className="rounded-b-md p-3 bg-white">

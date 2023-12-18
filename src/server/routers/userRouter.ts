@@ -33,16 +33,23 @@ export const userRouter = router({
         searchQuery: z.string(),
         page: z.number(),
         perPage: z.number(),
+        availability: z.array(z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"])),
       })
     )
     .query(async ({ ctx, input }) => {
       const skipPages = input.perPage * Number(input.page) - input.perPage;
-
+      let usersCount = 0;
       const [users, totalUsers] = await ctx.prisma.$transaction([
         ctx.prisma.user.findMany({
           skip: skipPages,
           take: input.perPage,
           where: {
+            availability: {
+              in:
+                input.availability.length > 0
+                  ? input.availability
+                  : ["FULLTIME", "PARTTIME", "NOTAVAILABLE"],
+            },
             OR: [
               {
                 name: {
@@ -88,15 +95,22 @@ export const userRouter = router({
         }),
         ctx.prisma.user.count(),
       ]);
+
+      if (input.searchQuery || input.availability.length > 0) {
+        usersCount = users.length;
+      } else {
+        usersCount = totalUsers;
+      }
+
       return {
         users,
         pagination: {
           currentPage: input.page,
           perPage: input.perPage,
           totalPages:
-            totalUsers < input.perPage
+            usersCount < input.perPage
               ? 1
-              : Math.ceil(totalUsers / input.perPage),
+              : Math.ceil(usersCount / input.perPage),
         },
       };
     }),
