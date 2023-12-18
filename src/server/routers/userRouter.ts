@@ -116,10 +116,12 @@ export const userRouter = router({
       },
     });
   }),
-  addPhone: procedure
+  userInfo: procedure
     .input(
       z.object({
         phone: z.string().length(9),
+        employmentDate: z.date().nullable(),
+        availability: z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"]),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -129,6 +131,8 @@ export const userRouter = router({
         },
         data: {
           phone: input.phone,
+          employmentDate: input.employmentDate,
+          availability: input.availability,
         },
       });
       return phone;

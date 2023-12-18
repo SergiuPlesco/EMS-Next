@@ -33,6 +33,7 @@ const EmployeesPage = () => {
     <div className="flex flex-col gap-10">
       <div>
         <Input
+          type="search"
           placeholder="Search by name, skill, project, position..."
           defaultValue={searchQuery}
           onChange={handleSetSearchQuery}
