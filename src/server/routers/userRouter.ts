@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 
 import { procedure, router } from "../trpc";
@@ -37,80 +38,77 @@ export const userRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const skipPages = input.perPage * Number(input.page) - input.perPage;
-      let usersCount = 0;
-      const [users, totalUsers] = await ctx.prisma.$transaction([
-        ctx.prisma.user.findMany({
-          skip: skipPages,
-          take: input.perPage,
-          where: {
-            availability: {
-              in:
-                input.availability.length > 0
-                  ? input.availability
-                  : ["FULLTIME", "PARTTIME", "NOTAVAILABLE"],
+      const skipPages = input.perPage * (input.page - 1);
+      const where: Prisma.UserWhereInput = {
+        availability: {
+          in:
+            input.availability.length > 0
+              ? input.availability
+              : ["FULLTIME", "PARTTIME", "NOTAVAILABLE"],
+        },
+        OR: [
+          {
+            name: {
+              contains: input.searchQuery,
+              mode: "insensitive",
             },
-            OR: [
-              {
+          },
+          {
+            skills: {
+              some: {
                 name: {
                   contains: input.searchQuery,
                   mode: "insensitive",
                 },
               },
-              {
-                skills: {
-                  some: {
-                    name: {
-                      contains: input.searchQuery,
-                      mode: "insensitive",
-                    },
-                  },
-                },
-              },
-              {
-                positions: {
-                  some: {
-                    name: {
-                      contains: input.searchQuery,
-                      mode: "insensitive",
-                    },
-                  },
-                },
-              },
-              {
-                projects: {
-                  some: {
-                    name: {
-                      contains: input.searchQuery,
-                      mode: "insensitive",
-                    },
-                  },
-                },
-              },
-            ],
+            },
           },
-          include: {
-            positions: true,
+          {
+            positions: {
+              some: {
+                name: {
+                  contains: input.searchQuery,
+                  mode: "insensitive",
+                },
+              },
+            },
           },
-        }),
-        ctx.prisma.user.count(),
-      ]);
+          {
+            projects: {
+              some: {
+                name: {
+                  contains: input.searchQuery,
+                  mode: "insensitive",
+                },
+              },
+            },
+          },
+        ],
+      };
 
-      if (input.searchQuery || input.availability.length > 0) {
-        usersCount = users.length;
-      } else {
-        usersCount = totalUsers;
-      }
+      const include: Prisma.UserInclude = {
+        positions: true,
+      };
+      const [users, totalUsers] = await ctx.prisma.$transaction([
+        ctx.prisma.user.findMany({
+          skip: skipPages,
+          take: input.perPage,
+          where,
+          include,
+        }),
+
+        ctx.prisma.user.findMany({
+          where,
+          include,
+        }),
+      ]);
 
       return {
         users,
         pagination: {
           currentPage: input.page,
           perPage: input.perPage,
-          totalPages:
-            usersCount < input.perPage
-              ? 1
-              : Math.ceil(usersCount / input.perPage),
+          totalPages: Math.ceil(totalUsers.length / input.perPage),
         },
       };
     }),
