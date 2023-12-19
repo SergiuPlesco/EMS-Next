@@ -22,7 +22,7 @@ const AddManager = () => {
   const addManager = trpc.users.addManager.useMutation();
   const deleteManager = trpc.users.deleteManager.useMutation();
 
-  const handleOnSelect = (name: string) => () => {
+  const handleOnSelect = (name: string) => {
     addManager.mutate(
       {
         name,

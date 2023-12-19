@@ -5,7 +5,6 @@ import Tabs from "@/components/Tabs/Tabs";
 import Projects from "@/containers/Projects/Projects";
 import Skills from "@/containers/Skills/Skills";
 
-import Availability from "../Availability/Availability";
 import Certificates from "../Certificates/Certificates";
 
 const tabsElements = [
@@ -16,10 +15,6 @@ const tabsElements = [
   {
     label: "Projects",
     component: <Projects />,
-  },
-  {
-    label: "Availability",
-    component: <Availability />,
   },
   {
     label: "Certificates",

@@ -156,7 +156,7 @@ export default function CreateProject() {
                 render={({ field }) => {
                   return (
                     <FormItem className="space-y-0">
-                      <FormLabel className="">Start Date</FormLabel>
+                      <FormLabel>Start Date</FormLabel>
                       <FormControl>
                         <DatePicker
                           selected={field.value}

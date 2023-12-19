@@ -1,10 +1,15 @@
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 
 import { procedure, router } from "../trpc";
 
 export const userRouter = router({
   all: procedure.query(async ({ ctx }) => {
-    return await ctx.prisma.user.findMany();
+    return await ctx.prisma.user.findMany({
+      include: {
+        positions: true,
+      },
+    });
   }),
   search: procedure
     .input(z.object({ searchQuery: z.string() }))
@@ -23,6 +28,90 @@ export const userRouter = router({
       );
       return excludedLoggedUser;
     }),
+  filter: procedure
+    .input(
+      z.object({
+        searchQuery: z.string(),
+        page: z.number(),
+        perPage: z.number(),
+        availability: z.array(z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"])),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const skipPages = input.perPage * (input.page - 1);
+      const where: Prisma.UserWhereInput = {
+        availability: {
+          in:
+            input.availability.length > 0
+              ? input.availability
+              : ["FULLTIME", "PARTTIME", "NOTAVAILABLE"],
+        },
+        OR: [
+          {
+            name: {
+              contains: input.searchQuery,
+              mode: "insensitive",
+            },
+          },
+          {
+            skills: {
+              some: {
+                name: {
+                  contains: input.searchQuery,
+                  mode: "insensitive",
+                },
+              },
+            },
+          },
+          {
+            positions: {
+              some: {
+                name: {
+                  contains: input.searchQuery,
+                  mode: "insensitive",
+                },
+              },
+            },
+          },
+          {
+            projects: {
+              some: {
+                name: {
+                  contains: input.searchQuery,
+                  mode: "insensitive",
+                },
+              },
+            },
+          },
+        ],
+      };
+
+      const include: Prisma.UserInclude = {
+        positions: true,
+      };
+      const [users, totalUsers] = await ctx.prisma.$transaction([
+        ctx.prisma.user.findMany({
+          skip: skipPages,
+          take: input.perPage,
+          where,
+          include,
+        }),
+
+        ctx.prisma.user.findMany({
+          where,
+          include,
+        }),
+      ]);
+
+      return {
+        users,
+        pagination: {
+          currentPage: input.page,
+          perPage: input.perPage,
+          totalPages: Math.ceil(totalUsers.length / input.perPage),
+        },
+      };
+    }),
   getById: procedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -39,10 +128,12 @@ export const userRouter = router({
       },
     });
   }),
-  addPhone: procedure
+  userInfo: procedure
     .input(
       z.object({
         phone: z.string().length(9),
+        employmentDate: z.date().nullable(),
+        availability: z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"]),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -52,6 +143,8 @@ export const userRouter = router({
         },
         data: {
           phone: input.phone,
+          employmentDate: input.employmentDate,
+          availability: input.availability,
         },
       });
       return phone;
