@@ -37,7 +37,7 @@ const Identity = ({ user }: { user: TUser }) => {
             description="Make changes to your profile here. Save each detail."
             icon={<Pencil1Icon width={16} color="var(--smart-purple)" />}
           >
-            <UserInfo />
+            <UserInfo user={user} />
           </Modal>
         </div>
         <p className="text-xs text-slate-500">{user?.email}</p>
