@@ -50,7 +50,9 @@ const Identity = () => {
         <p className="text-xs text-slate-500">{user?.email}</p>
         <p className="text-xs text-slate-500">
           {user?.phone}
-          {" / "}
+
+          {user.phone && user.employmentDate && " / "}
+
           {user?.employmentDate
             ? format(user?.employmentDate, "MMMM, yyyy")
             : ""}
