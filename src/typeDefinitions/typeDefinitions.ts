@@ -7,11 +7,11 @@ import {
 } from "@prisma/client";
 
 export type TUser = User & {
-  positions?: UserPosition[];
-  availability?: UserAvailability;
-  skills?: UserSkill[];
-  projects?: UserProject[];
-  managers?: User[];
+  positions: UserPosition[];
+  availability: UserAvailability;
+  skills: UserSkill[];
+  projects: UserProject[];
+  managers: User[];
 };
 
 export const AvailabilityEnum = [
