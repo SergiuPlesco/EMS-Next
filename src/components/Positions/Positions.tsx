@@ -2,14 +2,14 @@ import { Pencil1Icon, PlusIcon } from "@radix-ui/react-icons";
 import React from "react";
 
 import AddPosition from "@/components/forms/AddPosition/AddPosition";
-import { trpc } from "@/utils/trpc";
+import { TUser } from "@/typeDefinitions/typeDefinitions";
 
 import Modal from "../Modal/Modal";
 
-const Positions = () => {
-  const { data: userPositions, isLoading } = trpc.users.getPositions.useQuery();
+const Positions = ({ user }: { user: TUser }) => {
+  const userPositions = user.positions;
 
-  if (isLoading || !userPositions) {
+  if (!userPositions) {
     return null;
   }
 

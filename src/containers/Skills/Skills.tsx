@@ -4,12 +4,11 @@ import React from "react";
 import AddSkill from "@/components/forms/AddSkill/AddSkill";
 import Modal from "@/components/Modal/Modal";
 import Skill from "@/components/SkillItem/SkillItem";
-import { trpc } from "@/utils/trpc";
+import { TUser } from "@/typeDefinitions/typeDefinitions";
 
-const Skills = () => {
-  const { data: userSkills, isLoading } = trpc.users.getSkills.useQuery();
-
-  if (isLoading || !userSkills) {
+const Skills = ({ user }: { user: TUser }) => {
+  const userSkills = user.skills;
+  if (!userSkills) {
     return null;
   }
 

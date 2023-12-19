@@ -1,10 +1,8 @@
-import { trpc } from "@/utils/trpc";
+import { TUser } from "@/typeDefinitions/typeDefinitions";
 
 import UserInfoForm from "./UserInfoForm";
 
-const UserInfo = () => {
-  const { data: user } = trpc.users.getLoggedUser.useQuery();
-
+const UserInfo = ({ user }: { user: TUser }) => {
   if (!user) return null;
 
   return <UserInfoForm user={user} />;

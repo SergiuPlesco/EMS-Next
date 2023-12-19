@@ -1,8 +1,17 @@
 import { User } from "@prisma/client";
-import { UserPosition } from "@prisma/client";
+import {
+  Availability as UserAvailability,
+  UserPosition,
+  UserProject,
+  UserSkill,
+} from "@prisma/client";
 
 export type TUser = User & {
   positions: UserPosition[];
+  availability: UserAvailability;
+  skills: UserSkill[];
+  projects: UserProject[];
+  managers: User[];
 };
 
 export const AvailabilityEnum = [

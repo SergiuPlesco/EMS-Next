@@ -6,18 +6,11 @@ import React from "react";
 import UserInfo from "@/components/forms/UserInfo/UserInfo";
 import { AVAILABILITY_BORDER_COLORS } from "@/constants/common";
 import { cn } from "@/lib/utils";
-import { trpc } from "@/utils/trpc";
+import { TUser } from "@/typeDefinitions/typeDefinitions";
 
 import Modal from "../Modal/Modal";
-import Spinner from "../Spinner/Spinner";
 
-const Identity = () => {
-  const { data: user, isLoading } = trpc.users.getLoggedUser.useQuery();
-
-  if (isLoading || !user) {
-    return <Spinner />;
-  }
-
+const Identity = ({ user }: { user: TUser }) => {
   return (
     <div className="flex gap-4 items-center mb-6">
       <div
@@ -44,7 +37,7 @@ const Identity = () => {
             description="Make changes to your profile here. Save each detail."
             icon={<Pencil1Icon width={16} color="var(--smart-purple)" />}
           >
-            <UserInfo />
+            <UserInfo user={user} />
           </Modal>
         </div>
         <p className="text-xs text-slate-500">{user?.email}</p>

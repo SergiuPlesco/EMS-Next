@@ -21,13 +21,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
+import { TUser } from "@/typeDefinitions/typeDefinitions";
 import { trpc } from "@/utils/trpc";
 
-const Projects = () => {
+const Projects = ({ user }: { user: TUser }) => {
   const { toast } = useToast();
   const utils = trpc.useContext();
 
-  const { data: userProjects, isLoading } = trpc.projects.getAll.useQuery();
+  const userProjects = user.projects;
   const deleteProject = trpc.users.deleteProject.useMutation();
 
   const handleDeleteProject = (id: number, name: string) => () => {
@@ -53,7 +54,7 @@ const Projects = () => {
     );
   };
 
-  if (isLoading || !userProjects) {
+  if (!userProjects) {
     return null;
   }
 
