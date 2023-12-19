@@ -53,6 +53,13 @@ const AddPosition = () => {
             variant: "success",
           });
           utils.users.getPositions.invalidate();
+          utils.users.getLoggedUser.invalidate();
+        },
+        onError: (error) => {
+          toast({
+            description: `${error.message} `,
+            variant: "destructive",
+          });
         },
       }
     );
@@ -87,6 +94,7 @@ const AddPosition = () => {
             description: `${name} added to your positions`,
             variant: "success",
           });
+          utils.users.getLoggedUser.invalidate();
           utils.users.getPositions.invalidate();
         },
         onError: () => {},
@@ -114,6 +122,7 @@ const AddPosition = () => {
             variant: "success",
           });
           utils.users.getPositions.invalidate();
+          utils.users.getLoggedUser.invalidate();
         },
       }
     );

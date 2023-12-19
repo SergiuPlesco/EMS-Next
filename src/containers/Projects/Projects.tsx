@@ -43,6 +43,7 @@ const Projects = ({ user }: { user: TUser }) => {
             variant: "success",
           });
           utils.projects.getAll.invalidate();
+          utils.users.getLoggedUser.invalidate();
         },
         onError(error) {
           toast({
@@ -119,7 +120,7 @@ const Projects = ({ user }: { user: TUser }) => {
                         <DialogTitle>Projects</DialogTitle>
                         <DialogDescription>Edit project.</DialogDescription>
                       </DialogHeader>
-                      <EditProject projectId={project.id} />
+                      <EditProject projectId={project.projectId} />
                     </DialogContent>
                   </Dialog>
                 </div>

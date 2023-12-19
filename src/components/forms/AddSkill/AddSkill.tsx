@@ -69,8 +69,8 @@ const AddSkill = () => {
             description: `${name} added to your list`,
             variant: "success",
           });
-
           utils.users.getSkills.invalidate();
+          utils.users.getLoggedUser.invalidate();
         },
       }
     );
@@ -86,8 +86,8 @@ const AddSkill = () => {
             description: `${name} deleted form your list`,
             variant: "success",
           });
-
           utils.users.getSkills.invalidate();
+          utils.users.getLoggedUser.invalidate();
         },
       }
     );
@@ -112,8 +112,8 @@ const AddSkill = () => {
             description: `${inputValue} added to the list`,
             variant: "success",
           });
-
           utils.users.getSkills.invalidate();
+          utils.users.getLoggedUser.invalidate();
         },
       }
     );
