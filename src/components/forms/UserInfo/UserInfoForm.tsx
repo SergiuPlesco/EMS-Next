@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { User } from "@prisma/client";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import React from "react";
@@ -26,18 +27,6 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { trpc } from "@/utils/trpc";
-
-type User = {
-  id: string;
-  name: string | null;
-  email: string | null;
-  image: string | null;
-  emailVerified: Date | null;
-  phone: string | null;
-  role: string | null;
-  employmentDate: Date | null;
-  availability: "FULLTIME" | "PARTTIME" | "NOTAVAILABLE";
-};
 
 const FormSchema = z.object({
   phone: z.string().length(9),
