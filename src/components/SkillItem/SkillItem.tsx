@@ -25,10 +25,6 @@ const SkillItem = ({ skill }: { skill: IUserSkill }) => {
 
   return (
     <div className="flex flex-col mb-4">
-      <div className="flex justify-end">
-        <button>Edit</button>
-      </div>
-
       <div className="flex justify-between mb-2">
         <p>{skill.name}</p>
 
