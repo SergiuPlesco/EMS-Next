@@ -17,20 +17,17 @@ const Skills = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center">
+      <div className="flex items-center gap-2">
         <p className="font-medium text-xl text-[--smart-green]">Skills</p>
         <Modal
           title="Skills"
           description="Search, add, delete or create a new one."
           icon={
             hasUsersSkills ? (
-              <Pencil1Icon width={16} color="var(--smart-purple)" />
+              <Pencil1Icon width={20} height={20} color="var(--smart-purple)" />
             ) : (
-              <PlusIcon width={16} color="var(--smart-purple)" />
+              <PlusIcon width={20} height={20} color="var(--smart-purple)" />
             )
-          }
-          text={
-            <p className="text-[10px] font-normal text-slate-500">Skills</p>
           }
         >
           <AddSkill />

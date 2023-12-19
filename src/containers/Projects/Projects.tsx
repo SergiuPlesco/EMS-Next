@@ -61,20 +61,17 @@ const Projects = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center">
+      <div className="flex items-center gap-2">
         <p className="font-medium text-xl text-[--smart-green]">Projects</p>
         <Modal
           title="Projects"
           description="Add a new project."
           icon={
             hasUserProjects ? (
-              <Pencil1Icon width={16} color="var(--smart-purple)" />
+              <Pencil1Icon width={20} height={20} color="var(--smart-purple)" />
             ) : (
-              <PlusIcon width={16} color="var(--smart-purple)" />
+              <PlusIcon width={20} height={20} color="var(--smart-purple)" />
             )
-          }
-          text={
-            <p className="text-[10px] font-normal text-slate-500">Projects</p>
           }
         >
           <CreateProject />
