@@ -54,7 +54,8 @@ const Projects = () => {
 
   return (
     <>
-      <div className="flex justify-end items-center">
+      <div className="flex justify-between items-center">
+        <p className="font-medium text-xl text-[--smart-green]">Projects</p>
         <Modal
           title="Projects"
           description="Add a new project."
