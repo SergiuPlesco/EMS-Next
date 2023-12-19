@@ -1,4 +1,4 @@
-import { DotsVerticalIcon, PlusIcon } from "@radix-ui/react-icons";
+import { DotsVerticalIcon, Pencil1Icon, PlusIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import React from "react";
 
@@ -30,6 +30,7 @@ const Projects = ({ user }: { user: TUser }) => {
 
   const userProjects = user.projects;
   const deleteProject = trpc.users.deleteProject.useMutation();
+
   const handleDeleteProject = (id: number, name: string) => () => {
     deleteProject.mutate(
       {
@@ -57,26 +58,28 @@ const Projects = ({ user }: { user: TUser }) => {
     return null;
   }
 
+  const hasUserProjects = userProjects.length > 0;
+
   return (
     <>
-      <div className="flex justify-between items-center">
+      <div className="flex items-center gap-2">
         <p className="font-medium text-xl text-[--smart-green]">Projects</p>
         <Modal
           title="Projects"
           description="Add a new project."
-          icon={<PlusIcon width={16} color="var(--smart-purple)" />}
-          text={
-            <p className="text-[10px] font-normal text-slate-500">
-              Add/Remove Projects
-            </p>
+          icon={
+            hasUserProjects ? (
+              <Pencil1Icon width={20} height={20} color="var(--smart-purple)" />
+            ) : (
+              <PlusIcon width={20} height={20} color="var(--smart-purple)" />
+            )
           }
         >
           <CreateProject />
         </Modal>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {userProjects &&
-          userProjects.length > 0 &&
+        {hasUserProjects &&
           userProjects.map((project) => {
             return (
               <div
