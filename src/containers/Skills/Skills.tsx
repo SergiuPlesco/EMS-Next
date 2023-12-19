@@ -10,7 +10,8 @@ const Skills = () => {
   const { data: userSkills } = trpc.users.getSkills.useQuery();
   return (
     <>
-      <div className="flex justify-end items-center">
+      <div className="flex justify-between items-center">
+        <p className="font-medium text-xl text-[--smart-green]">Skills</p>
         <Modal
           title="Skills"
           description="Search, add, delete or create a new one."
