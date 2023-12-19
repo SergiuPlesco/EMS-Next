@@ -121,13 +121,21 @@ export const userRouter = router({
         },
       });
     }),
-  getLoggedUser: procedure.query(async ({ ctx }) => {
-    return await ctx.prisma.user.findFirst({
-      where: {
-        id: ctx.session?.user.id,
-      },
-    });
-  }),
+  getLoggedUser: procedure
+    .input(z.object({ userId: z.string().optional() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.user.findFirst({
+        where: {
+          id: input.userId || ctx.session?.user.id,
+        },
+        include: {
+          positions: true,
+          managers: true,
+          skills: true,
+          projects: true,
+        },
+      });
+    }),
   userInfo: procedure
     .input(
       z.object({

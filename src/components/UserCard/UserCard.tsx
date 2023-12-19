@@ -2,20 +2,29 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
+import { AVAILABILITY_BORDER_COLORS } from "@/constants/common";
 import { TUser } from "@/typeDefinitions/typeDefinitions";
 
 const UserCard = ({ user }: { user: TUser }) => {
   return (
-    <Link href={"/"}>
-      <div className="rounded-md shadow-md border w-full">
-        <div className="rounded-md">
+    <div className="rounded-md shadow-md border w-full ">
+      <Link
+        href={`/employees/${user.id}`}
+        className="flex flex-col items-start justify-start"
+      >
+        <div
+          className={`border-[3px] m-3 rounded-full `}
+          style={{
+            borderColor: AVAILABILITY_BORDER_COLORS[user.availability],
+          }}
+        >
           <Image
-            src={user.image || ""}
-            alt="profile image"
-            width="200"
-            height="250"
-            quality={100}
-            className="w-full h-full rounded-t-md"
+            src={user?.image || ""}
+            alt="Profile image"
+            width={75}
+            height={75}
+            className="rounded-full border  border-white"
+            priority
           />
         </div>
         <div className="rounded-b-md p-3 bg-white">
@@ -30,8 +39,8 @@ const UserCard = ({ user }: { user: TUser }) => {
             })}
           </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 };
 

@@ -4,10 +4,13 @@ import React from "react";
 import AddSkill from "@/components/forms/AddSkill/AddSkill";
 import Modal from "@/components/Modal/Modal";
 import Skill from "@/components/SkillItem/SkillItem";
-import { trpc } from "@/utils/trpc";
+import { TUser } from "@/typeDefinitions/typeDefinitions";
 
-const Skills = () => {
-  const { data: userSkills } = trpc.users.getSkills.useQuery();
+const Skills = ({ user }: { user: TUser }) => {
+  const userSkills = user.skills;
+  if (!userSkills) {
+    return null;
+  }
   return (
     <>
       <div className="flex justify-between items-center">

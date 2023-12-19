@@ -11,7 +11,7 @@ const UserSkeleton = () => {
               key={index}
               className="animate-pulse rounded-md bg-primary/10 shadow-md border"
             >
-              <div className="rounded-md min-w-full min-h-[226px]"></div>
+              <div className="rounded-md min-w-full h-[150px]"></div>
               <div className="rounded-b-md p-3 bg-white">
                 <p className="animate-pulse bg-primary/10 h-2 mb-2 font-extrabold"></p>
                 <div className="flex flex-col">

@@ -2,14 +2,14 @@ import { PlusIcon } from "@radix-ui/react-icons";
 import React from "react";
 
 import AddManager from "@/components/forms/AddManager/AddManager";
-import { trpc } from "@/utils/trpc";
+import { TUser } from "@/typeDefinitions/typeDefinitions";
 
 import Modal from "../Modal/Modal";
 
-const Managers = () => {
-  const { data: managers, isLoading } = trpc.users.getManagers.useQuery();
+const Managers = ({ user }: { user: TUser }) => {
+  const managers = user.managers;
 
-  if (isLoading || !managers) {
+  if (!managers) {
     return null;
   }
   return (
@@ -28,8 +28,8 @@ const Managers = () => {
           <AddManager />
         </Modal>
       </div>
-      {managers.managers?.length > 0 &&
-        managers.managers.map((manager) => {
+      {managers?.length > 0 &&
+        managers.map((manager) => {
           return (
             <h3 key={manager.id} className="font-semibold text-slate-600">
               {manager.name}
