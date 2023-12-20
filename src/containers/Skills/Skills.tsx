@@ -6,7 +6,13 @@ import Modal from "@/components/Modal/Modal";
 import Skill from "@/components/SkillItem/SkillItem";
 import { TUser } from "@/typeDefinitions/typeDefinitions";
 
-const Skills = ({ user }: { user: TUser }) => {
+const Skills = ({
+  user,
+  isLoggedUser,
+}: {
+  user: TUser;
+  isLoggedUser: boolean;
+}) => {
   const userSkills = user.skills;
   if (!userSkills) {
     return null;
@@ -16,22 +22,34 @@ const Skills = ({ user }: { user: TUser }) => {
 
   return (
     <>
-      <div className="flex items-center gap-2">
-        <p className="font-medium text-xl text-[--smart-green]">Skills</p>
-        <Modal
-          title="Skills"
-          description="Search, add, delete or create a new one."
-          icon={
-            hasUsersSkills ? (
-              <Pencil1Icon width={20} height={20} color="var(--smart-purple)" />
-            ) : (
-              <PlusIcon width={20} height={20} color="var(--smart-purple)" />
-            )
-          }
-        >
-          <AddSkill userSkills={userSkills} />
-        </Modal>
-      </div>
+      {hasUsersSkills && (
+        <div className="flex items-center gap-2">
+          <p className="font-medium text-xl text-[--smart-green]">Skills</p>
+          {isLoggedUser && (
+            <Modal
+              title="Skills"
+              description="Search, add, delete or create a new one."
+              icon={
+                hasUsersSkills ? (
+                  <Pencil1Icon
+                    width={20}
+                    height={20}
+                    color="var(--smart-purple)"
+                  />
+                ) : (
+                  <PlusIcon
+                    width={20}
+                    height={20}
+                    color="var(--smart-purple)"
+                  />
+                )
+              }
+            >
+              <AddSkill userSkills={userSkills} />
+            </Modal>
+          )}
+        </div>
+      )}
 
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {hasUsersSkills

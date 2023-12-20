@@ -6,7 +6,13 @@ import { TUser } from "@/typeDefinitions/typeDefinitions";
 
 import Modal from "../Modal/Modal";
 
-const Managers = ({ user }: { user: TUser }) => {
+const Managers = ({
+  user,
+  isLoggedUser,
+}: {
+  user: TUser;
+  isLoggedUser: boolean;
+}) => {
   const managers = user.managers;
 
   if (!managers) {
@@ -18,22 +24,24 @@ const Managers = ({ user }: { user: TUser }) => {
   return (
     <div className="flex flex-col">
       <div className="flex justify-start items-center gap-2">
-        <Modal
-          title="Edit managers"
-          description="Search and add your project manager/s"
-          icon={
-            hasManagers ? (
-              <Pencil1Icon width={16} color="var(--smart-purple)" />
-            ) : (
-              <PlusIcon width={16} color="var(--smart-purple)" />
-            )
-          }
-          text={
-            <p className="text-[10px] font-normal text-slate-500">Managers</p>
-          }
-        >
-          <AddManager />
-        </Modal>
+        {isLoggedUser && (
+          <Modal
+            title="Edit managers"
+            description="Search and add your project manager/s"
+            icon={
+              hasManagers ? (
+                <Pencil1Icon width={16} color="var(--smart-purple)" />
+              ) : (
+                <PlusIcon width={16} color="var(--smart-purple)" />
+              )
+            }
+            text={
+              <p className="text-[10px] font-normal text-slate-500">Managers</p>
+            }
+          >
+            <AddManager />
+          </Modal>
+        )}
       </div>
       {managers?.length > 0 &&
         managers.map((manager) => {
