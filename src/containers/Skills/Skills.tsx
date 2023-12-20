@@ -22,34 +22,30 @@ const Skills = ({
 
   return (
     <>
-      {hasUsersSkills && (
-        <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2">
+        {(isLoggedUser || (!isLoggedUser && hasUsersSkills)) && (
           <p className="font-medium text-xl text-[--smart-green]">Skills</p>
-          {isLoggedUser && (
-            <Modal
-              title="Skills"
-              description="Search, add, delete or create a new one."
-              icon={
-                hasUsersSkills ? (
-                  <Pencil1Icon
-                    width={20}
-                    height={20}
-                    color="var(--smart-purple)"
-                  />
-                ) : (
-                  <PlusIcon
-                    width={20}
-                    height={20}
-                    color="var(--smart-purple)"
-                  />
-                )
-              }
-            >
-              <AddSkill userSkills={userSkills} />
-            </Modal>
-          )}
-        </div>
-      )}
+        )}
+        {isLoggedUser && (
+          <Modal
+            title="Skills"
+            description="Search, add, delete or create a new one."
+            icon={
+              hasUsersSkills ? (
+                <Pencil1Icon
+                  width={20}
+                  height={20}
+                  color="var(--smart-purple)"
+                />
+              ) : (
+                <PlusIcon width={20} height={20} color="var(--smart-purple)" />
+              )
+            }
+          >
+            <AddSkill userSkills={userSkills} />
+          </Modal>
+        )}
+      </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {hasUsersSkills
