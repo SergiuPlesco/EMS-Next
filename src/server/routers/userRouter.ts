@@ -329,20 +329,30 @@ export const userRouter = router({
     }),
 
   deletePosition: procedure
-    .input(z.object({ positionId: z.number() }))
+    .input(z.object({ userPositionId: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const deletedPosition = await ctx.prisma.user.update({
+      const deletedPosition = await ctx.prisma.userPosition.delete({
         where: {
-          id: ctx.session?.user.id,
+          id: input.userPositionId,
         },
-        data: {
+      });
+      const userWithPosition = await ctx.prisma.user.findFirst({
+        where: {
           positions: {
-            delete: {
-              id: input.positionId,
+            some: {
+              positionId: deletedPosition.positionId,
             },
           },
         },
       });
+
+      if (!userWithPosition && deletedPosition.positionId) {
+        await ctx.prisma.position.delete({
+          where: {
+            id: deletedPosition.positionId,
+          },
+        });
+      }
       return deletedPosition;
     }),
   getPositions: procedure.query(async ({ ctx }) => {

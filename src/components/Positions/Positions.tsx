@@ -32,7 +32,7 @@ const Positions = ({ user }: { user: TUser }) => {
             <p className="text-[10px] font-normal text-slate-500">Positions</p>
           }
         >
-          <AddPosition />
+          <AddPosition userPositions={userPositions} />
         </Modal>
       </div>
       {hasUserPositions
