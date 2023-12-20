@@ -35,9 +35,6 @@ const Profile = () => {
       <section className="mb-4">
         <Projects user={user} isLoggedUser={isLoggedUser} />
       </section>
-      {/* <section>
-        <Certificates />
-      </section> */}
     </div>
   );
 };
