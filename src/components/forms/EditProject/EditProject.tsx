@@ -88,6 +88,7 @@ export default function EditProject({ projectId }: { projectId: number }) {
           });
           utils.projects.getAll.invalidate();
           utils.projects.getById.invalidate();
+          utils.users.getLoggedUser.invalidate();
           form.reset();
         },
         onError: (error) => {

@@ -29,7 +29,7 @@ const Skills = ({ user }: { user: TUser }) => {
             )
           }
         >
-          <AddSkill />
+          <AddSkill userSkills={userSkills} />
         </Modal>
       </div>
 

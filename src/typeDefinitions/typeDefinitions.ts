@@ -1,6 +1,6 @@
-import { User } from "@prisma/client";
 import {
   Availability as UserAvailability,
+  User,
   UserPosition,
   UserProject,
   UserSkill,

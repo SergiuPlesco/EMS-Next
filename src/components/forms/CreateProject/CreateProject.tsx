@@ -87,6 +87,7 @@ export default function CreateProject() {
             variant: "success",
           });
           utils.projects.getAll.invalidate();
+          utils.users.getLoggedUser.invalidate();
           form.reset();
         },
         onError: (error) => {
