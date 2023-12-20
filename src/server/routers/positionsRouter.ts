@@ -33,10 +33,10 @@ export const positionsRouter = router({
     .input(z.object({ searchQuery: z.string() }))
     .query(async ({ ctx, input }) => {
       if (input.searchQuery == "") return [];
-      return ctx.prisma.position.findMany({
+      return await ctx.prisma.position.findMany({
         where: {
           name: {
-            startsWith: input.searchQuery,
+            contains: input.searchQuery,
             mode: "insensitive",
           },
         },
@@ -54,7 +54,7 @@ export const positionsRouter = router({
       } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
           // "Foreign key constraint failed on the field: {field_name}"
-          // https://www.prisma.io/docs/reference/api-reference/error-reference#error-codes
+          // https://www.prisma.io/docs/orm/reference/error-reference#p2003
           if (error.code === "P2003") {
             throw {
               ...error,

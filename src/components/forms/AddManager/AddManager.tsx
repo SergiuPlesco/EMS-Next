@@ -22,7 +22,7 @@ const AddManager = () => {
   const addManager = trpc.users.addManager.useMutation();
   const deleteManager = trpc.users.deleteManager.useMutation();
 
-  const handleOnSelect = (name: string) => () => {
+  const handleOnSelect = (name: string) => {
     addManager.mutate(
       {
         name,
@@ -35,6 +35,7 @@ const AddManager = () => {
             variant: "success",
           });
           utils.users.getManagers.invalidate();
+          utils.users.getLoggedUser.invalidate();
         },
         onError: () => {
           toast({
@@ -72,6 +73,7 @@ const AddManager = () => {
             variant: "success",
           });
           utils.users.getManagers.invalidate();
+          utils.users.getLoggedUser.invalidate();
         },
       }
     );

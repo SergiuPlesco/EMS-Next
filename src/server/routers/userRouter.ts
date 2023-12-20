@@ -1,10 +1,15 @@
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 
 import { procedure, router } from "../trpc";
 
 export const userRouter = router({
   all: procedure.query(async ({ ctx }) => {
-    return await ctx.prisma.user.findMany();
+    return await ctx.prisma.user.findMany({
+      include: {
+        positions: true,
+      },
+    });
   }),
   search: procedure
     .input(z.object({ searchQuery: z.string() }))
@@ -23,6 +28,90 @@ export const userRouter = router({
       );
       return excludedLoggedUser;
     }),
+  filter: procedure
+    .input(
+      z.object({
+        searchQuery: z.string(),
+        page: z.number(),
+        perPage: z.number(),
+        availability: z.array(z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"])),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const skipPages = input.perPage * (input.page - 1);
+      const where: Prisma.UserWhereInput = {
+        availability: {
+          in:
+            input.availability.length > 0
+              ? input.availability
+              : ["FULLTIME", "PARTTIME", "NOTAVAILABLE"],
+        },
+        OR: [
+          {
+            name: {
+              contains: input.searchQuery,
+              mode: "insensitive",
+            },
+          },
+          {
+            skills: {
+              some: {
+                name: {
+                  contains: input.searchQuery,
+                  mode: "insensitive",
+                },
+              },
+            },
+          },
+          {
+            positions: {
+              some: {
+                name: {
+                  contains: input.searchQuery,
+                  mode: "insensitive",
+                },
+              },
+            },
+          },
+          {
+            projects: {
+              some: {
+                name: {
+                  contains: input.searchQuery,
+                  mode: "insensitive",
+                },
+              },
+            },
+          },
+        ],
+      };
+
+      const include: Prisma.UserInclude = {
+        positions: true,
+      };
+      const [users, totalUsers] = await ctx.prisma.$transaction([
+        ctx.prisma.user.findMany({
+          skip: skipPages,
+          take: input.perPage,
+          where,
+          include,
+        }),
+
+        ctx.prisma.user.findMany({
+          where,
+          include,
+        }),
+      ]);
+
+      return {
+        users,
+        pagination: {
+          currentPage: input.page,
+          perPage: input.perPage,
+          totalPages: Math.ceil(totalUsers.length / input.perPage),
+        },
+      };
+    }),
   getById: procedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -32,17 +121,35 @@ export const userRouter = router({
         },
       });
     }),
-  getLoggedUser: procedure.query(async ({ ctx }) => {
-    return await ctx.prisma.user.findFirst({
-      where: {
-        id: ctx.session?.user.id,
-      },
-    });
-  }),
-  addPhone: procedure
+  getLoggedUser: procedure
+    .input(z.object({ userId: z.string().optional() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.user.findFirst({
+        where: {
+          id: input.userId || ctx.session?.user.id,
+        },
+        include: {
+          positions: true,
+          managers: true,
+          skills: {
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
+          projects: {
+            orderBy: {
+              startDate: "desc",
+            },
+          },
+        },
+      });
+    }),
+  userInfo: procedure
     .input(
       z.object({
         phone: z.string().length(9),
+        employmentDate: z.date().nullable(),
+        availability: z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"]),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -52,6 +159,8 @@ export const userRouter = router({
         },
         data: {
           phone: input.phone,
+          employmentDate: input.employmentDate,
+          availability: input.availability,
         },
       });
       return phone;
@@ -105,21 +214,32 @@ export const userRouter = router({
       return userSkills;
     }),
   deleteSkill: procedure
-    .input(z.object({ skillId: z.number() }))
+    .input(z.object({ userSkillId: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const deletedSkill = await ctx.prisma.user.update({
+      const deleteSkill = await ctx.prisma.userSkill.delete({
         where: {
-          id: ctx.session?.user.id,
+          id: input.userSkillId,
         },
-        data: {
+      });
+
+      const userWithSkill = await ctx.prisma.user.findFirst({
+        where: {
           skills: {
-            delete: {
-              id: input.skillId,
+            some: {
+              skillId: deleteSkill.skillId,
             },
           },
         },
       });
-      return deletedSkill;
+
+      if (!userWithSkill && deleteSkill.skillId) {
+        await ctx.prisma.skill.delete({
+          where: {
+            id: deleteSkill.skillId,
+          },
+        });
+      }
+      return deleteSkill;
     }),
   getSkills: procedure.query(async ({ ctx }) => {
     const user = await ctx.prisma.user.findFirst({
@@ -209,20 +329,30 @@ export const userRouter = router({
     }),
 
   deletePosition: procedure
-    .input(z.object({ positionId: z.number() }))
+    .input(z.object({ userPositionId: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const deletedPosition = await ctx.prisma.user.update({
+      const deletedPosition = await ctx.prisma.userPosition.delete({
         where: {
-          id: ctx.session?.user.id,
+          id: input.userPositionId,
         },
-        data: {
+      });
+      const userWithPosition = await ctx.prisma.user.findFirst({
+        where: {
           positions: {
-            delete: {
-              id: input.positionId,
+            some: {
+              positionId: deletedPosition.positionId,
             },
           },
         },
       });
+
+      if (!userWithPosition && deletedPosition.positionId) {
+        await ctx.prisma.position.delete({
+          where: {
+            id: deletedPosition.positionId,
+          },
+        });
+      }
       return deletedPosition;
     }),
   getPositions: procedure.query(async ({ ctx }) => {
@@ -302,4 +432,20 @@ export const userRouter = router({
       },
     });
   }),
+  deleteProject: procedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.user.update({
+        where: {
+          id: ctx.session?.user.id,
+        },
+        data: {
+          projects: {
+            delete: {
+              id: input.id,
+            },
+          },
+        },
+      });
+    }),
 });
