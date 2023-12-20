@@ -69,34 +69,31 @@ const Projects = ({
 
   return (
     <>
-      {hasUserProjects && (
-        <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2">
+        {(isLoggedUser || (!isLoggedUser && hasUserProjects)) && (
           <p className="font-medium text-xl text-[--smart-green]">Projects</p>
-          {isLoggedUser && (
-            <Modal
-              title="Projects"
-              description="Add a new project."
-              icon={
-                hasUserProjects ? (
-                  <Pencil1Icon
-                    width={20}
-                    height={20}
-                    color="var(--smart-purple)"
-                  />
-                ) : (
-                  <PlusIcon
-                    width={20}
-                    height={20}
-                    color="var(--smart-purple)"
-                  />
-                )
-              }
-            >
-              <CreateProject />
-            </Modal>
-          )}
-        </div>
-      )}
+        )}
+        {isLoggedUser && (
+          <Modal
+            title="Projects"
+            description="Add a new project."
+            icon={
+              hasUserProjects ? (
+                <Pencil1Icon
+                  width={20}
+                  height={20}
+                  color="var(--smart-purple)"
+                />
+              ) : (
+                <PlusIcon width={20} height={20} color="var(--smart-purple)" />
+              )
+            }
+          >
+            <CreateProject />
+          </Modal>
+        )}
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {hasUserProjects &&
           userProjects.map((project) => {
