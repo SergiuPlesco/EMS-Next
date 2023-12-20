@@ -10,7 +10,13 @@ import { TUser } from "@/typeDefinitions/typeDefinitions";
 
 import Modal from "../Modal/Modal";
 
-const Identity = ({ user }: { user: TUser }) => {
+const Identity = ({
+  user,
+  isLoggedUser,
+}: {
+  user: TUser;
+  isLoggedUser: boolean;
+}) => {
   return (
     <div className="flex gap-4 items-center mb-6">
       <div
@@ -32,13 +38,15 @@ const Identity = ({ user }: { user: TUser }) => {
       <div>
         <div className="flex items-center gap-2">
           <h2 className="text-xl font-bold">{user?.name}</h2>
-          <Modal
-            title="Edit profile"
-            description="Make changes to your profile here. Save each detail."
-            icon={<Pencil1Icon width={16} color="var(--smart-purple)" />}
-          >
-            <UserInfo user={user} />
-          </Modal>
+          {isLoggedUser && (
+            <Modal
+              title="Edit profile"
+              description="Make changes to your profile here. Save each detail."
+              icon={<Pencil1Icon width={16} color="var(--smart-purple)" />}
+            >
+              <UserInfo user={user} />
+            </Modal>
+          )}
         </div>
         <p className="text-xs text-slate-500">{user?.email}</p>
         <p className="text-xs text-slate-500">

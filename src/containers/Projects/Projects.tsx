@@ -24,7 +24,13 @@ import { useToast } from "@/components/ui/use-toast";
 import { TUser } from "@/typeDefinitions/typeDefinitions";
 import { trpc } from "@/utils/trpc";
 
-const Projects = ({ user }: { user: TUser }) => {
+const Projects = ({
+  user,
+  isLoggedUser,
+}: {
+  user: TUser;
+  isLoggedUser: boolean;
+}) => {
   const { toast } = useToast();
   const utils = trpc.useContext();
 
@@ -63,22 +69,34 @@ const Projects = ({ user }: { user: TUser }) => {
 
   return (
     <>
-      <div className="flex items-center gap-2">
-        <p className="font-medium text-xl text-[--smart-green]">Projects</p>
-        <Modal
-          title="Projects"
-          description="Add a new project."
-          icon={
-            hasUserProjects ? (
-              <Pencil1Icon width={20} height={20} color="var(--smart-purple)" />
-            ) : (
-              <PlusIcon width={20} height={20} color="var(--smart-purple)" />
-            )
-          }
-        >
-          <CreateProject />
-        </Modal>
-      </div>
+      {hasUserProjects && (
+        <div className="flex items-center gap-2">
+          <p className="font-medium text-xl text-[--smart-green]">Projects</p>
+          {isLoggedUser && (
+            <Modal
+              title="Projects"
+              description="Add a new project."
+              icon={
+                hasUserProjects ? (
+                  <Pencil1Icon
+                    width={20}
+                    height={20}
+                    color="var(--smart-purple)"
+                  />
+                ) : (
+                  <PlusIcon
+                    width={20}
+                    height={20}
+                    color="var(--smart-purple)"
+                  />
+                )
+              }
+            >
+              <CreateProject />
+            </Modal>
+          )}
+        </div>
+      )}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {hasUserProjects &&
           userProjects.map((project) => {
@@ -91,38 +109,40 @@ const Projects = ({ user }: { user: TUser }) => {
                   <p className="text-lg font-medium text-[--smart-purple]">
                     {project.name}
                   </p>
-                  <Dialog>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger>
-                        <DotsVerticalIcon />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem asChild>
-                          <DialogTrigger className="w-full text-md font-medium text-slate-500">
-                            Edit
-                          </DialogTrigger>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          className="text-red-500"
-                          onClick={handleDeleteProject(
-                            project.id,
-                            project.name
-                          )}
-                        >
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                  {isLoggedUser && (
+                    <Dialog>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger>
+                          <DotsVerticalIcon />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem asChild>
+                            <DialogTrigger className="w-full text-md font-medium text-slate-500">
+                              Edit
+                            </DialogTrigger>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            className="text-red-500"
+                            onClick={handleDeleteProject(
+                              project.id,
+                              project.name
+                            )}
+                          >
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
 
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Projects</DialogTitle>
-                        <DialogDescription>Edit project.</DialogDescription>
-                      </DialogHeader>
-                      <EditProject projectId={project.projectId} />
-                    </DialogContent>
-                  </Dialog>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Projects</DialogTitle>
+                          <DialogDescription>Edit project.</DialogDescription>
+                        </DialogHeader>
+                        <EditProject projectId={project.projectId} />
+                      </DialogContent>
+                    </Dialog>
+                  )}
                 </div>
                 <div className="flex justify-start items-center gap-1">
                   <p className="text-xs text-slate-500">

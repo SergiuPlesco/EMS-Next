@@ -6,7 +6,13 @@ import { TUser } from "@/typeDefinitions/typeDefinitions";
 
 import Modal from "../Modal/Modal";
 
-const Positions = ({ user }: { user: TUser }) => {
+const Positions = ({
+  user,
+  isLoggedUser,
+}: {
+  user: TUser;
+  isLoggedUser: boolean;
+}) => {
   const userPositions = user.positions;
 
   if (!userPositions) {
@@ -18,22 +24,26 @@ const Positions = ({ user }: { user: TUser }) => {
   return (
     <div className="flex flex-col">
       <div className="flex justify-start items-center gap-2">
-        <Modal
-          title="Edit positions"
-          description="Search or create"
-          icon={
-            hasUserPositions ? (
-              <Pencil1Icon width={16} color="var(--smart-purple)" />
-            ) : (
-              <PlusIcon width={16} color="var(--smart-purple)" />
-            )
-          }
-          text={
-            <p className="text-[10px] font-normal text-slate-500">Positions</p>
-          }
-        >
-          <AddPosition userPositions={userPositions} />
-        </Modal>
+        {isLoggedUser && (
+          <Modal
+            title="Edit positions"
+            description="Search or create"
+            icon={
+              hasUserPositions ? (
+                <Pencil1Icon width={16} color="var(--smart-purple)" />
+              ) : (
+                <PlusIcon width={16} color="var(--smart-purple)" />
+              )
+            }
+            text={
+              <p className="text-[10px] font-normal text-slate-500">
+                Positions
+              </p>
+            }
+          >
+            <AddPosition userPositions={userPositions} />
+          </Modal>
+        )}
       </div>
       {hasUserPositions
         ? userPositions.map((position) => {
