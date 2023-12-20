@@ -32,7 +32,7 @@ const SkillItem = ({ skill }: { skill: IUserSkill }) => {
       </div>
 
       <Slider
-        min={1}
+        min={0}
         max={100}
         step={5}
         value={[rangeValue]}
