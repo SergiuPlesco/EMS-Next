@@ -131,8 +131,16 @@ export const userRouter = router({
         include: {
           positions: true,
           managers: true,
-          skills: true,
-          projects: true,
+          skills: {
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
+          projects: {
+            orderBy: {
+              startDate: "desc",
+            },
+          },
         },
       });
     }),
@@ -206,21 +214,32 @@ export const userRouter = router({
       return userSkills;
     }),
   deleteSkill: procedure
-    .input(z.object({ skillId: z.number() }))
+    .input(z.object({ userSkillId: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const deletedSkill = await ctx.prisma.user.update({
+      const deleteSkill = await ctx.prisma.userSkill.delete({
         where: {
-          id: ctx.session?.user.id,
+          id: input.userSkillId,
         },
-        data: {
+      });
+
+      const userWithSkill = await ctx.prisma.user.findFirst({
+        where: {
           skills: {
-            delete: {
-              id: input.skillId,
+            some: {
+              skillId: deleteSkill.skillId,
             },
           },
         },
       });
-      return deletedSkill;
+
+      if (!userWithSkill && deleteSkill.skillId) {
+        await ctx.prisma.skill.delete({
+          where: {
+            id: deleteSkill.skillId,
+          },
+        });
+      }
+      return deleteSkill;
     }),
   getSkills: procedure.query(async ({ ctx }) => {
     const user = await ctx.prisma.user.findFirst({
