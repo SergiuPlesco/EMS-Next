@@ -1,40 +1,66 @@
-import { PlusIcon } from "@radix-ui/react-icons";
+import { Pencil1Icon, PlusIcon } from "@radix-ui/react-icons";
 import React from "react";
 
 import AddSkill from "@/components/forms/AddSkill/AddSkill";
 import Modal from "@/components/Modal/Modal";
 import Skill from "@/components/SkillItem/SkillItem";
-import { trpc } from "@/utils/trpc";
+import { TUser } from "@/typeDefinitions/typeDefinitions";
 
-const Skills = () => {
-  const { data: userSkills } = trpc.users.getSkills.useQuery();
+const Skills = ({
+  user,
+  isLoggedUser,
+}: {
+  user: TUser;
+  isLoggedUser: boolean;
+}) => {
+  const userSkills = user.skills;
+  if (!userSkills) {
+    return null;
+  }
+
+  const hasUsersSkills = userSkills.length > 0;
+
   return (
     <>
-      <div className="flex justify-end items-center">
-        <Modal
-          title="Skills"
-          description="Search, add, delete or create a new one."
-          icon={<PlusIcon width={16} color="var(--smart-purple)" />}
-          text={
-            <p className="text-[10px] font-normal text-slate-500">
-              Add/Remove Skills
-            </p>
-          }
-        >
-          <AddSkill />
-        </Modal>
-      </div>
+      {hasUsersSkills && (
+        <div className="flex items-center gap-2">
+          <p className="font-medium text-xl text-[--smart-green]">Skills</p>
+          {isLoggedUser && (
+            <Modal
+              title="Skills"
+              description="Search, add, delete or create a new one."
+              icon={
+                hasUsersSkills ? (
+                  <Pencil1Icon
+                    width={20}
+                    height={20}
+                    color="var(--smart-purple)"
+                  />
+                ) : (
+                  <PlusIcon
+                    width={20}
+                    height={20}
+                    color="var(--smart-purple)"
+                  />
+                )
+              }
+            >
+              <AddSkill userSkills={userSkills} />
+            </Modal>
+          )}
+        </div>
+      )}
 
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {userSkills &&
-          userSkills.length > 0 &&
-          userSkills?.map((skill) => {
-            return (
-              <div key={skill.id} className="border rounded p-4">
-                <Skill skill={skill} />
-              </div>
-            );
-          })}
+        {hasUsersSkills
+          ? userSkills?.map((skill) => {
+              return (
+                <div key={skill.id} className="border rounded p-4">
+                  <Skill skill={skill} />
+                </div>
+              );
+            })
+          : null}
       </div>
     </>
   );

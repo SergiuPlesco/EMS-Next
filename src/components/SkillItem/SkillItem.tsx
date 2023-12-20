@@ -24,21 +24,20 @@ const SkillItem = ({ skill }: { skill: IUserSkill }) => {
   };
 
   return (
-    <div>
-      <div className="flex flex-col mb-4">
-        <div className="flex justify-between mb-2">
-          <p>{skill.name}</p>
-          <p>{rangeValue}%</p>
-        </div>
+    <div className="flex flex-col mb-4">
+      <div className="flex justify-between mb-2">
+        <p>{skill.name}</p>
 
-        <Slider
-          min={5}
-          max={100}
-          step={5}
-          value={[rangeValue]}
-          onValueChange={handleChange}
-        />
+        <p>{rangeValue}%</p>
       </div>
+
+      <Slider
+        min={1}
+        max={100}
+        step={5}
+        value={[rangeValue]}
+        onValueChange={handleChange}
+      />
     </div>
   );
 };

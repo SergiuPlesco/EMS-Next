@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { UserSkill } from "@prisma/client";
+import React, { useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 
 import Autocomplete from "@/components/Autocomplete/Autocomplete";
@@ -7,17 +8,9 @@ import { useToast } from "@/components/ui/use-toast";
 import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
 
-export interface ISkill {
-  id: number;
-  name: string;
-  rating: number | null;
-  createdAt: Date;
-}
-
-const AddSkill = () => {
+const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
   const { toast } = useToast();
   const [inputValue, setInputValue] = useState("");
-  const [skills, setSkills] = useState<ISkill[]>([]);
 
   const utils = trpc.useContext();
 
@@ -25,11 +18,7 @@ const AddSkill = () => {
     searchQuery: inputValue,
   });
 
-  const { data: userSkills, isLoading: isUserSkillsLoading } =
-    trpc.users.getSkills.useQuery();
-
   const createSkill = trpc.skills.create.useMutation();
-  const deleteSkill = trpc.skills.delete.useMutation();
   const deleteSkillFromUser = trpc.users.deleteSkill.useMutation();
   const addSkillToUser = trpc.users.addSKill.useMutation();
 
@@ -39,7 +28,7 @@ const AddSkill = () => {
   };
 
   const handleOnSelect = (name: string) => {
-    const skillAdded = skills?.find((skill) => skill.name === name);
+    const skillAdded = userSkills?.find((skill) => skill.name === name);
 
     if (name === "" || skillAdded) {
       toast({
@@ -49,15 +38,6 @@ const AddSkill = () => {
       return;
     }
 
-    setSkills([
-      ...skills,
-      {
-        id: Number(generateId()),
-        name,
-        rating: 5, // default skill level 5%
-        createdAt: new Date(),
-      },
-    ]);
     addSkillToUser.mutate(
       {
         name,
@@ -70,15 +50,15 @@ const AddSkill = () => {
             variant: "success",
           });
 
-          utils.users.getSkills.invalidate();
+          utils.users.getLoggedUser.invalidate();
         },
       }
     );
   };
-  const handleDeleteFromUser = (id: number, name: string) => () => {
+  const handleDeleteFromUser = (userSkillId: number, name: string) => () => {
     deleteSkillFromUser.mutate(
       {
-        skillId: id,
+        userSkillId,
       },
       {
         onSuccess: () => {
@@ -87,7 +67,7 @@ const AddSkill = () => {
             variant: "success",
           });
 
-          utils.users.getSkills.invalidate();
+          utils.users.getLoggedUser.invalidate();
         },
       }
     );
@@ -113,49 +93,11 @@ const AddSkill = () => {
             variant: "success",
           });
 
-          utils.users.getSkills.invalidate();
+          utils.users.getLoggedUser.invalidate();
         },
       }
     );
   };
-
-  const handleDeleteSkillFromList = (id: number, name: string) => () => {
-    deleteSkill.mutate(
-      {
-        skillId: id,
-        name,
-      },
-      {
-        onSuccess: () => {
-          setInputValue("");
-          toast({
-            description: `${name} is deleted form the list`,
-            variant: "success",
-          });
-          utils.skills.search.invalidate();
-        },
-        onError: (error) => {
-          toast({
-            description: error.message,
-            variant: "destructive",
-          });
-        },
-      }
-    );
-  };
-
-  useEffect(() => {
-    if (!isUserSkillsLoading && userSkills) {
-      setSkills(
-        userSkills.map((skill: ISkill) => ({
-          id: skill.id,
-          name: skill.name,
-          rating: skill.rating,
-          createdAt: skill.createdAt,
-        }))
-      );
-    }
-  }, [isUserSkillsLoading, userSkills]);
 
   if (userSkills == null) {
     return null;
@@ -166,8 +108,8 @@ const AddSkill = () => {
       <div className="flex flex-col w-full mb-4">
         <div className="flex justify-between">
           <div className="flex gap-1 flex-wrap">
-            {skills
-              ? skills.map((skill) => {
+            {userSkills
+              ? userSkills.map((skill) => {
                   return (
                     <div
                       key={generateId()}
@@ -193,7 +135,6 @@ const AddSkill = () => {
         onChange={handleOnChange}
         options={searchList}
         onSelect={handleOnSelect}
-        onDelete={handleDeleteSkillFromList}
         onEnter={handleCreateNewSkill}
       />
 

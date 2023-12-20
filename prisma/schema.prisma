@@ -63,11 +63,11 @@ model Skill {
 
 model UserSkill {
   id        Int      @id @default(autoincrement())
-  skillId   Int
+  skillId   Int?
   userId    String?
   rating    Int
   name      String
-  skill     Skill    @relation(fields: [skillId], references: [id])
+  skill     Skill?    @relation(fields: [skillId], references: [id])
   user      User?    @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
 }

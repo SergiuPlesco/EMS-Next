@@ -35,6 +35,7 @@ const AddManager = () => {
             variant: "success",
           });
           utils.users.getManagers.invalidate();
+          utils.users.getLoggedUser.invalidate();
         },
         onError: () => {
           toast({
@@ -72,6 +73,7 @@ const AddManager = () => {
             variant: "success",
           });
           utils.users.getManagers.invalidate();
+          utils.users.getLoggedUser.invalidate();
         },
       }
     );

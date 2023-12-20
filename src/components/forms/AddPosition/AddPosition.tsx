@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { UserPosition } from "@prisma/client";
+import React, { useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 
 import Autocomplete from "@/components/Autocomplete/Autocomplete";
@@ -7,17 +8,10 @@ import { useToast } from "@/components/ui/use-toast";
 import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
 
-const AddPosition = () => {
+const AddPosition = ({ userPositions }: { userPositions: UserPosition[] }) => {
   const { toast } = useToast();
   const utils = trpc.useContext();
   const [inputValue, setInputValue] = useState("");
-
-  const [positions, setPositions] = useState<{ id: number; name: string }[]>(
-    []
-  );
-
-  const { data: userPositions, isLoading: isUserPositionsLoading } =
-    trpc.users.getPositions.useQuery();
 
   const { data: searchList } = trpc.positions.search.useQuery({
     searchQuery: inputValue,
@@ -26,25 +20,16 @@ const AddPosition = () => {
   const addPositionToUser = trpc.users.addPosition.useMutation();
   const deletePositionFromUser = trpc.users.deletePosition.useMutation();
   const createNewPosition = trpc.positions.create.useMutation();
-  const deletePosition = trpc.positions.delete.useMutation();
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
   };
 
-  const handleDeleteFromUser = (id: number, name: string) => () => {
-    const elementToDeleteIndex = positions.findIndex(
-      (position) => position.id === id
-    );
-    if (elementToDeleteIndex !== -1) {
-      const newPositions = [...positions];
-      newPositions.splice(elementToDeleteIndex, 1);
-      setPositions(newPositions);
-    }
+  const handleDeleteFromUser = (userPositionId: number, name: string) => () => {
     deletePositionFromUser.mutate(
       {
-        positionId: id,
+        userPositionId,
       },
       {
         onSuccess: () => {
@@ -52,14 +37,23 @@ const AddPosition = () => {
             description: `${name} deleted`,
             variant: "success",
           });
-          utils.users.getPositions.invalidate();
+
+          utils.users.getLoggedUser.invalidate();
+        },
+        onError: (error) => {
+          toast({
+            description: `${error.message} `,
+            variant: "destructive",
+          });
         },
       }
     );
   };
 
   const handleOnSelect = (name: string) => {
-    const positionAdded = positions?.find((position) => position.name === name);
+    const positionAdded = userPositions?.find(
+      (position) => position.name === name
+    );
 
     if (name === "" || positionAdded) {
       toast({
@@ -69,13 +63,6 @@ const AddPosition = () => {
       return;
     }
 
-    setPositions([
-      ...positions,
-      {
-        id: Number(generateId()),
-        name,
-      },
-    ]);
     addPositionToUser.mutate(
       {
         name,
@@ -87,9 +74,8 @@ const AddPosition = () => {
             description: `${name} added to your positions`,
             variant: "success",
           });
-          utils.users.getPositions.invalidate();
+          utils.users.getLoggedUser.invalidate();
         },
-        onError: () => {},
       }
     );
   };
@@ -113,44 +99,12 @@ const AddPosition = () => {
             description: `${inputValue} added to the list`,
             variant: "success",
           });
-          utils.users.getPositions.invalidate();
+
+          utils.users.getLoggedUser.invalidate();
         },
       }
     );
   };
-
-  const handleDeletePositionFromList = (id: number, name: string) => () => {
-    deletePosition.mutate(
-      { positionId: id, name },
-      {
-        onSuccess: () => {
-          setInputValue("");
-          toast({
-            description: `${name} deleted form the list`,
-            variant: "success",
-          });
-          utils.positions.search.invalidate();
-        },
-        onError: (error) => {
-          toast({
-            description: error.message,
-            variant: "destructive",
-          });
-        },
-      }
-    );
-  };
-
-  useEffect(() => {
-    !isUserPositionsLoading &&
-      userPositions &&
-      setPositions(
-        userPositions.map((position) => ({
-          id: position.id,
-          name: position.name,
-        }))
-      );
-  }, [isUserPositionsLoading, userPositions]);
 
   if (userPositions == null) {
     return null;
@@ -162,8 +116,8 @@ const AddPosition = () => {
         <div className="flex flex-col w-full">
           <div className="flex justify-between">
             <div className="flex gap-1 flex-wrap">
-              {positions
-                ? positions.map((position) => {
+              {userPositions
+                ? userPositions.map((position) => {
                     return (
                       <div
                         key={generateId()}
@@ -195,7 +149,6 @@ const AddPosition = () => {
           onChange={handleOnChange}
           options={searchList}
           onSelect={handleOnSelect}
-          onDelete={handleDeletePositionFromList}
           onEnter={handleCreateNewPosition}
         />
 
