@@ -271,6 +271,7 @@ export default function CreateProject() {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea
+                      className="placeholder:text-slate-400"
                       placeholder="Start writing about your role in this project and more..."
                       {...field}
                     />

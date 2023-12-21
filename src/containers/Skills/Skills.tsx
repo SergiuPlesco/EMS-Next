@@ -52,7 +52,7 @@ const Skills = ({
           ? userSkills?.map((skill) => {
               return (
                 <div key={skill.id} className="border rounded p-4">
-                  <Skill skill={skill} />
+                  <Skill skill={skill} canEdit={isLoggedUser} />
                 </div>
               );
             })

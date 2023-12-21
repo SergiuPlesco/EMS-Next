@@ -37,7 +37,7 @@ export const skillsRouter = router({
       return await ctx.prisma.skill.findMany({
         where: {
           name: {
-            startsWith: input.searchQuery,
+            contains: input.searchQuery,
             mode: "insensitive",
           },
         },
