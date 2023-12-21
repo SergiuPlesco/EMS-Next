@@ -24,7 +24,7 @@ const Positions = ({
   return (
     <div className="flex flex-col">
       <div className="flex justify-start items-center gap-2">
-        {isLoggedUser && (
+        {isLoggedUser ? (
           <Modal
             title="Edit positions"
             description="Search or create"
@@ -43,6 +43,8 @@ const Positions = ({
           >
             <AddPosition userPositions={userPositions} />
           </Modal>
+        ) : (
+          <p className="text-[10px] font-normal text-slate-500">Positions</p>
         )}
       </div>
       {hasUserPositions

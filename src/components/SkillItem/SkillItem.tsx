@@ -1,30 +1,47 @@
 import React, { useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
 
 import { Slider } from "@/components/ui/slider";
+import { useToast } from "@/components/ui/use-toast";
 import { trpc } from "@/utils/trpc";
 
-export interface IUserSkill {
+export type IUserSkill = {
   name: string;
   id: number;
   rating: number | null;
   userId: string | null;
-}
+};
 
-const SkillItem = ({ skill }: { skill: IUserSkill }) => {
+type SkillItemProps = { skill: IUserSkill; canEdit: boolean };
+
+const SkillItem = ({ skill, canEdit }: SkillItemProps) => {
+  const { toast } = useToast();
+  const utils = trpc.useContext();
   const [rangeValue, setRangeValue] = useState<number>(skill.rating || 5);
 
   const updateSkillRating = trpc.users.updateRating.useMutation();
 
-  const handleChange = (value: number[]) => {
+  const handleChange = useDebouncedCallback((value: number[]) => {
     setRangeValue(Number(value[0]));
-    updateSkillRating.mutate({
-      skillId: skill.id,
-      rating: Number(value[0]),
-    });
-  };
+    updateSkillRating.mutate(
+      {
+        skillId: skill.id,
+        rating: Number(value[0]),
+      },
+      {
+        onSuccess: () => {
+          toast({
+            description: `${skill.name} rating has been updated`,
+            variant: "success",
+          });
+          utils.users.getLoggedUser.invalidate();
+        },
+      }
+    );
+  }, 200);
 
   return (
-    <div className="flex flex-col mb-4">
+    <div className="flex flex-col  mb-4">
       <div className="flex justify-between mb-2">
         <p>{skill.name}</p>
 
@@ -37,7 +54,13 @@ const SkillItem = ({ skill }: { skill: IUserSkill }) => {
         step={5}
         value={[rangeValue]}
         onValueChange={handleChange}
+        disabled={!canEdit}
       />
+      {/* <CircleProgress
+        percentage={skill.rating ? skill.rating : 5}
+        size={100}
+        strokeWidth={10}
+      /> */}
     </div>
   );
 };
