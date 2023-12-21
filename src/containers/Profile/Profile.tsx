@@ -12,9 +12,12 @@ const Profile = () => {
   const router = useRouter();
   const userId = router.query.id as string;
   const isLoggedUser = userId === undefined;
-  const { data: user, isLoading } = trpc.users.getLoggedUser.useQuery({
-    userId,
-  });
+  const { data: user, isLoading } = trpc.users.getLoggedUser.useQuery(
+    {
+      userId,
+    },
+    { cacheTime: 0 }
+  );
 
   if (isLoading || !user) {
     return <Spinner />;
