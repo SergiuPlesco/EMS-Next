@@ -76,7 +76,7 @@ const SkillItem = ({ skill }: SkillItemProps) => {
   };
 
   return (
-    <div className="flex flex-col  mb-4">
+    <div className="flex flex-col mb-4">
       <div className="flex justify-between mb-2">
         <p className="font-medium text-slate-700">{skill.name}</p>
 
