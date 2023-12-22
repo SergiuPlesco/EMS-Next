@@ -69,7 +69,7 @@ const Projects = ({
 
   return (
     <>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 mb-1">
         {(isLoggedUser || (!isLoggedUser && hasUserProjects)) && (
           <p className="font-medium text-xl text-[--smart-green]">Projects</p>
         )}
