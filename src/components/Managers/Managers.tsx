@@ -24,7 +24,7 @@ const Managers = ({
   return (
     <div className="flex flex-col">
       <div className="flex justify-start items-center gap-2">
-        {isLoggedUser ? (
+        {isLoggedUser && (
           <Modal
             title="Edit managers"
             description="Search and add your project manager/s"
@@ -36,13 +36,14 @@ const Managers = ({
               )
             }
             text={
-              <p className="text-[10px] font-normal text-slate-500">Managers</p>
+              <p className="text-[12px] font-normal text-slate-500">Managers</p>
             }
           >
             <AddManager />
           </Modal>
-        ) : (
-          <p className="text-[10px] font-normal text-slate-500">Managers</p>
+        )}
+        {!isLoggedUser && hasManagers && (
+          <p className="text-[12px] font-normal text-slate-500">Managers</p>
         )}
       </div>
       {managers?.length > 0 &&
