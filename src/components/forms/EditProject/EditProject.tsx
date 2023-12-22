@@ -159,7 +159,6 @@ export default function EditProject({ projectId }: { projectId: number }) {
                           selected={field.value}
                           onChange={field.onChange}
                           showMonthYearPicker
-                          showFullMonthYearPicker
                           dateFormat="MMMM, yyyy"
                           popperPlacement="bottom"
                           className="w-full mt-2"
@@ -202,7 +201,6 @@ export default function EditProject({ projectId }: { projectId: number }) {
                           selected={field.value}
                           onChange={field.onChange}
                           showMonthYearPicker
-                          showFullMonthYearPicker
                           popperClassName="absolute top-0"
                           popperPlacement="bottom"
                           dateFormat="MMMM, yyyy"
