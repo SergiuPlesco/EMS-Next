@@ -92,7 +92,7 @@ const Projects = ({
             return (
               <div
                 key={project.id}
-                className="flex flex-col gap-2 border rounded p-4"
+                className="flex flex-col gap-2 border rounded p-4 shadow-md"
               >
                 <div className="flex justify-between items-center">
                   <p className="text-lg font-medium text-[--smart-purple]">

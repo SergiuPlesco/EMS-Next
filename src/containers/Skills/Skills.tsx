@@ -39,11 +39,11 @@ const Skills = ({
         )}
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {hasUsersSkills
           ? userSkills?.map((skill) => {
               return (
-                <div key={skill.id} className="border rounded p-4">
+                <div key={skill.id} className="border rounded p-4 shadow-md">
                   <Skill skill={skill} />
                 </div>
               );
