@@ -7,7 +7,7 @@ import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import LogoutButton from "../../../components/LogoutButton/LogoutButton";
 
 const navigationTabs = [
-  { icon: AiFillHome, path: "/", title: "Home" },
+  { icon: AiFillHome, path: "/", title: "Profile" },
   // { icon: AiOutlineAreaChart, path: "/analytics", title: "Analytics" },
   { icon: AiOutlineUsergroupAdd, path: "/employees", title: "Employees" },
 ];

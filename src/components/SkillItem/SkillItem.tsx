@@ -28,9 +28,9 @@ export type IUserSkill = {
   userId: string | null;
 };
 
-type SkillItemProps = { skill: IUserSkill };
+type SkillItemProps = { skill: IUserSkill; isLoggedUser: boolean };
 
-const SkillItem = ({ skill }: SkillItemProps) => {
+const SkillItem = ({ skill, isLoggedUser }: SkillItemProps) => {
   const { toast } = useToast();
   const utils = trpc.useContext();
   const [rangeValue, setRangeValue] = useState<number>(skill.rating || 5);
@@ -82,45 +82,47 @@ const SkillItem = ({ skill }: SkillItemProps) => {
 
         <div className="flex items-center gap-4">
           <p className="font-medium text-slate-700">{rangeValue}%</p>
-          <Dialog>
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <DotsVerticalIcon />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem asChild>
-                  <DialogTrigger className="w-full text-md font-medium text-slate-500">
-                    Edit
-                  </DialogTrigger>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="text-red-500"
-                  onClick={handleDeleteFromUser(skill.id, skill.name)}
-                >
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          {isLoggedUser && (
+            <Dialog>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <DotsVerticalIcon />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem asChild>
+                    <DialogTrigger className="w-full text-md font-medium text-slate-500">
+                      Edit
+                    </DialogTrigger>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-red-500"
+                    onClick={handleDeleteFromUser(skill.id, skill.name)}
+                  >
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Skill</DialogTitle>
-                <DialogDescription>Edit skill.</DialogDescription>
-              </DialogHeader>
-              <div className="flex justify-between mb-2">
-                <p className="font-medium text-slate-700">{skill.name}</p>
-                <p className="font-medium text-slate-700">{rangeValue}%</p>
-              </div>
-              <Slider
-                min={0}
-                max={100}
-                step={5}
-                value={[rangeValue]}
-                onValueChange={handleChange}
-              />
-            </DialogContent>
-          </Dialog>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Skill</DialogTitle>
+                  <DialogDescription>Edit skill.</DialogDescription>
+                </DialogHeader>
+                <div className="flex justify-between mb-2">
+                  <p className="font-medium text-slate-700">{skill.name}</p>
+                  <p className="font-medium text-slate-700">{rangeValue}%</p>
+                </div>
+                <Slider
+                  min={0}
+                  max={100}
+                  step={5}
+                  value={[rangeValue]}
+                  onValueChange={handleChange}
+                />
+              </DialogContent>
+            </Dialog>
+          )}
         </div>
       </div>
 
