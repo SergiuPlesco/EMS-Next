@@ -24,7 +24,7 @@ const NavigationList = () => {
           className="flex items-end md:items-start md:justify-center pl-4 md:p-0 md:flex-col gap-2 no-underline text-[#000]"
         >
           <p
-            className={`text-[12px] md:text-[14px] ${
+            className={`text-[12px] md:text-[14px] hover:text-[#A02065] ${
               router.pathname === item.path ? "text-[#A02065]" : "text-[#000]"
             } `}
           >
