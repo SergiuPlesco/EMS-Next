@@ -77,7 +77,7 @@ const SkillItem = ({ skill, isLoggedUser }: SkillItemProps) => {
 
   return (
     <div className="flex flex-col mb-4">
-      <div className="flex justify-between mb-2">
+      <div className="flex justify-between items-start mb-2">
         <p className="font-medium text-slate-700">{skill.name}</p>
 
         <div className="flex items-center gap-4">
@@ -86,7 +86,7 @@ const SkillItem = ({ skill, isLoggedUser }: SkillItemProps) => {
             <Dialog>
               <DropdownMenu>
                 <DropdownMenuTrigger>
-                  <DotsVerticalIcon />
+                  <DotsVerticalIcon className="text-slate-600 mb-[0.1rem]" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem asChild>

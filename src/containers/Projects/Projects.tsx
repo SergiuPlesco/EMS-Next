@@ -102,7 +102,7 @@ const Projects = ({
                     <Dialog>
                       <DropdownMenu>
                         <DropdownMenuTrigger>
-                          <DotsVerticalIcon />
+                          <DotsVerticalIcon className="text-slate-600 mb-[0.1rem]" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
                           <DropdownMenuItem asChild>
