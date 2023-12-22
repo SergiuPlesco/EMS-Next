@@ -1,4 +1,4 @@
-import { DotsVerticalIcon, Pencil1Icon, PlusIcon } from "@radix-ui/react-icons";
+import { DotsVerticalIcon, PlusIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import React from "react";
 
@@ -78,15 +78,7 @@ const Projects = ({
             title="Projects"
             description="Add a new project."
             icon={
-              hasUserProjects ? (
-                <Pencil1Icon
-                  width={20}
-                  height={20}
-                  color="var(--smart-purple)"
-                />
-              ) : (
-                <PlusIcon width={20} height={20} color="var(--smart-purple)" />
-              )
+              <PlusIcon width={20} height={20} color="var(--smart-purple)" />
             }
           >
             <CreateProject />
@@ -100,7 +92,7 @@ const Projects = ({
             return (
               <div
                 key={project.id}
-                className="flex flex-col gap-2 border rounded p-4"
+                className="flex flex-col gap-2 border rounded p-4 shadow-md"
               >
                 <div className="flex justify-between items-center">
                   <p className="text-lg font-medium text-[--smart-purple]">

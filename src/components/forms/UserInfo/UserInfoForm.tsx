@@ -106,7 +106,6 @@ const UserInfoForm = ({ user }: { user: User }) => {
                           selected={field.value}
                           onChange={field.onChange}
                           showMonthYearPicker
-                          showFullMonthYearPicker
                           dateFormat="MMMM, yyyy"
                           popperPlacement="bottom"
                           className="w-full mt-2"

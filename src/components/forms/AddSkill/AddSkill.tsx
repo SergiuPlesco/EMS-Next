@@ -107,16 +107,16 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
     <div className="flex flex-col gap-2 border rounded p-2 mb-6 shadow-md">
       <div className="flex flex-col w-full mb-4">
         <div className="flex justify-between">
-          <div className="flex gap-1 flex-wrap">
+          <div className="flex gap-2 flex-wrap">
             {userSkills
               ? userSkills.map((skill) => {
                   return (
                     <div
                       key={generateId()}
-                      className="flex justify-start items-center gap-2 w-fit mb-1 py-1 px-1 rounded bg-slate-200"
+                      className="flex justify-start items-center gap-3 w-fit p-2 rounded bg-slate-200"
                     >
                       <p className="text-slate-500 text-sm">{skill.name}</p>
-                      <p className="text-[0.5rem]">{skill.rating}%</p>
+
                       <button
                         onClick={handleDeleteFromUser(skill.id, skill.name)}
                       >
@@ -138,10 +138,10 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
         onEnter={handleCreateNewSkill}
       />
 
-      <div className="flex gap-2 mb-4">
+      <div className="flex justify-end gap-2 mb-4">
         <Button
-          type="submit"
-          className="py-0 h-7 rounded bg-blue-300 bg-smartgreen"
+          type="button"
+          className="mt-2 py-0 h-7 rounded bg-blue-300 bg-smartpurple"
           onClick={handleCreateNewSkill}
         >
           Add
