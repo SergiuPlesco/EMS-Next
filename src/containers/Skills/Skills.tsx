@@ -22,7 +22,7 @@ const Skills = ({
 
   return (
     <>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 mb-1">
         {(isLoggedUser || (!isLoggedUser && hasUsersSkills)) && (
           <p className="font-medium text-xl text-[--smart-green]">Skills</p>
         )}
