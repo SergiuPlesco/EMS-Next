@@ -1,4 +1,4 @@
-import { Pencil1Icon, PlusIcon } from "@radix-ui/react-icons";
+import { PlusIcon } from "@radix-ui/react-icons";
 import React from "react";
 
 import AddSkill from "@/components/forms/AddSkill/AddSkill";
@@ -31,15 +31,7 @@ const Skills = ({
             title="Skills"
             description="Search, add, delete or create a new one."
             icon={
-              hasUsersSkills ? (
-                <Pencil1Icon
-                  width={20}
-                  height={20}
-                  color="var(--smart-purple)"
-                />
-              ) : (
-                <PlusIcon width={20} height={20} color="var(--smart-purple)" />
-              )
+              <PlusIcon width={20} height={20} color="var(--smart-purple)" />
             }
           >
             <AddSkill userSkills={userSkills} />
@@ -52,7 +44,7 @@ const Skills = ({
           ? userSkills?.map((skill) => {
               return (
                 <div key={skill.id} className="border rounded p-4">
-                  <Skill skill={skill} canEdit={isLoggedUser} />
+                  <Skill skill={skill} />
                 </div>
               );
             })

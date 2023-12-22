@@ -265,10 +265,10 @@ export default function EditProject({ projectId }: { projectId: number }) {
               );
             }}
           />
-          <div>
+          <div className="flex justify-end gap-2 mb-4">
             <Button
               type="submit"
-              className="py-0 h-7 rounded bg-blue-300 bg-smartpurple"
+              className="mt-2 py-0 h-7 rounded bg-blue-300 bg-smartpurple"
             >
               Save
             </Button>
