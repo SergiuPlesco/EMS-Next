@@ -163,7 +163,6 @@ export default function CreateProject() {
                           selected={field.value}
                           onChange={field.onChange}
                           showMonthYearPicker
-                          showFullMonthYearPicker
                           dateFormat="MMMM, yyyy"
                           popperPlacement="bottom"
                           className="w-full mt-2"
@@ -206,7 +205,6 @@ export default function CreateProject() {
                           selected={field.value}
                           onChange={field.onChange}
                           showMonthYearPicker
-                          showFullMonthYearPicker
                           popperClassName="absolute top-0"
                           popperPlacement="bottom"
                           dateFormat="MMMM, yyyy"
@@ -281,10 +279,10 @@ export default function CreateProject() {
               );
             }}
           />
-          <div>
+          <div className="flex justify-end gap-2 mb-4">
             <Button
               type="submit"
-              className="py-0 h-7 rounded bg-blue-300 bg-smartpurple"
+              className="mt-2 py-0 h-7 rounded bg-blue-300 bg-smartpurple"
             >
               Save
             </Button>
