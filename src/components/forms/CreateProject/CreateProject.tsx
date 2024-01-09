@@ -138,7 +138,7 @@ export default function CreateProject() {
                         }}
                       />
 
-                      <FormLabel className="ml-2">
+                      <FormLabel className="ml-2 text-base">
                         I am currently assigned to this project
                       </FormLabel>
                     </div>
@@ -171,7 +171,7 @@ export default function CreateProject() {
                               type="button"
                               variant={"outline"}
                               className={cn(
-                                "justify-start text-left font-normal",
+                                "justify-start text-left font-normal text-base",
                                 !field.value && "text-muted-foreground"
                               )}
                             >
@@ -214,7 +214,7 @@ export default function CreateProject() {
                               type="button"
                               variant={"outline"}
                               className={cn(
-                                "justify-start text-left font-normal",
+                                "justify-start text-left font-normal text-base",
                                 !field.value && "text-muted-foreground"
                               )}
                             >
@@ -269,7 +269,7 @@ export default function CreateProject() {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea
-                      className="placeholder:text-slate-400"
+                      className="placeholder:text-slate-400 text-base"
                       placeholder="Start writing about your role in this project and more..."
                       {...field}
                     />
