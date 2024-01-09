@@ -134,7 +134,7 @@ export default function EditProject({ projectId }: { projectId: number }) {
                         }}
                       />
 
-                      <FormLabel className="ml-2">
+                      <FormLabel className="ml-2 text-base">
                         I am currently assigned to this project
                       </FormLabel>
                     </div>
@@ -167,7 +167,7 @@ export default function EditProject({ projectId }: { projectId: number }) {
                               type="button"
                               variant={"outline"}
                               className={cn(
-                                "justify-start text-left font-normal",
+                                "justify-start text-left font-normal text-base",
                                 !field.value && "text-muted-foreground"
                               )}
                             >
@@ -210,7 +210,7 @@ export default function EditProject({ projectId }: { projectId: number }) {
                               type="button"
                               variant={"outline"}
                               className={cn(
-                                "justify-start text-left font-normal",
+                                "justify-start text-left font-normal text-base",
                                 !field.value && "text-muted-foreground"
                               )}
                             >
@@ -239,7 +239,7 @@ export default function EditProject({ projectId }: { projectId: number }) {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input value={field.value} disabled />
+                    <Input value={field.value} disabled className="text-base" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -255,7 +255,7 @@ export default function EditProject({ projectId }: { projectId: number }) {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea
-                      className="placeholder:text-slate-400"
+                      className="placeholder:text-slate-400 text-base"
                       placeholder="Start writing about your role in this project and more..."
                       {...field}
                     />
