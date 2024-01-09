@@ -85,7 +85,12 @@ const UserInfoForm = ({ user }: { user: User }) => {
                 <FormItem>
                   <FormLabel>Phone</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your phone" type="number" {...field} />
+                    <Input
+                      placeholder="Your phone"
+                      type="number"
+                      {...field}
+                      className="text-base"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -115,7 +120,7 @@ const UserInfoForm = ({ user }: { user: User }) => {
                               type="button"
                               variant={"outline"}
                               className={cn(
-                                "justify-start text-left font-normal",
+                                "justify-start text-left font-normal text-base",
                                 !field.value && "text-muted-foreground"
                               )}
                             >
@@ -148,15 +153,22 @@ const UserInfoForm = ({ user }: { user: User }) => {
                         defaultValue={field.value}
                         onValueChange={field.onChange}
                       >
-                        <FormControl>
+                        <FormControl className="text-base">
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a verified email to display" />
+                            <SelectValue placeholder="Select an option" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="FULLTIME">Full Time</SelectItem>
-                          <SelectItem value="PARTTIME">Part Time</SelectItem>
-                          <SelectItem value="NOTAVAILABLE">
+                          <SelectItem value="FULLTIME" className="text-base">
+                            Full Time
+                          </SelectItem>
+                          <SelectItem value="PARTTIME" className="text-base">
+                            Part Time
+                          </SelectItem>
+                          <SelectItem
+                            value="NOTAVAILABLE"
+                            className="text-base"
+                          >
                             Not Available
                           </SelectItem>
                         </SelectContent>
