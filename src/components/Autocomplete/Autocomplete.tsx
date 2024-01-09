@@ -37,7 +37,7 @@ const Autocomplete = ({
         </span>
         <Input
           type="search"
-          className={`border rounded p-2 pl-8 text-sm w-full text-slate-900 focus:border-slate-500 outline-0 placeholder:text-slate-400`}
+          className={`border rounded p-2 pl-8 text-base w-full text-slate-900 focus:border-slate-500 outline-0 placeholder:text-slate-400`}
           placeholder={placeholder}
           value={value}
           onChange={onChange}
