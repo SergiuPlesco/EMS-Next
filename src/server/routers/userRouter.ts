@@ -472,4 +472,13 @@ export const userRouter = router({
         },
       });
     }),
+  deleteById: procedure
+    .input(z.object({ userId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.user.delete({
+        where: {
+          id: input.userId,
+        },
+      });
+    }),
 });

@@ -1,8 +1,8 @@
 import { Pencil1Icon } from "@radix-ui/react-icons";
-import React from "react";
 
 import { TUser } from "@/typeDefinitions/typeDefinitions";
 
+import DeleteUser from "../DeleteUser/DeleteUser";
 import AssignRole from "../forms/AssignRole/AssignRole";
 import Modal from "../Modal/Modal";
 
@@ -21,6 +21,7 @@ const UserManager = ({ user }: { user: TUser }) => {
           }
         >
           <AssignRole user={user} />
+          <DeleteUser user={user} />
         </Modal>
       </div>
       <h3 className="font-semibold text-slate-600 capitalize">{user.role}</h3>

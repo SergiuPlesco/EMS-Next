@@ -20,6 +20,7 @@ const UserProfile = () => {
       userId,
     },
     {
+      enabled: Boolean(userId),
       cacheTime: 0,
     }
   );
