@@ -119,15 +119,6 @@ export const userRouter = router({
         where: {
           id: input.userId,
         },
-      });
-    }),
-  getLoggedUser: procedure
-    .input(z.object({ userId: z.string().optional() }))
-    .query(async ({ ctx, input }) => {
-      return await ctx.prisma.user.findFirst({
-        where: {
-          id: input.userId || ctx.session?.user.id,
-        },
         include: {
           positions: true,
           managers: true,
@@ -144,6 +135,27 @@ export const userRouter = router({
         },
       });
     }),
+  getLoggedUser: procedure.query(async ({ ctx }) => {
+    return await ctx.prisma.user.findFirst({
+      where: {
+        id: ctx.session?.user.id,
+      },
+      include: {
+        positions: true,
+        managers: true,
+        skills: {
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
+        projects: {
+          orderBy: {
+            startDate: "desc",
+          },
+        },
+      },
+    });
+  }),
   userInfo: procedure
     .input(
       z.object({
@@ -445,6 +457,18 @@ export const userRouter = router({
               id: input.id,
             },
           },
+        },
+      });
+    }),
+  assignRole: procedure
+    .input(z.object({ userId: z.string(), role: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.user.update({
+        where: {
+          id: input.userId,
+        },
+        data: {
+          role: input.role,
         },
       });
     }),

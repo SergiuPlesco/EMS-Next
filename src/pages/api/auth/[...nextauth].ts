@@ -4,7 +4,7 @@ import type { NextAuthOptions } from "next-auth";
 import NextAuth, { getServerSession } from "next-auth/next";
 import Google from "next-auth/providers/google";
 
-import { adminEmails } from "@/constants/common";
+import { ADMIN_EMAILS } from "@/constants/common";
 import prisma from "@/server/prisma";
 
 const { NEXT_PUBLIC_GOOGLE_ID = "", NEXT_PUBLIC_GOOGLE_SECRET = "" } =
@@ -22,7 +22,7 @@ export const authOptions: NextAuthOptions = {
           name: profile.name,
           email: profile.email,
           image: profile.picture,
-          role: adminEmails.includes(profile.email) ? "superadmin" : "user",
+          role: ADMIN_EMAILS.includes(profile.email) ? "superadmin" : "user",
         };
       },
     }),

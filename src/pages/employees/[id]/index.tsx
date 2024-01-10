@@ -1,9 +1,9 @@
 import React from "react";
 
-import Profile from "@/containers/Profile/Profile";
+import UserProfile from "@/containers/Profile/UserProfile";
 
 const EmployeeProfile = () => {
-  return <Profile />;
+  return <UserProfile />;
 };
 
 export default EmployeeProfile;
