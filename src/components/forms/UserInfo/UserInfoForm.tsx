@@ -71,7 +71,7 @@ const UserInfoForm = ({ user }: { user: User }) => {
     );
   };
   return (
-    <div className="flex flex-col items-start gap-4 border rounded p-2 mb-6 shadow-md">
+    <div className="flex flex-col gap-4 border rounded p-2 mb-6 shadow-md">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
@@ -85,7 +85,12 @@ const UserInfoForm = ({ user }: { user: User }) => {
                 <FormItem>
                   <FormLabel>Phone</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your phone" type="number" {...field} />
+                    <Input
+                      placeholder="Your phone"
+                      type="number"
+                      {...field}
+                      className="text-base"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -106,7 +111,6 @@ const UserInfoForm = ({ user }: { user: User }) => {
                           selected={field.value}
                           onChange={field.onChange}
                           showMonthYearPicker
-                          showFullMonthYearPicker
                           dateFormat="MMMM, yyyy"
                           popperPlacement="bottom"
                           className="w-full mt-2"
@@ -116,7 +120,7 @@ const UserInfoForm = ({ user }: { user: User }) => {
                               type="button"
                               variant={"outline"}
                               className={cn(
-                                "justify-start text-left font-normal",
+                                "justify-start text-left font-normal text-base",
                                 !field.value && "text-muted-foreground"
                               )}
                             >
@@ -149,15 +153,22 @@ const UserInfoForm = ({ user }: { user: User }) => {
                         defaultValue={field.value}
                         onValueChange={field.onChange}
                       >
-                        <FormControl>
+                        <FormControl className="text-base">
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a verified email to display" />
+                            <SelectValue placeholder="Select an option" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="FULLTIME">Full Time</SelectItem>
-                          <SelectItem value="PARTTIME">Part Time</SelectItem>
-                          <SelectItem value="NOTAVAILABLE">
+                          <SelectItem value="FULLTIME" className="text-base">
+                            Full Time
+                          </SelectItem>
+                          <SelectItem value="PARTTIME" className="text-base">
+                            Part Time
+                          </SelectItem>
+                          <SelectItem
+                            value="NOTAVAILABLE"
+                            className="text-base"
+                          >
                             Not Available
                           </SelectItem>
                         </SelectContent>
@@ -170,10 +181,10 @@ const UserInfoForm = ({ user }: { user: User }) => {
               />
             </div>
           </div>
-          <div>
+          <div className="flex justify-end gap-2 mb-4">
             <Button
               type="submit"
-              className="py-0 h-7 rounded bg-blue-300 bg-smartpurple"
+              className="mt-2 py-0 h-7 rounded bg-blue-300 bg-smartpurple"
               disabled={updateInfo.isLoading}
             >
               Save

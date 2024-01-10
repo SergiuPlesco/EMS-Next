@@ -138,7 +138,7 @@ export default function CreateProject() {
                         }}
                       />
 
-                      <FormLabel className="ml-2">
+                      <FormLabel className="ml-2 text-base">
                         I am currently assigned to this project
                       </FormLabel>
                     </div>
@@ -163,7 +163,6 @@ export default function CreateProject() {
                           selected={field.value}
                           onChange={field.onChange}
                           showMonthYearPicker
-                          showFullMonthYearPicker
                           dateFormat="MMMM, yyyy"
                           popperPlacement="bottom"
                           className="w-full mt-2"
@@ -172,7 +171,7 @@ export default function CreateProject() {
                               type="button"
                               variant={"outline"}
                               className={cn(
-                                "justify-start text-left font-normal",
+                                "justify-start text-left font-normal text-base",
                                 !field.value && "text-muted-foreground"
                               )}
                             >
@@ -206,7 +205,6 @@ export default function CreateProject() {
                           selected={field.value}
                           onChange={field.onChange}
                           showMonthYearPicker
-                          showFullMonthYearPicker
                           popperClassName="absolute top-0"
                           popperPlacement="bottom"
                           dateFormat="MMMM, yyyy"
@@ -216,7 +214,7 @@ export default function CreateProject() {
                               type="button"
                               variant={"outline"}
                               className={cn(
-                                "justify-start text-left font-normal",
+                                "justify-start text-left font-normal text-base",
                                 !field.value && "text-muted-foreground"
                               )}
                             >
@@ -271,6 +269,7 @@ export default function CreateProject() {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea
+                      className="placeholder:text-slate-400 text-base"
                       placeholder="Start writing about your role in this project and more..."
                       {...field}
                     />
@@ -280,10 +279,10 @@ export default function CreateProject() {
               );
             }}
           />
-          <div>
+          <div className="flex justify-end gap-2 mb-4">
             <Button
               type="submit"
-              className="py-0 h-7 rounded bg-blue-300 bg-smartpurple"
+              className="mt-2 py-0 h-7 rounded bg-blue-300 bg-smartpurple"
             >
               Save
             </Button>

@@ -100,7 +100,7 @@ const AddManager = () => {
                   return (
                     <div
                       key={manager.id}
-                      className="flex justify-start w-fit mb-1 py-1 px-1 rounded bg-slate-200"
+                      className="flex justify-start gap-3 w-fit p-2 rounded bg-slate-200"
                     >
                       <p className="text-slate-500 pr-4 text-sm">
                         {manager.name}

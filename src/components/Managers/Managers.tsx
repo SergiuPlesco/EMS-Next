@@ -36,11 +36,14 @@ const Managers = ({
               )
             }
             text={
-              <p className="text-[10px] font-normal text-slate-500">Managers</p>
+              <p className="text-[12px] font-normal text-slate-500">Managers</p>
             }
           >
             <AddManager />
           </Modal>
+        )}
+        {!isLoggedUser && hasManagers && (
+          <p className="text-[12px] font-normal text-slate-500">Managers</p>
         )}
       </div>
       {managers?.length > 0 &&

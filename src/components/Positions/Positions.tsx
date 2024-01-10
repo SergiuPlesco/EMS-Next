@@ -36,13 +36,16 @@ const Positions = ({
               )
             }
             text={
-              <p className="text-[10px] font-normal text-slate-500">
+              <p className="text-[12px] font-normal text-slate-500">
                 Positions
               </p>
             }
           >
             <AddPosition userPositions={userPositions} />
           </Modal>
+        )}
+        {!isLoggedUser && hasUserPositions && (
+          <p className="text-[12px] font-normal text-slate-500">Positions</p>
         )}
       </div>
       {hasUserPositions
