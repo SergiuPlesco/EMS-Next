@@ -28,6 +28,7 @@ export const projectRouter = router({
         await ctx.prisma.userProject.create({
           data: {
             projectId: newProject.id,
+            name: newProject.name,
             userId: ctx.session?.user.id,
             description: input.description,
             startDate: input.startDate,
