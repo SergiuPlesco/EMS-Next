@@ -51,7 +51,7 @@ model User {
   projects       UserProject[]
   certificates   Certificate[]
   employmentDate DateTime?
-  role           String?        @default("user")
+  role           String        @default("user")
   availability   Availability   @default(FULLTIME)
 }
 
