@@ -1,0 +1,2 @@
+# When there's a conflict in pnpm-lock.yaml, use the lockfile from the current branch
+pnpm-lock.yaml merge=theirs
