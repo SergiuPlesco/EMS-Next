@@ -5,7 +5,6 @@ export const ADMIN_EMAILS = [
 ];
 
 export const USER_ROLES = {
-  SUPERADMIN: "superadmin",
   ADMIN: "admin",
   USER: "user",
 };
