@@ -28,7 +28,7 @@ const Modal = ({
   return (
     <Dialog open={open}>
       <DialogTrigger asChild>
-        <Button variant="link" className="p-0 hover:no-underline">
+        <Button variant="link" className="p-0 hover:no-underline h-[20px]">
           <div className="flex justify-end items-start gap-2">
             {text ? text : ""}
             {icon ? icon : null}
