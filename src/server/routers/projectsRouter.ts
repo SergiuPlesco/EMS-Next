@@ -29,7 +29,7 @@ export const projectRouter = router({
           data: {
             projectId: newProject.id,
             name: newProject.name,
-            userId: ctx.session?.user.id,
+            userId: ctx.session!.user.id,
             description: input.description,
             startDate: input.startDate,
             endDate: input.endDate,
