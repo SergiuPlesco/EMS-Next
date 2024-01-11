@@ -4,7 +4,7 @@ import type { NextAuthOptions } from "next-auth";
 import NextAuth, { getServerSession } from "next-auth/next";
 import Google from "next-auth/providers/google";
 
-import { ADMIN_EMAILS } from "@/constants/common";
+import { ADMIN_EMAILS, USER_ROLES } from "@/constants/common";
 import prisma from "@/server/prisma";
 
 const { NEXT_PUBLIC_GOOGLE_ID = "", NEXT_PUBLIC_GOOGLE_SECRET = "" } =
@@ -16,19 +16,30 @@ export const authOptions: NextAuthOptions = {
     Google({
       clientId: NEXT_PUBLIC_GOOGLE_ID,
       clientSecret: NEXT_PUBLIC_GOOGLE_SECRET,
-      async profile(profile) {
-        return {
-          id: profile.sub,
-          name: profile.name,
-          email: profile.email,
-          image: profile.picture,
-          role: ADMIN_EMAILS.includes(profile.email) ? "superadmin" : "user",
-        };
-      },
     }),
   ],
   callbacks: {
     session: async ({ session, user }) => {
+      const isAdmin = ADMIN_EMAILS.includes(user.email);
+      const hasAdminRole = user.role === USER_ROLES.ADMIN;
+      if (isAdmin && !hasAdminRole) {
+        const admin = await prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            role: USER_ROLES.ADMIN,
+          },
+        });
+        return {
+          ...session,
+          user: {
+            ...user,
+            role: admin.role,
+          },
+        };
+      }
+
       return {
         ...session,
         user: {

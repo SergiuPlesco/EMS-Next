@@ -37,8 +37,7 @@ const UserProfile = () => {
       <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
         <Positions user={user} isLoggedUser={false} />
         <Managers user={user} isLoggedUser={false} />
-        {(loggedUser?.role === USER_ROLES.SUPERADMIN ||
-          loggedUser?.role === USER_ROLES.ADMIN) && <UserManager user={user} />}
+        {loggedUser?.role === USER_ROLES.ADMIN && <UserManager user={user} />}
       </section>
       <section className="mb-10">
         <Skills user={user} isLoggedUser={false} />
