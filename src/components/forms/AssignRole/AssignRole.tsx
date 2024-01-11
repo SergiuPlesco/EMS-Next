@@ -36,7 +36,7 @@ const AssignRole = ({ user }: { user: TUser }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      role: user.role || USER_ROLES.USER,
+      role: user.role,
     },
   });
 
