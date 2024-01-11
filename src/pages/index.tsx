@@ -1,7 +1,7 @@
-import Profile from "@/containers/Profile/Profile";
+import MyProfile from "@/containers/Profile/MyProfile";
 
 const HomePage = () => {
-  return <Profile />;
+  return <MyProfile />;
 };
 
 export default HomePage;
