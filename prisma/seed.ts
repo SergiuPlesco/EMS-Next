@@ -91,7 +91,7 @@ async function main() {
 
         await prisma.userProject.create({
           data: {
-            name: projectName,
+            name: projectName || "project name",
             description: `Description for ${projectName}`,
             startDate: new Date(), // Modifică pentru a atribui o dată aleatoare
             userId: user.id,
