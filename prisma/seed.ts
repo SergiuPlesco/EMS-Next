@@ -89,13 +89,9 @@ async function main() {
           create: { name: projectName },
         });
 
-        await prisma.userProject.upsert({
-          where: {
-            name: projectName,
-          },
-          update: {},
-          create: {
-            name: projectName,
+        await prisma.userProject.create({
+          data: {
+            name: projectName || "project name",
             description: `Description for ${projectName}`,
             startDate: new Date(), // Modifică pentru a atribui o dată aleatoare
             userId: user.id,
