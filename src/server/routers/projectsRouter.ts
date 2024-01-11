@@ -25,16 +25,16 @@ export const projectRouter = router({
           update: {},
         });
 
-        return await ctx.prisma.userProject.create({
+        await ctx.prisma.userProject.create({
           data: {
             projectId: newProject.id,
             userId: ctx.session?.user.id,
-            name: newProject.name,
             description: input.description,
             startDate: input.startDate,
             endDate: input.endDate,
           },
         });
+        return newProject;
       } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
           // "Unique constraint failed on the {constraint}"
@@ -83,12 +83,15 @@ export const projectRouter = router({
           projectId: input.id,
           userId: ctx.session?.user.id,
         },
+        include: {
+          project: true,
+        },
       });
     }),
   update: procedure
     .input(
       z.object({
-        name: z.string().min(1, "Name is required"),
+        userProjectId: z.number(),
         description: z.string(),
         startDate: z.date(),
         endDate: z.date().nullable(),
@@ -97,7 +100,7 @@ export const projectRouter = router({
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.userProject.update({
         where: {
-          name: input.name,
+          id: input.userProjectId,
           userId: ctx.session?.user.id,
         },
         data: {
