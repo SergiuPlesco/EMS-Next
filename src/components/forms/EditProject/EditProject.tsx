@@ -53,29 +53,31 @@ export default function EditProject({ projectId }: { projectId: number }) {
   const { toast } = useToast();
   const utils = trpc.useContext();
 
-  const { data: project } = trpc.projects.getById.useQuery({
+  const { data: userProject } = trpc.projects.getById.useQuery({
     id: projectId,
   });
-
   const updateProject = trpc.projects.update.useMutation();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     values: {
-      name: project ? project.name : "",
-      startDate: project && project.startDate ? project.startDate : new Date(),
-      endDate: project ? project.endDate : new Date(),
-      isPresent: project ? !Boolean(project.endDate) : false,
-      description: project ? project.description : "",
+      name: userProject?.project?.name || "",
+      startDate:
+        userProject && userProject.startDate
+          ? userProject.startDate
+          : new Date(),
+      endDate: userProject ? userProject.endDate : new Date(),
+      isPresent: userProject ? !Boolean(userProject.endDate) : false,
+      description: userProject ? userProject.description : "",
     },
     mode: "all",
   });
 
   const handleUpdateProject = (data: z.infer<typeof FormSchema>) => {
-    if (!data) return;
+    if (!data || !userProject) return;
     updateProject.mutate(
       {
-        name: String(data.name).trim(),
+        userProjectId: userProject?.id,
         description: data.description,
         startDate: data.startDate,
         endDate: data.endDate,
