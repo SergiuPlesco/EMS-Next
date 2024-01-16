@@ -159,7 +159,16 @@ export const userRouter = router({
   userInfo: procedure
     .input(
       z.object({
-        phone: z.string().length(9),
+        phone: z
+          .string()
+          .length(
+            9,
+            "Please ensure it is 9 digits long and follows the format 0xxxxxxxx."
+          )
+          .regex(
+            new RegExp("[0-9]{9}"),
+            "Please ensure it is 9 digits long and follows the format 0xxxxxxxx."
+          ),
         employmentDate: z.date().nullable(),
         availability: z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"]),
       })

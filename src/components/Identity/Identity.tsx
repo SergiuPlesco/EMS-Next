@@ -1,4 +1,4 @@
-import { Pencil1Icon } from "@radix-ui/react-icons";
+import { GearIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import Image from "next/image";
 import React from "react";
@@ -42,7 +42,7 @@ const Identity = ({
             <Modal
               title="Edit profile"
               description="Make changes to your profile here. Save each detail."
-              icon={<Pencil1Icon width={16} color="var(--smart-purple)" />}
+              icon={<GearIcon width={16} color="var(--smart-purple)" />}
             >
               <UserInfo user={user} />
             </Modal>
