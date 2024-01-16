@@ -1,6 +1,6 @@
+import { UserSkill } from "@prisma/client";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import React, { useState } from "react";
-import { useDebouncedCallback } from "use-debounce";
+import React from "react";
 
 import {
   Dialog,
@@ -21,41 +21,15 @@ import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/components/ui/use-toast";
 import { trpc } from "@/utils/trpc";
 
-export type IUserSkill = {
-  name: string;
-  id: number;
-  rating: number | null;
-  userId: string | null;
-};
+import EditRating from "../forms/EditRating/EditRating";
 
-type SkillItemProps = { skill: IUserSkill; isLoggedUser: boolean };
+type SkillItemProps = { skill: UserSkill; isLoggedUser: boolean };
 
 const SkillItem = ({ skill, isLoggedUser }: SkillItemProps) => {
   const { toast } = useToast();
   const utils = trpc.useContext();
-  const [rangeValue, setRangeValue] = useState<number>(skill.rating || 5);
 
-  const updateSkillRating = trpc.users.updateRating.useMutation();
   const deleteSkillFromUser = trpc.users.deleteSkill.useMutation();
-
-  const handleChange = useDebouncedCallback((value: number[]) => {
-    setRangeValue(Number(value[0]));
-    updateSkillRating.mutate(
-      {
-        skillId: skill.id,
-        rating: Number(value[0]),
-      },
-      {
-        onSuccess: () => {
-          toast({
-            description: `${skill.name} rating has been updated`,
-            variant: "success",
-          });
-          utils.users.getLoggedUser.invalidate();
-        },
-      }
-    );
-  }, 200);
 
   const handleDeleteFromUser = (userSkillId: number, name: string) => () => {
     deleteSkillFromUser.mutate(
@@ -81,7 +55,7 @@ const SkillItem = ({ skill, isLoggedUser }: SkillItemProps) => {
         <p className="font-medium text-slate-700">{skill.name}</p>
 
         <div className="flex items-center gap-4">
-          <p className="font-medium text-slate-700">{rangeValue}%</p>
+          <p className="font-medium text-slate-700">{skill.rating}%</p>
           {isLoggedUser && (
             <Dialog>
               <DropdownMenu>
@@ -107,19 +81,12 @@ const SkillItem = ({ skill, isLoggedUser }: SkillItemProps) => {
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Skill</DialogTitle>
-                  <DialogDescription>Edit skill.</DialogDescription>
+                  <DialogDescription>
+                    Edit skill knowledge level.
+                  </DialogDescription>
                 </DialogHeader>
-                <div className="flex justify-between mb-2">
-                  <p className="font-medium text-slate-700">{skill.name}</p>
-                  <p className="font-medium text-slate-700">{rangeValue}%</p>
-                </div>
-                <Slider
-                  min={0}
-                  max={100}
-                  step={5}
-                  value={[rangeValue]}
-                  onValueChange={handleChange}
-                />
+
+                <EditRating skill={skill} />
               </DialogContent>
             </Dialog>
           )}
@@ -130,8 +97,7 @@ const SkillItem = ({ skill, isLoggedUser }: SkillItemProps) => {
         min={0}
         max={100}
         step={5}
-        value={[rangeValue]}
-        onValueChange={handleChange}
+        value={[skill.rating]}
         disabled={true}
       />
     </div>

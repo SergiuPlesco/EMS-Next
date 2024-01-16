@@ -159,7 +159,16 @@ export const userRouter = router({
   userInfo: procedure
     .input(
       z.object({
-        phone: z.string().length(9),
+        phone: z
+          .string()
+          .length(
+            9,
+            "Please ensure it is 9 digits long and follows the format 0xxxxxxxx."
+          )
+          .regex(
+            new RegExp("[0-9]{9}"),
+            "Please ensure it is 9 digits long and follows the format 0xxxxxxxx."
+          ),
         employmentDate: z.date().nullable(),
         availability: z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"]),
       })
@@ -293,12 +302,13 @@ export const userRouter = router({
     return topSkills;
   }),
   updateRating: procedure
-    .input(z.object({ skillId: z.number(), rating: z.number() }))
+    .input(
+      z.object({ skillId: z.number(), rating: z.number().min(5).max(100) })
+    )
     .mutation(async ({ ctx, input }) => {
       const updatedSkill = await ctx.prisma.userSkill.update({
         where: {
           id: input.skillId,
-          // @ts-ignore
           userId: ctx.session?.user?.id,
         },
         data: {
