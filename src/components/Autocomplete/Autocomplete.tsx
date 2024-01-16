@@ -7,7 +7,7 @@ import { Input } from "../ui/input";
 
 interface Autocomplete {
   value: string;
-  onChange: (e: any) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSelect: (name: string) => void;
   options: any[] | undefined;
   onDelete?: (id: number, name: string) => () => void | undefined;
