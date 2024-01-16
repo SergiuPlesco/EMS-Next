@@ -1,5 +1,8 @@
 import {
   Availability as UserAvailability,
+  Position,
+  Project,
+  Skill,
   User,
   UserPosition,
   UserProject,
@@ -20,3 +23,23 @@ export const AvailabilityEnum = [
   "NOTAVAILABLE",
 ] as const;
 export type Availability = (typeof AvailabilityEnum)[number];
+
+export type Option =
+  | Position
+  | User
+  | Project
+  | Skill
+  | UserSkill
+  | UserProject
+  | UserPosition
+  | { id: string; name: string };
+
+export type TagListProps = {
+  options: Option[];
+  onDelete: (id: number | string, name: string) => () => void;
+};
+
+export type TagItemProps = {
+  option: Option;
+  onDelete: (id: number | string, name: string) => () => void;
+};
