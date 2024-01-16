@@ -1,11 +1,10 @@
 import { UserPosition } from "@prisma/client";
 import React, { useState } from "react";
-import { AiOutlineDelete } from "react-icons/ai";
 
 import Autocomplete from "@/components/Autocomplete/Autocomplete";
+import TagList from "@/components/TagList/TagList";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
 
 const AddPosition = ({ userPositions }: { userPositions: UserPosition[] }) => {
@@ -26,29 +25,30 @@ const AddPosition = ({ userPositions }: { userPositions: UserPosition[] }) => {
     setInputValue(value);
   };
 
-  const handleDeleteFromUser = (userPositionId: number, name: string) => () => {
-    deletePositionFromUser.mutate(
-      {
-        userPositionId,
-      },
-      {
-        onSuccess: () => {
-          toast({
-            description: `${name} deleted`,
-            variant: "success",
-          });
+  const handleDeleteFromUser =
+    (userPositionId: number | string, name: string) => () => {
+      deletePositionFromUser.mutate(
+        {
+          userPositionId: Number(userPositionId),
+        },
+        {
+          onSuccess: () => {
+            toast({
+              description: `${name} deleted.`,
+              variant: "success",
+            });
 
-          utils.users.getLoggedUser.invalidate();
-        },
-        onError: (error) => {
-          toast({
-            description: `${error.message} `,
-            variant: "destructive",
-          });
-        },
-      }
-    );
-  };
+            utils.users.getLoggedUser.invalidate();
+          },
+          onError: (error) => {
+            toast({
+              description: `${error.message} `,
+              variant: "destructive",
+            });
+          },
+        }
+      );
+    };
 
   const handleOnSelect = (name: string) => {
     const positionAdded = userPositions?.find(
@@ -57,7 +57,7 @@ const AddPosition = ({ userPositions }: { userPositions: UserPosition[] }) => {
 
     if (name === "" || positionAdded) {
       toast({
-        description: `${name} is already in your list`,
+        description: `${name} is already in your list.`,
         variant: "destructive",
       });
       return;
@@ -71,7 +71,7 @@ const AddPosition = ({ userPositions }: { userPositions: UserPosition[] }) => {
         onSuccess: () => {
           setInputValue("");
           toast({
-            description: `${name} added to your positions`,
+            description: `${name} added to your positions.`,
             variant: "success",
           });
           utils.users.getLoggedUser.invalidate();
@@ -83,7 +83,8 @@ const AddPosition = ({ userPositions }: { userPositions: UserPosition[] }) => {
   const handleCreateNewPosition = () => {
     if (!inputValue) {
       toast({
-        description: "What are you adding?",
+        description:
+          "Please enter a position name in the input field before saving.",
         variant: "destructive",
       });
       return;
@@ -96,7 +97,7 @@ const AddPosition = ({ userPositions }: { userPositions: UserPosition[] }) => {
         onSuccess: () => {
           setInputValue("");
           toast({
-            description: `${inputValue} added to the list`,
+            description: `${inputValue} added to the list.`,
             variant: "success",
           });
 
@@ -113,37 +114,7 @@ const AddPosition = ({ userPositions }: { userPositions: UserPosition[] }) => {
   return (
     <>
       <div className="flex flex-col gap-2 border rounded p-2 mb-6 shadow-md">
-        <div className="flex flex-col w-full">
-          <div className="flex justify-between">
-            <div className="flex gap-1 flex-wrap">
-              {userPositions
-                ? userPositions.map((position) => {
-                    return (
-                      <div
-                        key={generateId()}
-                        className="flex justify-start gap-3 w-fit p-2 rounded bg-slate-200"
-                      >
-                        <p className="text-slate-500 pr-4 text-sm">
-                          {position.name}
-                        </p>
-                        <button
-                          onClick={handleDeleteFromUser(
-                            position.id,
-                            position.name
-                          )}
-                        >
-                          <AiOutlineDelete
-                            size={16}
-                            className="text-[#a12064]"
-                          />
-                        </button>
-                      </div>
-                    );
-                  })
-                : null}
-            </div>
-          </div>
-        </div>
+        <TagList options={userPositions} onDelete={handleDeleteFromUser} />
         <Autocomplete
           value={inputValue}
           onChange={handleOnChange}

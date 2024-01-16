@@ -1,11 +1,10 @@
 import { UserSkill } from "@prisma/client";
 import React, { useState } from "react";
-import { AiOutlineDelete } from "react-icons/ai";
 
 import Autocomplete from "@/components/Autocomplete/Autocomplete";
+import TagList from "@/components/TagList/TagList";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import generateId from "@/utils/generateId";
 import { trpc } from "@/utils/trpc";
 
 const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
@@ -32,7 +31,7 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
 
     if (name === "" || skillAdded) {
       toast({
-        description: `${name} is already in your list`,
+        description: `${name} is already in your list.`,
         variant: "destructive",
       });
       return;
@@ -46,7 +45,7 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
         onSuccess: () => {
           setInputValue("");
           toast({
-            description: `${name} added to your list`,
+            description: `${name} added to your list.`,
             variant: "success",
           });
 
@@ -55,41 +54,43 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
       }
     );
   };
-  const handleDeleteFromUser = (userSkillId: number, name: string) => () => {
-    deleteSkillFromUser.mutate(
-      {
-        userSkillId,
-      },
-      {
-        onSuccess: () => {
-          toast({
-            description: `${name} deleted form your list`,
-            variant: "success",
-          });
-
-          utils.users.getLoggedUser.invalidate();
+  const handleDeleteFromUser =
+    (userSkillId: number | string, name: string) => () => {
+      deleteSkillFromUser.mutate(
+        {
+          userSkillId: Number(userSkillId),
         },
-      }
-    );
-  };
+        {
+          onSuccess: () => {
+            toast({
+              description: `${name} deleted form your list.`,
+              variant: "success",
+            });
+
+            utils.users.getLoggedUser.invalidate();
+          },
+        }
+      );
+    };
 
   const handleCreateNewSkill = () => {
     if (!inputValue) {
       toast({
-        description: "What are you adding?",
+        description:
+          "Please enter a skill name in the input field before saving.",
         variant: "destructive",
       });
       return;
     }
     createSkill.mutate(
       {
-        name: inputValue,
+        name: inputValue.trim(),
       },
       {
         onSuccess: () => {
           setInputValue("");
           toast({
-            description: `${inputValue} added to the list`,
+            description: `${inputValue} created and added to your list.`,
             variant: "success",
           });
 
@@ -105,30 +106,7 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
 
   return (
     <div className="flex flex-col gap-2 border rounded p-2 mb-6 shadow-md">
-      <div className="flex flex-col w-full mb-4">
-        <div className="flex justify-between">
-          <div className="flex gap-2 flex-wrap">
-            {userSkills
-              ? userSkills.map((skill) => {
-                  return (
-                    <div
-                      key={generateId()}
-                      className="flex justify-start items-center gap-3 w-fit p-2 rounded bg-slate-200"
-                    >
-                      <p className="text-slate-500 text-sm">{skill.name}</p>
-
-                      <button
-                        onClick={handleDeleteFromUser(skill.id, skill.name)}
-                      >
-                        <AiOutlineDelete size={16} className="text-[#a12064]" />
-                      </button>
-                    </div>
-                  );
-                })
-              : null}
-          </div>
-        </div>
-      </div>
+      <TagList options={userSkills} onDelete={handleDeleteFromUser} />
 
       <Autocomplete
         value={inputValue}
