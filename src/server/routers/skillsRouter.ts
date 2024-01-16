@@ -5,7 +5,16 @@ import { procedure, router } from "../trpc";
 
 export const skillsRouter = router({
   create: procedure
-    .input(z.object({ name: z.string() }))
+    .input(
+      z.object({
+        name: z
+          .string()
+          .max(
+            50,
+            "Skill name cannot be longer than 50 characters. Please shorten the skill name and try again."
+          ),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       const newSkill = await ctx.prisma.skill.upsert({
         where: {
@@ -25,6 +34,7 @@ export const skillsRouter = router({
           createdAt: new Date(),
         },
       });
+
       return newSkill;
     }),
   all: procedure.query(async ({ ctx }) => {
