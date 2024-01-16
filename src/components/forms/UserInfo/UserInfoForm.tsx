@@ -29,7 +29,12 @@ import { cn } from "@/lib/utils";
 import { trpc } from "@/utils/trpc";
 
 const FormSchema = z.object({
-  phone: z.string().length(9),
+  phone: z
+    .string()
+    .length(
+      9,
+      "Please ensure it is 9 digits long and follows the format 0xxxxxxxx."
+    ),
   employmentDate: z.date().nullable(),
   availability: z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"]),
 });
@@ -83,13 +88,14 @@ const UserInfoForm = ({ user }: { user: User }) => {
             render={({ field }) => {
               return (
                 <FormItem>
-                  <FormLabel>Phone</FormLabel>
+                  <FormLabel>Mobile Number</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Your phone"
+                      placeholder="012345678"
                       type="number"
                       {...field}
-                      className="text-base"
+                      pattern="[0-9]{9}"
+                      className="text-base [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
                   </FormControl>
                   <FormMessage />
@@ -104,7 +110,7 @@ const UserInfoForm = ({ user }: { user: User }) => {
                 name="employmentDate"
                 render={({ field }) => {
                   return (
-                    <FormItem className="space-y-0">
+                    <FormItem className="flex flex-col gap-1 mt-2">
                       <FormLabel>Employment Date</FormLabel>
                       <FormControl>
                         <DatePicker
@@ -113,7 +119,7 @@ const UserInfoForm = ({ user }: { user: User }) => {
                           showMonthYearPicker
                           dateFormat="MMMM, yyyy"
                           popperPlacement="bottom"
-                          className="w-full mt-2"
+                          className="w-full"
                           maxDate={new Date()}
                           customInput={
                             <Button
@@ -146,8 +152,10 @@ const UserInfoForm = ({ user }: { user: User }) => {
                 name="availability"
                 render={({ field }) => {
                   return (
-                    <FormItem className="space-y-2">
-                      <FormLabel>Availability</FormLabel>
+                    <FormItem className="flex flex-col gap-1 mt-2">
+                      <FormLabel className="flex justify-start items-center gap-1 relative">
+                        Availability for new projects
+                      </FormLabel>
 
                       <Select
                         defaultValue={field.value}
