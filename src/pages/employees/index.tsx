@@ -42,6 +42,7 @@ const EmployeesPage = () => {
           placeholder="Search by name, skill, project, position..."
           defaultValue={searchQuery}
           onChange={handleSetSearchQuery}
+          className="text-base"
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-[minmax(0,200px),1fr] gap-10">
