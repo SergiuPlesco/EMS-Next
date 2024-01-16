@@ -302,12 +302,13 @@ export const userRouter = router({
     return topSkills;
   }),
   updateRating: procedure
-    .input(z.object({ skillId: z.number(), rating: z.number() }))
+    .input(
+      z.object({ skillId: z.number(), rating: z.number().min(5).max(100) })
+    )
     .mutation(async ({ ctx, input }) => {
       const updatedSkill = await ctx.prisma.userSkill.update({
         where: {
           id: input.skillId,
-          // @ts-ignore
           userId: ctx.session?.user?.id,
         },
         data: {
