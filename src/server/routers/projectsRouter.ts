@@ -7,8 +7,19 @@ export const projectRouter = router({
   create: procedure
     .input(
       z.object({
-        name: z.string().min(1, "Name is required"),
-        description: z.string(),
+        name: z
+          .string()
+          .min(1, "Project name is required.")
+          .max(
+            50,
+            "Project name cannot be longer than 50 characters. Please shorten the project name and try again."
+          ),
+        description: z
+          .string()
+          .max(
+            350,
+            "Project description cannot be longer than 350 characters. Please shorten the project description and try again."
+          ),
         startDate: z.date(),
         endDate: z.date().nullable(),
       })
@@ -64,7 +75,16 @@ export const projectRouter = router({
     });
   }),
   search: procedure
-    .input(z.object({ searchQuery: z.string() }))
+    .input(
+      z.object({
+        searchQuery: z
+          .string()
+          .max(
+            50,
+            "Search querry cannot be longer than 50 characters. Please shorten the search query and try again."
+          ),
+      })
+    )
     .query(async ({ ctx, input }) => {
       if (input.searchQuery === "") return [];
       return await ctx.prisma.project.findMany({
@@ -93,7 +113,12 @@ export const projectRouter = router({
     .input(
       z.object({
         userProjectId: z.number(),
-        description: z.string(),
+        description: z
+          .string()
+          .max(
+            350,
+            "Project description cannot be longer than 350 characters. Please shorten the project description and try again."
+          ),
         startDate: z.date(),
         endDate: z.date().nullable(),
       })

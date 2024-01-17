@@ -43,6 +43,7 @@ const Autocomplete = ({
           value={value}
           onChange={onChange}
           onKeyDown={handleOnKeyDown}
+          maxLength={50}
         />
       </div>
       <div className="absolute top-[100%] mt-1 rounded w-full bg-[#ffffff]">
