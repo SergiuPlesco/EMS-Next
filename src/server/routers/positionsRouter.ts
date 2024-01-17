@@ -5,7 +5,16 @@ import { procedure, router } from "../trpc";
 
 export const positionsRouter = router({
   create: procedure
-    .input(z.object({ name: z.string() }))
+    .input(
+      z.object({
+        name: z
+          .string()
+          .max(
+            50,
+            "Position name cannot be longer than 50 characters. Please shorten the position name and try again."
+          ),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       const newPosition = await ctx.prisma.position.upsert({
         where: {
@@ -30,7 +39,16 @@ export const positionsRouter = router({
     return await ctx.prisma.position.findMany();
   }),
   search: procedure
-    .input(z.object({ searchQuery: z.string() }))
+    .input(
+      z.object({
+        searchQuery: z
+          .string()
+          .max(
+            50,
+            "Search querry cannot be longer than 50 characters. Please shorten the search query and try again."
+          ),
+      })
+    )
     .query(async ({ ctx, input }) => {
       if (input.searchQuery == "") return [];
       return await ctx.prisma.position.findMany({
