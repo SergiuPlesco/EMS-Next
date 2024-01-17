@@ -5,7 +5,16 @@ import { procedure, router } from "../trpc";
 
 export const positionsRouter = router({
   create: procedure
-    .input(z.object({ name: z.string() }))
+    .input(
+      z.object({
+        name: z
+          .string()
+          .max(
+            25,
+            "Position name cannot be longer than 25 characters. Please shorten the position name and try again."
+          ),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       const newPosition = await ctx.prisma.position.upsert({
         where: {

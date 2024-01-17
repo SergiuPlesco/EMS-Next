@@ -27,11 +27,22 @@ import { trpc } from "@/utils/trpc";
 
 const FormSchema = z
   .object({
-    name: z.string().min(1, "Name is required"),
+    name: z
+      .string()
+      .min(1, "Project name is required")
+      .max(
+        50,
+        "Project name cannot be longer than 50 characters. Please shorten the project name and try again."
+      ),
     startDate: z.date(),
     endDate: z.date().nullable(),
     isPresent: z.boolean(),
-    description: z.string(),
+    description: z
+      .string()
+      .max(
+        350,
+        "Project description cannot be longer than 350 characters. Please shorten the project description and try again."
+      ),
   })
   .refine(
     (data) => {
