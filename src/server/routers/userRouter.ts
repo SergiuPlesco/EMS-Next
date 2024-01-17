@@ -12,7 +12,16 @@ export const userRouter = router({
     });
   }),
   search: procedure
-    .input(z.object({ searchQuery: z.string() }))
+    .input(
+      z.object({
+        searchQuery: z
+          .string()
+          .max(
+            50,
+            "Search querry cannot be longer than 50 characters. Please shorten the search query and try again."
+          ),
+      })
+    )
     .query(async ({ ctx, input }) => {
       if (input.searchQuery === "") return [];
       const result = await ctx.prisma.user.findMany({
@@ -31,7 +40,12 @@ export const userRouter = router({
   filter: procedure
     .input(
       z.object({
-        searchQuery: z.string(),
+        searchQuery: z
+          .string()
+          .max(
+            50,
+            "Search querry cannot be longer than 50 characters. Please shorten the search query and try again."
+          ),
         page: z.number(),
         perPage: z.number(),
         availability: z.array(z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"])),
@@ -199,7 +213,12 @@ export const userRouter = router({
   addSKill: procedure
     .input(
       z.object({
-        name: z.string(),
+        name: z
+          .string()
+          .max(
+            50,
+            "Skill name cannot be longer than 50 characters. Please shorten the skill name and try again."
+          ),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -320,7 +339,16 @@ export const userRouter = router({
     }),
 
   addPosition: procedure
-    .input(z.object({ name: z.string() }))
+    .input(
+      z.object({
+        name: z
+          .string()
+          .max(
+            50,
+            "Position name cannot be longer than 50 characters. Please shorten the position name and try again."
+          ),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       const position = await ctx.prisma.position.findUnique({
         where: {
@@ -397,7 +425,16 @@ export const userRouter = router({
     return allUserPositions;
   }),
   addManager: procedure
-    .input(z.object({ name: z.string() }))
+    .input(
+      z.object({
+        name: z
+          .string()
+          .max(
+            50,
+            "Manager name cannot be longer than 50 characters. Please shorten the manager name and try again."
+          ),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.user.findFirst({
         where: {

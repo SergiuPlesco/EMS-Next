@@ -41,7 +41,16 @@ export const skillsRouter = router({
     return await ctx.prisma.skill.findMany();
   }),
   search: procedure
-    .input(z.object({ searchQuery: z.string() }))
+    .input(
+      z.object({
+        searchQuery: z
+          .string()
+          .max(
+            50,
+            "Search querry cannot be longer than 50 characters. Please shorten the search query and try again."
+          ),
+      })
+    )
     .query(async ({ ctx, input }) => {
       if (input.searchQuery == "") return [];
       return await ctx.prisma.skill.findMany({

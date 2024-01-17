@@ -113,7 +113,12 @@ export const projectRouter = router({
     .input(
       z.object({
         userProjectId: z.number(),
-        description: z.string(),
+        description: z
+          .string()
+          .max(
+            350,
+            "Project description cannot be longer than 350 characters. Please shorten the project description and try again."
+          ),
         startDate: z.date(),
         endDate: z.date().nullable(),
       })
