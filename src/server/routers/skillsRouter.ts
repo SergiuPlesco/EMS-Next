@@ -25,7 +25,7 @@ export const skillsRouter = router({
         },
         update: {},
       });
-      await ctx.prisma.userSkill.create({
+      const newUserSkill = await ctx.prisma.userSkill.create({
         data: {
           skillId: newSkill.id,
           userId: ctx.session?.user.id as string,
@@ -35,7 +35,7 @@ export const skillsRouter = router({
         },
       });
 
-      return newSkill;
+      return newUserSkill;
     }),
   all: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.skill.findMany();

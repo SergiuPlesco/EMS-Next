@@ -76,7 +76,7 @@ const Projects = ({
         {isLoggedUser && (
           <Modal
             title="Projects"
-            description="Add a new project."
+            description="Search, add, or create new projects."
             icon={
               <PlusIcon width={20} height={20} color="var(--smart-purple)" />
             }

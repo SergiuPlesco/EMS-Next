@@ -237,7 +237,7 @@ export const userRouter = router({
         },
       });
 
-      const userSkills = await ctx.prisma.user.update({
+      await ctx.prisma.user.update({
         where: {
           // @ts-ignore
           id: ctx.session?.user.id,
@@ -251,7 +251,7 @@ export const userRouter = router({
         },
       });
 
-      return userSkills;
+      return userSkill;
     }),
   deleteSkill: procedure
     .input(z.object({ userSkillId: z.number() }))

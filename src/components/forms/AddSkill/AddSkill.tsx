@@ -5,11 +5,17 @@ import Autocomplete from "@/components/Autocomplete/Autocomplete";
 import TagList from "@/components/TagList/TagList";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 import { trpc } from "@/utils/trpc";
+
+import EditRating from "../EditRating/EditRating";
 
 const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
   const { toast } = useToast();
   const [inputValue, setInputValue] = useState("");
+  const [selectedSkill, setSelectedSkill] = useState<
+    UserSkill | null | undefined
+  >(null);
 
   const utils = trpc.useContext();
 
@@ -20,6 +26,12 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
   const createSkill = trpc.skills.create.useMutation();
   const deleteSkillFromUser = trpc.users.deleteSkill.useMutation();
   const addSkillToUser = trpc.users.addSKill.useMutation();
+
+  const selectTag = (tag: UserSkill) => () => {
+    setSelectedSkill((prevSelectedSkill) =>
+      prevSelectedSkill?.id === tag.id ? null : tag
+    );
+  };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -42,13 +54,13 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
         name,
       },
       {
-        onSuccess: () => {
+        onSuccess: (newUserSkill) => {
           setInputValue("");
           toast({
             description: `${name} added to your list.`,
             variant: "success",
           });
-
+          setSelectedSkill(newUserSkill);
           utils.users.getLoggedUser.invalidate();
         },
       }
@@ -66,7 +78,7 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
               description: `${name} deleted form your list.`,
               variant: "success",
             });
-
+            setSelectedSkill(null);
             utils.users.getLoggedUser.invalidate();
           },
         }
@@ -87,13 +99,13 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
         name: inputValue.trim(),
       },
       {
-        onSuccess: () => {
+        onSuccess: (newUserSkill) => {
           setInputValue("");
           toast({
             description: `${inputValue} created and added to your list.`,
             variant: "success",
           });
-
+          setSelectedSkill(newUserSkill);
           utils.users.getLoggedUser.invalidate();
         },
         onError: (error) => {
@@ -116,7 +128,28 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
 
   return (
     <div className="flex flex-col gap-2 border rounded p-2 mb-6 shadow-md">
-      <TagList options={userSkills} onDelete={handleDeleteFromUser} />
+      <TagList
+        options={userSkills}
+        onDelete={handleDeleteFromUser}
+        onSelect={selectTag}
+        selectedId={selectedSkill?.id}
+        isSelectable
+      />
+
+      <div
+        className={cn(
+          "transition ease-in-out duration-300",
+          selectedSkill ? "opacity-100" : "opacity-0"
+        )}
+      >
+        {selectedSkill ? (
+          <EditRating
+            key={selectedSkill.id}
+            skill={selectedSkill}
+            onSave={() => setSelectedSkill(null)}
+          />
+        ) : null}
+      </div>
 
       <Autocomplete
         value={inputValue}

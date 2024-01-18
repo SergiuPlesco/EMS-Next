@@ -37,6 +37,9 @@ export type Option =
 export type TagListProps = {
   options: Option[];
   onDelete: (id: number | string, name: string) => () => void;
+  onSelect?: (tag: any) => () => void;
+  selectedId?: number;
+  isSelectable?: boolean;
 };
 
 export type TagItemProps = {
