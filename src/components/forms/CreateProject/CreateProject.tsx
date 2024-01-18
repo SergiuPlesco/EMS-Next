@@ -262,7 +262,6 @@ export default function CreateProject() {
                         field.onChange(e);
                       }}
                       options={searchList}
-                      // form setValue
                       onSelect={handleSelect}
                     />
                   </FormControl>

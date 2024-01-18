@@ -10,7 +10,7 @@ import {
 
 type ModalProps = {
   title?: string;
-  description?: string;
+  description?: React.ReactNode | string;
   children: React.ReactNode;
   icon?: React.ReactNode;
   text?: React.ReactNode | string;
