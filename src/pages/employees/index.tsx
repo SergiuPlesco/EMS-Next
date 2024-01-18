@@ -43,6 +43,7 @@ const EmployeesPage = () => {
           defaultValue={searchQuery}
           onChange={handleSetSearchQuery}
           className="text-base"
+          maxLength={50}
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-[minmax(0,200px),1fr] gap-10">

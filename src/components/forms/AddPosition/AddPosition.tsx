@@ -103,6 +103,16 @@ const AddPosition = ({ userPositions }: { userPositions: UserPosition[] }) => {
 
           utils.users.getLoggedUser.invalidate();
         },
+        onError: (error) => {
+          toast({
+            description:
+              error?.data?.zodError?.fieldErrors &&
+              error?.data?.zodError?.fieldErrors.name
+                ? error.data?.zodError?.fieldErrors.name[0]
+                : "Something went wrong.",
+            variant: "destructive",
+          });
+        },
       }
     );
   };
