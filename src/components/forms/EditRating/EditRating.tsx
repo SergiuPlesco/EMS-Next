@@ -22,7 +22,13 @@ const FormSchema = z.object({
   }),
 });
 
-const EditRating = ({ skill, onSave }: { skill: UserSkill; onSave: any }) => {
+const EditRating = ({
+  skill,
+  onSave,
+}: {
+  skill: UserSkill;
+  onSave?: () => void;
+}) => {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -48,7 +54,7 @@ const EditRating = ({ skill, onSave }: { skill: UserSkill; onSave: any }) => {
             description: `${skill.name} rating has been updated.`,
             variant: "success",
           });
-          onSave();
+          onSave && onSave();
           utils.users.getLoggedUser.invalidate();
         },
       }

@@ -33,6 +33,10 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
     );
   };
 
+  const resetSelectedTag = () => {
+    setSelectedSkill(null);
+  };
+
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
@@ -146,7 +150,7 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
           <EditRating
             key={selectedSkill.id}
             skill={selectedSkill}
-            onSave={() => setSelectedSkill(null)}
+            onSave={resetSelectedTag}
           />
         ) : null}
       </div>
