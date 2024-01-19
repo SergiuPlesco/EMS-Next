@@ -29,7 +29,12 @@ const Skills = ({
         {isLoggedUser && (
           <Modal
             title="Skills"
-            description="Search, add, delete or create a new one."
+            description={
+              <>
+                <p>Search, add, remove, or create new skills.</p>
+                <p>Easily adjust knowledge levels by clicking on a tag.</p>
+              </>
+            }
             icon={
               <PlusIcon width={20} height={20} color="var(--smart-purple)" />
             }
