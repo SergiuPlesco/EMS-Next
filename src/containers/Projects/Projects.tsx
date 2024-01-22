@@ -6,6 +6,17 @@ import CreateProject from "@/components/forms/CreateProject/CreateProject";
 import EditProject from "@/components/forms/EditProject/EditProject";
 import Modal from "@/components/Modal/Modal";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -94,42 +105,63 @@ const Projects = ({
                 key={project.id}
                 className="flex flex-col gap-2 border rounded p-4 shadow-md"
               >
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-start">
                   <p className="text-lg font-medium text-[--smart-purple]">
                     {project.name}
                   </p>
                   {isLoggedUser && (
                     <Dialog>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger>
-                          <DotsVerticalIcon className="text-slate-600 mb-[0.1rem]" />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                          <DropdownMenuItem asChild>
-                            <DialogTrigger className="w-full text-md font-medium text-slate-500">
-                              Edit
-                            </DialogTrigger>
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            className="text-red-500"
-                            onClick={handleDeleteProject(
-                              project.id,
-                              project.name
-                            )}
-                          >
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      <AlertDialog>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger>
+                            <DotsVerticalIcon className="text-slate-600 mt-2" />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="w-60 mr-2">
+                            <DropdownMenuItem asChild>
+                              <DialogTrigger className="w-full text-md font-medium text-slate-500">
+                                Edit
+                              </DialogTrigger>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem className="text-red-500" asChild>
+                              <AlertDialogTrigger asChild>
+                                <p>Delete {`${project.name}`}</p>
+                              </AlertDialogTrigger>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
 
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Projects</DialogTitle>
-                          <DialogDescription>Edit project.</DialogDescription>
-                        </DialogHeader>
-                        <EditProject projectId={project.projectId} />
-                      </DialogContent>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Projects</DialogTitle>
+                            <DialogDescription>Edit project.</DialogDescription>
+                          </DialogHeader>
+                          <EditProject projectId={project.projectId} />
+                        </DialogContent>
+
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Are you absolutely sure?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={handleDeleteProject(
+                                project.id,
+                                project.name
+                              )}
+                              className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90"
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </Dialog>
                   )}
                 </div>
