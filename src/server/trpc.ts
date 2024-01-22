@@ -1,4 +1,4 @@
-import { inferAsyncReturnType, initTRPC } from "@trpc/server";
+import { inferAsyncReturnType, initTRPC,TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
@@ -23,5 +23,14 @@ const t = initTRPC
   });
 
 export const router = t.router;
-export const procedure = t.procedure;
+export const procedure = t.procedure.use(async (opts) => {
+  const { ctx } = opts;
+  if (!ctx.session || !ctx.session.user) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "User not authenticated",
+    });
+  }
+  return opts.next({ ctx });
+});
 export const middleware = t.middleware;
