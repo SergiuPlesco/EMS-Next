@@ -1,3 +1,4 @@
+import { UserSkill } from "@prisma/client";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import React from "react";
 
@@ -25,19 +26,17 @@ const TagList = ({
                     key={generateId()}
                     className={cn(
                       "flex justify-start items-center gap-3 w-fit p-2 rounded bg-slate-200  text-slate-500",
-                      selectedId === option.id ? "bg-[--smart-green]" : "",
+                      selectedId === option.id
+                        ? "bg-[--smart-green] text-slate-800"
+                        : "",
                       isSelectable &&
                         "transition hover:bg-[--smart-green] hover:text-slate-800 hover:cursor-pointer"
                     )}
                     onClick={onSelect ? onSelect(option) : undefined}
                   >
-                    <p
-                      className={cn(
-                        " text-sm",
-                        selectedId === option.id ? "text-slate-800" : ""
-                      )}
-                    >
-                      {option.name}
+                    <p className="text-sm">{option.name}</p>
+                    <p className="text-xs">
+                      {isUserSkill(option) && ` ${option.rating}%`}
                     </p>
 
                     <Button
@@ -57,4 +56,7 @@ const TagList = ({
   );
 };
 
+const isUserSkill = (obj: any): obj is UserSkill => {
+  return "rating" in obj;
+};
 export default TagList;
