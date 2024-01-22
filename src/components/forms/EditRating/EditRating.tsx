@@ -11,15 +11,24 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/components/ui/use-toast";
 import { trpc } from "@/utils/trpc";
 const FormSchema = z.object({
-  rating: z.array(z.number().min(5).max(100)),
+  rating: z.array(z.number()).refine((value) => value[0] >= 5, {
+    message: "Knowledge level cannot be less than 5.",
+  }),
 });
 
-const EditRating = ({ skill }: { skill: UserSkill }) => {
+const EditRating = ({
+  skill,
+  onSave,
+}: {
+  skill: UserSkill;
+  onSave?: () => void;
+}) => {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -42,9 +51,10 @@ const EditRating = ({ skill }: { skill: UserSkill }) => {
       {
         onSuccess: () => {
           toast({
-            description: `${skill.name} rating has been updated`,
+            description: `${skill.name} rating has been updated.`,
             variant: "success",
           });
+          onSave && onSave();
           utils.users.getLoggedUser.invalidate();
         },
       }
@@ -80,6 +90,7 @@ const EditRating = ({ skill }: { skill: UserSkill }) => {
                         onValueChange={field.onChange}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 );
               }}
