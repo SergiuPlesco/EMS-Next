@@ -45,6 +45,10 @@ export default function PaginationSection(props: IProps) {
     return `${pathname}?${params.toString()}`;
   };
 
+  if (totalPages === 1) {
+    return null;
+  }
+
   return (
     <>
       <div className="mx-auto max-w-90 gap-1 flex flex-row justify-center items-center">
