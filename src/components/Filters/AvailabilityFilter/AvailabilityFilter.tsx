@@ -7,6 +7,9 @@ import {
   AvailabilityEnum,
 } from "@/typeDefinitions/typeDefinitions";
 
+import FilterTitle from "../utils/FilterTitle";
+import FilterWrapper from "../utils/FilterWrapper";
+
 const AvailabilityItems = [
   {
     value: AvailabilityEnum[0],
@@ -43,16 +46,17 @@ const AvailabilityFilter = () => {
   };
 
   return (
-    <div>
-      <h2 className="font-medium mb-4">Availability</h2>
+    <FilterWrapper>
+      <FilterTitle title="Availability" />
       <div>
         {AvailabilityItems.map((item) => {
           return (
             <div
               key={item.value}
-              className="flex justify-start gap-2 items-center"
+              className="flex justify-start gap-2 items-center mb-1"
             >
               <Checkbox
+                id={item.value}
                 value={item.value}
                 checked={availability.includes(item.value)}
                 onCheckedChange={(checked) => {
@@ -63,12 +67,12 @@ const AvailabilityFilter = () => {
                       );
                 }}
               />
-              <p>{item.label}</p>
+              <label htmlFor={item.value}>{item.label}</label>
             </div>
           );
         })}
       </div>
-    </div>
+    </FilterWrapper>
   );
 };
 

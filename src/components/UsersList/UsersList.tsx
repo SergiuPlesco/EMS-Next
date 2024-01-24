@@ -18,12 +18,17 @@ const UsersList = () => {
     typeof query?.availability === "string"
       ? (query?.availability?.split(",") as Availability[])
       : [];
+  const skills =
+    typeof query?.skills === "string"
+      ? (query?.skills?.split(",") as string[])
+      : [];
 
   const { data, isLoading, isFetching } = trpc.users.filter.useQuery({
     searchQuery: searchQuery as string,
     page: currentPage,
     perPage: USERS_PER_PAGE,
     availability,
+    skills,
   });
 
   if (isLoading || isFetching) {
