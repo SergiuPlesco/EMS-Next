@@ -1,4 +1,5 @@
 import { Availability } from "@prisma/client";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -10,28 +11,41 @@ import UserSkeleton from "@/components/UserSkeleton/UserSkeleton";
 import { trpc } from "@/utils/trpc";
 
 const EmployeesPage = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const { query, pathname, replace } = useRouter();
+  const searchQuery = query.search || "";
+  const currentPage = Number(query.page) || 1;
+
   const [availability, setAvailability] = useState<Availability[]>([]);
 
   const { data, isLoading, isFetching } = trpc.users.filter.useQuery({
-    searchQuery,
+    searchQuery: searchQuery as string,
     page: currentPage,
-    perPage: 12,
+    perPage: 24,
     availability,
   });
 
-  const debounced = useDebouncedCallback(
-    (value) => {
-      setSearchQuery(value);
-      setCurrentPage(1);
-    },
+  const debounced = useDebouncedCallback((value) => {
+    const params = new URLSearchParams(Object(query));
 
-    1000
-  );
+    if (value) {
+      params.set("search", value);
+    } else {
+      params.delete("search");
+    }
+
+    params.set("page", "1");
+    replace(`${pathname}?${params.toString()}`);
+  }, 300);
 
   const handleSetSearchQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
-    debounced(e.target.value);
+    const value = e.target.value.trim();
+    debounced(value);
+  };
+
+  const handleSetCurrentPage = (val: number) => {
+    const params = new URLSearchParams(Object(query));
+    params.set("page", val.toString());
+    replace(`${pathname}?${params.toString()}`);
   };
 
   return (
@@ -40,7 +54,7 @@ const EmployeesPage = () => {
         <Input
           type="search"
           placeholder="Search by name, skill, project, position..."
-          defaultValue={searchQuery}
+          defaultValue={searchQuery as string}
           onChange={handleSetSearchQuery}
           className="text-base"
           maxLength={50}
@@ -64,9 +78,9 @@ const EmployeesPage = () => {
                   })}
               </div>
               <Pagination
-                page={currentPage}
-                count={data?.pagination.totalPages || 0}
-                onChange={setCurrentPage}
+                currentPage={currentPage}
+                totalPages={data?.pagination.totalPages || 0}
+                onChange={handleSetCurrentPage}
               />
             </>
           )}
