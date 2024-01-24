@@ -20,7 +20,7 @@ const EmployeesPage = () => {
   const { data, isLoading, isFetching } = trpc.users.filter.useQuery({
     searchQuery: searchQuery as string,
     page: currentPage,
-    perPage: 4,
+    perPage: 24,
     availability,
   });
 
@@ -78,8 +78,8 @@ const EmployeesPage = () => {
                   })}
               </div>
               <Pagination
-                page={currentPage}
-                count={data?.pagination.totalPages || 0}
+                currentPage={currentPage}
+                totalPages={data?.pagination.totalPages || 0}
                 onChange={handleSetCurrentPage}
               />
             </>
