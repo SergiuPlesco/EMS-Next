@@ -1,6 +1,5 @@
 import { Availability } from "@prisma/client";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 import AvailabilityFilter from "@/components/Filters/AvailabilityFilter/AvailabilityFilter";
@@ -14,8 +13,10 @@ const EmployeesPage = () => {
   const { query, pathname, replace } = useRouter();
   const searchQuery = query.search || "";
   const currentPage = Number(query.page) || 1;
-
-  const [availability, setAvailability] = useState<Availability[]>([]);
+  const availability =
+    typeof query?.availability === "string"
+      ? (query?.availability?.split(",") as Availability[])
+      : [];
 
   const { data, isLoading, isFetching } = trpc.users.filter.useQuery({
     searchQuery: searchQuery as string,
@@ -48,6 +49,19 @@ const EmployeesPage = () => {
     replace(`${pathname}?${params.toString()}`);
   };
 
+  const handleSetAvailability = (val: Availability[]) => {
+    const valString = val.join(",");
+    const params = new URLSearchParams(Object(query));
+
+    if (valString) {
+      params.set("availability", valString);
+    } else {
+      params.delete("availability");
+    }
+    params.set("page", "1");
+    replace(`${pathname}?${params.toString()}`);
+  };
+
   return (
     <div className="flex flex-col gap-10">
       <div>
@@ -63,7 +77,7 @@ const EmployeesPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-[minmax(0,200px),1fr] gap-10">
         <AvailabilityFilter
           availability={availability}
-          setAvailability={setAvailability}
+          setAvailability={handleSetAvailability}
         />
         <div className="flex flex-col justify-center items-center gap-5">
           {isLoading || isFetching ? (
