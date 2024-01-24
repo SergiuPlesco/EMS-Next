@@ -1,31 +1,20 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-// import {
-//   Pagination,
-//   PaginationContent,
-//   PaginationEllipsis,
-//   PaginationItem,
-//   PaginationLink,
-//   PaginationNext,
-//   PaginationPrevious,
-// } from "@/components/ui/pagination";
 import { useRouter } from "next/router";
 
 import { cn } from "@/lib/utils";
 
 interface IProps {
-  currentPage: number;
   totalPages: number;
-  onChange: (val: number) => void;
 }
 
-const GROUP_MAX = 3;
-const half = Math.ceil(GROUP_MAX / 2);
+const MAX_VISIBILE_PAGES = 3;
+const half = Math.ceil(MAX_VISIBILE_PAGES / 2);
 
 export default function PaginationSection(props: IProps) {
   const { query, pathname } = useRouter();
-
-  const { currentPage, totalPages } = props;
+  const currentPage = Number(query.page) || 1;
+  const { totalPages } = props;
 
   const getLink = (current: number) => (
     <Link
@@ -61,7 +50,7 @@ export default function PaginationSection(props: IProps) {
           </Link>
         )}
 
-        {totalPages <= GROUP_MAX + 2 ? (
+        {totalPages <= MAX_VISIBILE_PAGES + 2 ? (
           Array(totalPages)
             .fill(0)
             .map((_, index) => getLink(index + 1))
@@ -69,7 +58,7 @@ export default function PaginationSection(props: IProps) {
           <>
             {getLink(1)}
             {currentPage > 1 + half && <span className="leading-10">...</span>}
-            {Array(GROUP_MAX)
+            {Array(MAX_VISIBILE_PAGES)
               .fill(0)
               .map((_, index) => {
                 const p = currentPage - half + index + 1;
@@ -93,7 +82,7 @@ export default function PaginationSection(props: IProps) {
           </Link>
         )}
       </div>
-      {/* shadcn/ui pagination */}
+      {/* shadcn/ui pagination - temporary commented out*/}
       {/* <Pagination>
         <PaginationContent>
           {totalPages > 1 && (
@@ -105,7 +94,7 @@ export default function PaginationSection(props: IProps) {
             </PaginationItem>
           )}
 
-          {totalPages <= GROUP_MAX + 2 ? (
+          {totalPages <= MAX_VISIBILE_PAGES + 2 ? (
             Array(totalPages)
               .fill(0)
               .map((_, index) => (
@@ -127,7 +116,7 @@ export default function PaginationSection(props: IProps) {
                 </PaginationItem>
               )}
 
-              {Array(GROUP_MAX)
+              {Array(MAX_VISIBILE_PAGES)
                 .fill(0)
                 .map((_, index) => {
                   const p = currentPage - half + index + 1;

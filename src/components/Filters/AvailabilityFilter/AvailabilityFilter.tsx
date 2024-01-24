@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import React from "react";
 
 import { Checkbox } from "@/components/ui/checkbox";
@@ -21,15 +22,26 @@ const AvailabilityItems = [
   },
 ];
 
-type AvailabilityProps = {
-  availability: Availability[];
-  setAvailability: (arg: Availability[]) => void;
-};
+const AvailabilityFilter = () => {
+  const { query, pathname, replace } = useRouter();
+  const availability =
+    typeof query?.availability === "string"
+      ? (query?.availability?.split(",") as Availability[])
+      : [];
 
-const AvailabilityFilter = ({
-  availability,
-  setAvailability,
-}: AvailabilityProps) => {
+  const handleSetAvailability = (val: Availability[]) => {
+    const valString = val.join(",");
+    const params = new URLSearchParams(Object(query));
+
+    if (valString) {
+      params.set("availability", valString);
+    } else {
+      params.delete("availability");
+    }
+    params.set("page", "1");
+    replace(`${pathname}?${params.toString()}`);
+  };
+
   return (
     <div>
       <h2 className="font-medium mb-4">Availability</h2>
@@ -45,8 +57,8 @@ const AvailabilityFilter = ({
                 checked={availability.includes(item.value)}
                 onCheckedChange={(checked) => {
                   return checked
-                    ? setAvailability([...availability, item.value])
-                    : setAvailability(
+                    ? handleSetAvailability([...availability, item.value])
+                    : handleSetAvailability(
                         availability?.filter((value) => value !== item.value)
                       );
                 }}
