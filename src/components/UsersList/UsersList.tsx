@@ -29,7 +29,7 @@ const UsersList = () => {
   if (isLoading || isFetching) {
     return <UserSkeleton />;
   }
-  if (!data) {
+  if (data?.users.length === 0) {
     return <NoData />;
   }
   return (
