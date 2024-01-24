@@ -8,8 +8,8 @@ interface IProps {
   totalPages: number;
 }
 
-const MAX_VISIBILE_PAGES = 3;
-const half = Math.ceil(MAX_VISIBILE_PAGES / 2);
+const MAX_VISIBLE_PAGES = 3;
+const half = Math.ceil(MAX_VISIBLE_PAGES / 2);
 
 export default function PaginationSection(props: IProps) {
   const { query, pathname } = useRouter();
@@ -50,7 +50,7 @@ export default function PaginationSection(props: IProps) {
           </Link>
         )}
 
-        {totalPages <= MAX_VISIBILE_PAGES + 2 ? (
+        {totalPages <= MAX_VISIBLE_PAGES + 2 ? (
           Array(totalPages)
             .fill(0)
             .map((_, index) => getLink(index + 1))
@@ -58,7 +58,7 @@ export default function PaginationSection(props: IProps) {
           <>
             {getLink(1)}
             {currentPage > 1 + half && <span className="leading-10">...</span>}
-            {Array(MAX_VISIBILE_PAGES)
+            {Array(MAX_VISIBLE_PAGES)
               .fill(0)
               .map((_, index) => {
                 const p = currentPage - half + index + 1;
@@ -94,7 +94,7 @@ export default function PaginationSection(props: IProps) {
             </PaginationItem>
           )}
 
-          {totalPages <= MAX_VISIBILE_PAGES + 2 ? (
+          {totalPages <= MAX_VISIBLE_PAGES + 2 ? (
             Array(totalPages)
               .fill(0)
               .map((_, index) => (
@@ -116,7 +116,7 @@ export default function PaginationSection(props: IProps) {
                 </PaginationItem>
               )}
 
-              {Array(MAX_VISIBILE_PAGES)
+              {Array(MAX_VISIBLE_PAGES)
                 .fill(0)
                 .map((_, index) => {
                   const p = currentPage - half + index + 1;
