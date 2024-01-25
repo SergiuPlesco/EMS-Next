@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { trpc } from "@/utils/trpc";
 
+import { FILTERS } from "../utils/constans";
 import FilterItemWrapper from "../utils/FilterItemWrapper";
 import FilterWrapper from "../utils/FilterWrapper";
 
@@ -23,11 +24,11 @@ const SkillFilter = () => {
     const params = new URLSearchParams(Object(query));
 
     if (valString) {
-      params.set("skills", valString);
+      params.set(FILTERS.SKILLS, valString);
     } else {
-      params.delete("skills");
+      params.delete(FILTERS.SKILLS);
     }
-    params.set("page", "1");
+    params.set(FILTERS.PAGE, "1");
     replace(`${pathname}?${params.toString()}`);
   };
 
@@ -53,7 +54,7 @@ const SkillFilter = () => {
                     }}
                   />
                   <Label
-                    className="cursor-pointer font-normal"
+                    className="cursor-pointer font-normal mt-[1px]"
                     htmlFor={item.name}
                   >
                     {item.name}

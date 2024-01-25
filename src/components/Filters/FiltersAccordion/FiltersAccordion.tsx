@@ -7,17 +7,23 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
+import { FILTERS } from "../utils/constans";
+
 const FiltersAccordion = () => {
   return (
-    <Accordion defaultValue="Availability" type="single" collapsible>
-      <AccordionItem value="Availability">
-        <AccordionTrigger>Availability</AccordionTrigger>
+    <Accordion defaultValue={FILTERS.AVAILABILITY} type="single" collapsible>
+      <AccordionItem value={FILTERS.AVAILABILITY}>
+        <AccordionTrigger className="capitalize">
+          {FILTERS.AVAILABILITY}
+        </AccordionTrigger>
         <AccordionContent>
           <AvailabilityFilter />
         </AccordionContent>
       </AccordionItem>
-      <AccordionItem value="Skills">
-        <AccordionTrigger>Skills</AccordionTrigger>
+      <AccordionItem value={FILTERS.SKILLS}>
+        <AccordionTrigger className="capitalize">
+          {FILTERS.SKILLS}
+        </AccordionTrigger>
         <AccordionContent>
           <SkillFilter />
         </AccordionContent>

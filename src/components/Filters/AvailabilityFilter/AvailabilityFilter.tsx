@@ -8,6 +8,7 @@ import {
   AvailabilityEnum,
 } from "@/typeDefinitions/typeDefinitions";
 
+import { FILTERS } from "../utils/constans";
 import FilterItemWrapper from "../utils/FilterItemWrapper";
 import FilterWrapper from "../utils/FilterWrapper";
 
@@ -38,11 +39,11 @@ const AvailabilityFilter = () => {
     const params = new URLSearchParams(Object(query));
 
     if (valString) {
-      params.set("availability", valString);
+      params.set(FILTERS.AVAILABILITY, valString);
     } else {
-      params.delete("availability");
+      params.delete(FILTERS.AVAILABILITY);
     }
-    params.set("page", "1");
+    params.set(FILTERS.PAGE, "1");
     replace(`${pathname}?${params.toString()}`);
   };
 
@@ -66,7 +67,7 @@ const AvailabilityFilter = () => {
                 }}
               />
               <Label
-                className="cursor-pointer font-normal"
+                className="cursor-pointer font-normal mt-[1px]"
                 htmlFor={item.value}
               >
                 {item.label}
