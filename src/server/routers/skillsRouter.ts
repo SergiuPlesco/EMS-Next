@@ -47,7 +47,7 @@ export const skillsRouter = router({
               message: `${input.name} is already added.`,
             };
           } else {
-            throw error;
+            throw "error";
           }
         }
       }
