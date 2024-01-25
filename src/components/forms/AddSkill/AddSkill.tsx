@@ -43,19 +43,9 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
   };
 
   const handleOnSelect = (name: string) => {
-    const skillAdded = userSkills?.find((skill) => skill.name === name);
-
-    if (name === "" || skillAdded) {
-      toast({
-        description: `${name} is already in your list.`,
-        variant: "destructive",
-      });
-      return;
-    }
-
     addSkillToUser.mutate(
       {
-        name,
+        name: name.trim(),
       },
       {
         onSuccess: (newUserSkill) => {
@@ -66,6 +56,16 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
           });
           setSelectedSkill(newUserSkill);
           utils.users.getLoggedUser.invalidate();
+        },
+        onError: (error) => {
+          toast({
+            description:
+              error?.data?.zodError?.fieldErrors &&
+              error?.data?.zodError?.fieldErrors.name
+                ? error.data?.zodError?.fieldErrors.name[0]
+                : error.message,
+            variant: "destructive",
+          });
         },
       }
     );
@@ -90,7 +90,7 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
     };
 
   const handleCreateNewSkill = () => {
-    if (!inputValue) {
+    if (!inputValue.trim()) {
       toast({
         description:
           "Please enter a skill name in the input field before saving.",
@@ -118,7 +118,7 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
               error?.data?.zodError?.fieldErrors &&
               error?.data?.zodError?.fieldErrors.name
                 ? error.data?.zodError?.fieldErrors.name[0]
-                : "Something went wrong.",
+                : error.message,
             variant: "destructive",
           });
         },
