@@ -232,36 +232,63 @@ export const userRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const skill = await ctx.prisma.skill.findUnique({
-        where: {
-          name: input.name,
-        },
-      });
-      if (!skill) return;
-      const userSkill = await ctx.prisma.userSkill.create({
-        data: {
-          skillId: skill?.id,
-          userId: ctx.session?.user.id,
-          name: skill?.name,
-          rating: 5,
-        },
-      });
+      try {
+        const skill = await ctx.prisma.skill.findUnique({
+          where: {
+            name: input.name,
+          },
+        });
 
-      await ctx.prisma.user.update({
-        where: {
-          // @ts-ignore
-          id: ctx.session?.user.id,
-        },
-        data: {
-          skills: {
-            connect: {
-              id: userSkill?.id,
+        if (!skill) {
+          throw new Error(`${input.name} does not exist.`);
+        }
+
+        const existingUserSkill = await ctx.prisma.userSkill.findFirst({
+          where: {
+            userId: ctx.session?.user.id,
+            skillId: skill.id,
+          },
+        });
+
+        if (existingUserSkill) {
+          throw new Error(`${input.name} is already added.`);
+        }
+
+        const userSkill = await ctx.prisma.userSkill.create({
+          data: {
+            skillId: skill.id,
+            userId: ctx.session?.user.id,
+            name: skill.name,
+            rating: 5,
+          },
+        });
+
+        await ctx.prisma.user.update({
+          where: {
+            id: ctx.session?.user.id,
+          },
+          data: {
+            skills: {
+              connect: {
+                id: userSkill.id,
+              },
             },
           },
-        },
-      });
+        });
 
-      return userSkill;
+        return userSkill;
+      } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          // Prisma error handling
+          if (error.code === "P2002") {
+            throw new Error(`${input.name} is already added.`);
+          } else {
+            throw error;
+          }
+        } else {
+          throw error;
+        }
+      }
     }),
   deleteSkill: procedure
     .input(z.object({ userSkillId: z.number() }))
