@@ -42,7 +42,7 @@ const EmployeesPage = () => {
                 </DrawerDescription>
               </DrawerHeader>
               <ScrollArea
-                className="px-6 py-4 border rounded m-1 h-[600px]"
+                className="px-6 py-4 border rounded m-1 h-[400px]"
                 type="always"
               >
                 <FiltersAccordion />
