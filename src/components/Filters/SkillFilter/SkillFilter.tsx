@@ -54,7 +54,7 @@ const SkillFilter = () => {
                     }}
                   />
                   <Label
-                    className="cursor-pointer font-normal mt-[1px]"
+                    className="cursor-pointer font-normal mt-[1px] leading-4"
                     htmlFor={item.name}
                   >
                     {item.name}
