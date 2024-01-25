@@ -14,3 +14,7 @@ export const AVAILABILITY_BORDER_COLORS = {
   PARTTIME: "rgba(255, 140, 0, 1)",
   NOTAVAILABLE: "rgba(255, 10, 30, 0.8)",
 };
+
+export const ENDPOINTS = {
+  employees: "/employees",
+};
