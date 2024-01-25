@@ -16,26 +16,41 @@ export const skillsRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const newSkill = await ctx.prisma.skill.upsert({
-        where: {
-          name: input.name,
-        },
-        create: {
-          name: input.name,
-        },
-        update: {},
-      });
-      const newUserSkill = await ctx.prisma.userSkill.create({
-        data: {
-          skillId: newSkill.id,
-          userId: ctx.session?.user.id as string,
-          rating: 5,
-          name: newSkill.name,
-          createdAt: new Date(),
-        },
-      });
+      try {
+        const newSkill = await ctx.prisma.skill.upsert({
+          where: {
+            name: input.name.trim(),
+          },
+          create: {
+            name: input.name.trim(),
+          },
+          update: {},
+        });
+        const newUserSkill = await ctx.prisma.userSkill.create({
+          data: {
+            skillId: newSkill.id,
+            userId: ctx.session?.user.id as string,
+            rating: 5,
+            name: newSkill.name,
+            createdAt: new Date(),
+          },
+        });
 
-      return newUserSkill;
+        return newUserSkill;
+      } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          // "Unique constraint failed on the {constraint}"
+          // https://www.prisma.io/docs/orm/reference/error-reference#p2002
+          if (error.code === "P2002") {
+            throw {
+              ...error,
+              message: `${input.name} is already added.`,
+            };
+          } else {
+            throw error;
+          }
+        }
+      }
     }),
   all: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.skill.findMany({

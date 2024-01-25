@@ -67,9 +67,11 @@ model UserSkill {
   userId    String?
   rating    Int
   name      String
-  skill     Skill?    @relation(fields: [skillId], references: [id])
+  skill     Skill?   @relation(fields: [skillId], references: [id])
   user      User?    @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
+
+  @@unique([name, userId, skillId])
 }
 
 model Position {
