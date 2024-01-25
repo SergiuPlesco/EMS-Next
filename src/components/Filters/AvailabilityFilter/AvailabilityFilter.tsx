@@ -2,10 +2,15 @@ import { useRouter } from "next/router";
 import React from "react";
 
 import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import {
   Availability,
   AvailabilityEnum,
 } from "@/typeDefinitions/typeDefinitions";
+
+import { FILTERS } from "../utils/constans";
+import FilterItemWrapper from "../utils/FilterItemWrapper";
+import FilterWrapper from "../utils/FilterWrapper";
 
 const AvailabilityItems = [
   {
@@ -34,25 +39,23 @@ const AvailabilityFilter = () => {
     const params = new URLSearchParams(Object(query));
 
     if (valString) {
-      params.set("availability", valString);
+      params.set(FILTERS.AVAILABILITY, valString);
     } else {
-      params.delete("availability");
+      params.delete(FILTERS.AVAILABILITY);
     }
-    params.set("page", "1");
+    params.set(FILTERS.PAGE, "1");
     replace(`${pathname}?${params.toString()}`);
   };
 
   return (
-    <div>
-      <h2 className="font-medium mb-4">Availability</h2>
+    <FilterWrapper>
       <div>
         {AvailabilityItems.map((item) => {
           return (
-            <div
-              key={item.value}
-              className="flex justify-start gap-2 items-center"
-            >
+            <FilterItemWrapper key={item.value}>
               <Checkbox
+                className="data-[state=checked]:bg-[--smart-purple] border-[--smart-purple]"
+                id={item.value}
                 value={item.value}
                 checked={availability.includes(item.value)}
                 onCheckedChange={(checked) => {
@@ -63,12 +66,17 @@ const AvailabilityFilter = () => {
                       );
                 }}
               />
-              <p>{item.label}</p>
-            </div>
+              <Label
+                className="cursor-pointer font-normal mt-[1px] leading-4"
+                htmlFor={item.value}
+              >
+                {item.label}
+              </Label>
+            </FilterItemWrapper>
           );
         })}
       </div>
-    </div>
+    </FilterWrapper>
   );
 };
 

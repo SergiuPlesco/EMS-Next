@@ -2,9 +2,10 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useDebouncedCallback } from "use-debounce";
 
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
+import { FILTERS } from "../utils/constans";
 
-const SearchByString = () => {
+const SearchFilter = () => {
   const { query, pathname, replace } = useRouter();
   const searchQuery = query.search || "";
 
@@ -12,12 +13,12 @@ const SearchByString = () => {
     const params = new URLSearchParams(Object(query));
 
     if (value) {
-      params.set("search", value);
+      params.set(FILTERS.SEARCH, value);
     } else {
-      params.delete("search");
+      params.delete(FILTERS.SEARCH);
     }
 
-    params.set("page", "1");
+    params.set(FILTERS.PAGE, "1");
     replace(`${pathname}?${params.toString()}`);
   }, 300);
 
@@ -32,11 +33,11 @@ const SearchByString = () => {
         placeholder="Search by name, skill, project, position..."
         defaultValue={searchQuery as string}
         onChange={handleSetSearchQuery}
-        className="text-base"
+        className="text-base py-6"
         maxLength={50}
       />
     </div>
   );
 };
 
-export default SearchByString;
+export default SearchFilter;

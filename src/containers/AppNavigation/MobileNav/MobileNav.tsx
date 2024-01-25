@@ -18,13 +18,13 @@ const MobileNav = () => {
   }, [router.pathname]);
 
   return (
-    <div className="">
+    <div>
       <button className="flex items-center" onClick={handleMenu}>
         {open ? <AiOutlineClose size={24} /> : <AiOutlineMenu size={24} />}
       </button>
       {open ? (
         <div className="absolute top-[59px] right-0 left-0 bottom-0 h-screen bg-white z-10">
-          <div className="">
+          <div>
             <NavigationList />
           </div>
         </div>
