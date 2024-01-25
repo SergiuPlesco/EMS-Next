@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 
 import { cn } from "@/lib/utils";
 
+import { FILTERS } from "../Filters/utils/constans";
+
 interface IProps {
   totalPages: number;
 }
@@ -30,7 +32,7 @@ export default function PaginationSection(props: IProps) {
 
   const createPageURL = (pageNumber: number | string) => {
     const params = new URLSearchParams(Object(query));
-    params.set("page", pageNumber.toString());
+    params.set(FILTERS.PAGE, pageNumber.toString());
     return `${pathname}?${params.toString()}`;
   };
 

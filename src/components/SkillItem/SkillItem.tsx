@@ -1,5 +1,7 @@
 import { UserSkill } from "@prisma/client";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 
 import {
@@ -30,8 +32,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/components/ui/use-toast";
+import { ENDPOINTS } from "@/constants/common";
 import { trpc } from "@/utils/trpc";
 
+import { FILTERS } from "../Filters/utils/constans";
 import EditRating from "../forms/EditRating/EditRating";
 
 type SkillItemProps = { skill: UserSkill; isLoggedUser: boolean };
@@ -39,6 +43,7 @@ type SkillItemProps = { skill: UserSkill; isLoggedUser: boolean };
 const SkillItem = ({ skill, isLoggedUser }: SkillItemProps) => {
   const { toast } = useToast();
   const utils = trpc.useContext();
+  const { query } = useRouter();
 
   const deleteSkillFromUser = trpc.users.deleteSkill.useMutation();
 
@@ -60,10 +65,22 @@ const SkillItem = ({ skill, isLoggedUser }: SkillItemProps) => {
     );
   };
 
+  const createSkillURL = (skillName: string) => {
+    const params = new URLSearchParams(Object(query));
+    params.set(FILTERS.PAGE, "1");
+    params.set(FILTERS.SKILLS, skillName);
+    return `${ENDPOINTS.employees}/?${params.toString()}`;
+  };
+
   return (
     <div className="flex flex-col mb-4">
       <div className="flex justify-between items-start gap-2 mb-2">
-        <p className="font-medium text-slate-700">{skill.name}</p>
+        <Link
+          href={createSkillURL(skill.name)}
+          className="font-medium text-slate-700"
+        >
+          {skill.name}
+        </Link>
 
         <div className="flex items-center gap-4">
           <p className="font-medium text-slate-700">{skill.rating}%</p>

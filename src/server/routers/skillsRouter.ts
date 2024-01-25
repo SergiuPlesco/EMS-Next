@@ -38,7 +38,11 @@ export const skillsRouter = router({
       return newUserSkill;
     }),
   all: procedure.query(async ({ ctx }) => {
-    return await ctx.prisma.skill.findMany();
+    return await ctx.prisma.skill.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    });
   }),
   search: procedure
     .input(
