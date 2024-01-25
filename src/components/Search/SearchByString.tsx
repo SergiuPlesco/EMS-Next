@@ -32,7 +32,7 @@ const SearchByString = () => {
         placeholder="Search by name, skill, project, position..."
         defaultValue={searchQuery as string}
         onChange={handleSetSearchQuery}
-        className="text-base"
+        className="text-base py-6"
         maxLength={50}
       />
     </div>

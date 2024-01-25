@@ -2,12 +2,13 @@ import { useRouter } from "next/router";
 import React from "react";
 
 import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import {
   Availability,
   AvailabilityEnum,
 } from "@/typeDefinitions/typeDefinitions";
 
-import FilterTitle from "../utils/FilterTitle";
+import FilterItemWrapper from "../utils/FilterItemWrapper";
 import FilterWrapper from "../utils/FilterWrapper";
 
 const AvailabilityItems = [
@@ -47,15 +48,12 @@ const AvailabilityFilter = () => {
 
   return (
     <FilterWrapper>
-      <FilterTitle title="Availability" />
       <div>
         {AvailabilityItems.map((item) => {
           return (
-            <div
-              key={item.value}
-              className="flex justify-start gap-2 items-center mb-1"
-            >
+            <FilterItemWrapper key={item.value}>
               <Checkbox
+                className="data-[state=checked]:bg-[--smart-purple] border-[--smart-purple]"
                 id={item.value}
                 value={item.value}
                 checked={availability.includes(item.value)}
@@ -67,8 +65,13 @@ const AvailabilityFilter = () => {
                       );
                 }}
               />
-              <label htmlFor={item.value}>{item.label}</label>
-            </div>
+              <Label
+                className="cursor-pointer font-normal"
+                htmlFor={item.value}
+              >
+                {item.label}
+              </Label>
+            </FilterItemWrapper>
           );
         })}
       </div>

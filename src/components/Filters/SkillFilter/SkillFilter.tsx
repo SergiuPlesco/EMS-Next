@@ -2,10 +2,11 @@ import { useRouter } from "next/router";
 import React from "react";
 
 import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { trpc } from "@/utils/trpc";
 
-import FilterTitle from "../utils/FilterTitle";
+import FilterItemWrapper from "../utils/FilterItemWrapper";
 import FilterWrapper from "../utils/FilterWrapper";
 
 const SkillFilter = () => {
@@ -32,19 +33,15 @@ const SkillFilter = () => {
 
   return (
     <FilterWrapper>
-      <FilterTitle title="Skills" />
       <div>
-        <ScrollArea className="w-full h-[225px]">
+        <ScrollArea className="w-full h-[325px]" type="always">
           {skillsList &&
             skillsList.map((item) => {
               return (
-                <div
-                  key={item.id}
-                  className="flex justify-start gap-2 items-start mb-1 cursor-pointer"
-                >
+                <FilterItemWrapper key={item.id}>
                   <Checkbox
+                    className="data-[state=checked]:bg-[--smart-purple] border-[--smart-purple]"
                     id={item.name}
-                    className="mt-1"
                     value={item.name}
                     checked={skills.includes(item.name)}
                     onCheckedChange={(checked) => {
@@ -55,8 +52,13 @@ const SkillFilter = () => {
                           );
                     }}
                   />
-                  <label htmlFor={item.name}>{item.name}</label>
-                </div>
+                  <Label
+                    className="cursor-pointer font-normal"
+                    htmlFor={item.name}
+                  >
+                    {item.name}
+                  </Label>
+                </FilterItemWrapper>
               );
             })}
         </ScrollArea>
