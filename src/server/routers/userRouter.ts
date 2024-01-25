@@ -49,6 +49,7 @@ export const userRouter = router({
         page: z.number(),
         perPage: z.number(),
         availability: z.array(z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"])),
+        skills: z.array(z.string()),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -60,6 +61,15 @@ export const userRouter = router({
               ? input.availability
               : ["FULLTIME", "PARTTIME", "NOTAVAILABLE"],
         },
+        ...(input.skills.length > 0 && {
+          skills: {
+            some: {
+              name: {
+                in: input.skills,
+              },
+            },
+          },
+        }),
         OR: [
           {
             name: {
