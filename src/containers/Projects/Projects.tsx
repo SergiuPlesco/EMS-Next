@@ -1,7 +1,10 @@
 import { DotsVerticalIcon, PlusIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 
+import { FILTERS } from "@/components/Filters/utils/constans";
 import CreateProject from "@/components/forms/CreateProject/CreateProject";
 import EditProject from "@/components/forms/EditProject/EditProject";
 import Modal from "@/components/Modal/Modal";
@@ -32,6 +35,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
+import { ENDPOINTS } from "@/constants/common";
 import { TUser } from "@/typeDefinitions/typeDefinitions";
 import { trpc } from "@/utils/trpc";
 
@@ -43,7 +47,8 @@ const Projects = ({
   isLoggedUser: boolean;
 }) => {
   const { toast } = useToast();
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
+  const { query } = useRouter();
 
   const userProjects = user.projects;
   const deleteProject = trpc.users.deleteProject.useMutation();
@@ -59,7 +64,7 @@ const Projects = ({
             description: `${name} has been removed.`,
             variant: "success",
           });
-          utils.projects.getAll.invalidate();
+          utils.projects.all.invalidate();
           utils.users.getLoggedUser.invalidate();
         },
         onError(error) {
@@ -70,6 +75,12 @@ const Projects = ({
         },
       }
     );
+  };
+  const createProjectURL = (projectName: string) => {
+    const params = new URLSearchParams(Object(query));
+    params.set(FILTERS.PAGE, "1");
+    params.set(FILTERS.PROJECTS, projectName);
+    return `${ENDPOINTS.employees}/?${params.toString()}`;
   };
 
   if (!userProjects) {
@@ -106,9 +117,12 @@ const Projects = ({
                 className="flex flex-col gap-2 border rounded p-4 shadow-md"
               >
                 <div className="flex justify-between items-start">
-                  <p className="text-lg font-medium text-[--smart-purple]">
+                  <Link
+                    href={createProjectURL(project.name)}
+                    className="text-lg font-medium text-[--smart-purple]"
+                  >
                     {project.name}
-                  </p>
+                  </Link>
                   {isLoggedUser && (
                     <Dialog>
                       <AlertDialog>

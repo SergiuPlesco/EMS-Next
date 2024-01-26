@@ -20,12 +20,13 @@ const SearchFilter = () => {
 
     params.set(FILTERS.PAGE, "1");
     replace(`${pathname}?${params.toString()}`);
-  }, 300);
+  }, 500);
 
   const handleSetSearchQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
     debounced(value);
   };
+
   return (
     <div>
       <Input
@@ -33,7 +34,7 @@ const SearchFilter = () => {
         placeholder="Search by name, skill, project, position..."
         defaultValue={searchQuery as string}
         onChange={handleSetSearchQuery}
-        className="text-base py-6"
+        className="text-base h-12"
         maxLength={50}
       />
     </div>

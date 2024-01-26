@@ -5,4 +5,5 @@ export const FILTERS = {
   AVAILABILITY: "availability",
   POSITIONS: "positions",
   MANAGERS: "managers",
+  PROJECTS: "projects",
 };

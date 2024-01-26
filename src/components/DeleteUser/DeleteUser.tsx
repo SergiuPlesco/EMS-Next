@@ -21,7 +21,7 @@ import { useToast } from "../ui/use-toast";
 const DeleteUser = ({ user }: { user: TUser }) => {
   const { toast } = useToast();
   const router = useRouter();
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const deleteUser = trpc.users.deleteById.useMutation();
 
   const handleDeleteUser = () => {

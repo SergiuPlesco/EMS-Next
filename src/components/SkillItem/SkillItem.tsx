@@ -42,7 +42,7 @@ type SkillItemProps = { skill: UserSkill; isLoggedUser: boolean };
 
 const SkillItem = ({ skill, isLoggedUser }: SkillItemProps) => {
   const { toast } = useToast();
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const { query } = useRouter();
 
   const deleteSkillFromUser = trpc.users.deleteSkill.useMutation();
