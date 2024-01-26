@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
+import ManagersFilter from "../ManagersFilter/ManagersFilter";
 import ProjectsFilter from "../ProjectsFilter/ProjectsFilter";
 import { FILTERS } from "../utils/constans";
 
@@ -35,6 +36,14 @@ const FiltersAccordion = () => {
         </AccordionTrigger>
         <AccordionContent>
           <ProjectsFilter />
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value={FILTERS.MANAGERS}>
+        <AccordionTrigger className="capitalize">
+          {FILTERS.MANAGERS}
+        </AccordionTrigger>
+        <AccordionContent>
+          <ManagersFilter />
         </AccordionContent>
       </AccordionItem>
     </Accordion>

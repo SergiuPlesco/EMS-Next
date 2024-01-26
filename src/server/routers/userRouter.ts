@@ -65,6 +65,14 @@ export const userRouter = router({
               "Project name cannot be longer than 50 characters. Please shorten the project name and try again."
             )
         ),
+        managers: z.array(
+          z
+            .string()
+            .max(
+              50,
+              "Manager name cannot be longer than 50 characters. Please shorten the manager name and try again."
+            )
+        ),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -90,6 +98,15 @@ export const userRouter = router({
             some: {
               name: {
                 in: input.projects,
+              },
+            },
+          },
+        }),
+        ...(input.managers.length > 0 && {
+          managers: {
+            some: {
+              name: {
+                in: input.managers,
               },
             },
           },
@@ -549,6 +566,15 @@ export const userRouter = router({
       },
       select: {
         managers: true,
+      },
+    });
+  }),
+  getAllManagers: procedure.query(async ({ ctx }) => {
+    return await ctx.prisma.user.findMany({
+      where: {
+        members: {
+          some: {},
+        },
       },
     });
   }),
