@@ -41,7 +41,7 @@ const FormSchema = z.object({
 
 const UserInfoForm = ({ user }: { user: User }) => {
   const { toast } = useToast();
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     values: {

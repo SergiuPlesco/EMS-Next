@@ -10,23 +10,23 @@ import { FILTERS } from "../utils/constans";
 import FilterItemWrapper from "../utils/FilterItemWrapper";
 import FilterWrapper from "../utils/FilterWrapper";
 
-const SkillFilter = () => {
+const ProjectsFilter = () => {
   const { query, pathname, replace } = useRouter();
-  const skills =
-    typeof query?.skills === "string"
-      ? (query?.skills?.split(",") as string[])
+  const projects =
+    typeof query?.projects === "string"
+      ? (query?.projects?.split(",") as string[])
       : [];
 
-  const { data: skillsList } = trpc.skills.all.useQuery();
+  const { data: projectsList } = trpc.projects.all.useQuery();
 
-  const handleSetSkills = (val: string[]) => {
+  const handleSetFilter = (val: string[]) => {
     const valString = val.join(",");
     const params = new URLSearchParams(Object(query));
 
     if (valString) {
-      params.set(FILTERS.SKILLS, valString);
+      params.set(FILTERS.PROJECTS, valString);
     } else {
-      params.delete(FILTERS.SKILLS);
+      params.delete(FILTERS.PROJECTS);
     }
     params.set(FILTERS.PAGE, "1");
     replace(`${pathname}?${params.toString()}`);
@@ -36,20 +36,20 @@ const SkillFilter = () => {
     <FilterWrapper>
       <div>
         <ScrollArea className="w-full h-[225px] md:h-[325px]" type="always">
-          {skillsList &&
-            skillsList.map((item) => {
+          {projectsList &&
+            projectsList.map((item) => {
               return (
                 <FilterItemWrapper key={item.id}>
                   <Checkbox
                     className="data-[state=checked]:bg-[--smart-purple] border-[--smart-purple]"
                     id={item.name}
                     value={item.name}
-                    checked={skills.includes(item.name)}
+                    checked={projects.includes(item.name)}
                     onCheckedChange={(checked) => {
                       return checked
-                        ? handleSetSkills([...skills, item.name])
-                        : handleSetSkills(
-                            skills?.filter((value) => value !== item.name)
+                        ? handleSetFilter([...projects, item.name])
+                        : handleSetFilter(
+                            projects?.filter((value) => value !== item.name)
                           );
                     }}
                   />
@@ -68,4 +68,4 @@ const SkillFilter = () => {
   );
 };
 
-export default SkillFilter;
+export default ProjectsFilter;

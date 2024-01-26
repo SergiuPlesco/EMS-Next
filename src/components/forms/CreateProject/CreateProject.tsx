@@ -63,7 +63,7 @@ const FormSchema = z
 
 export default function CreateProject() {
   const { toast } = useToast();
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const createProject = trpc.projects.create.useMutation();
   const [searchQuery, setSearchQuery] = useState("");
   const { data: searchList } = trpc.projects.search.useQuery({
@@ -97,7 +97,7 @@ export default function CreateProject() {
             description: `${data.name} has been added.`,
             variant: "success",
           });
-          utils.projects.getAll.invalidate();
+          utils.projects.all.invalidate();
           utils.users.getLoggedUser.invalidate();
           form.reset();
         },

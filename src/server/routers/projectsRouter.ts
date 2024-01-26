@@ -62,7 +62,7 @@ export const projectRouter = router({
         }
       }
     }),
-  getAll: procedure.query(async ({ ctx }) => {
+  all: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.userProject.findMany({
       where: {
         user: {

@@ -17,7 +17,7 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
     UserSkill | null | undefined
   >(null);
 
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
 
   const { data: searchList } = trpc.skills.search.useQuery({
     searchQuery: inputValue,
