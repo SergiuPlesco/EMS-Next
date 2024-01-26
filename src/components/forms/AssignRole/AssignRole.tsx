@@ -30,7 +30,7 @@ const FormSchema = z.object({
 const AssignRole = ({ user }: { user: TUser }) => {
   const { toast } = useToast();
   const roleValues = Object.values(USER_ROLES);
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const assignRole = trpc.users.assignRole.useMutation();
 
   const form = useForm<z.infer<typeof FormSchema>>({

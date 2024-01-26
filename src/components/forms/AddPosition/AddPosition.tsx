@@ -9,7 +9,7 @@ import { trpc } from "@/utils/trpc";
 
 const AddPosition = ({ userPositions }: { userPositions: UserPosition[] }) => {
   const { toast } = useToast();
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const [inputValue, setInputValue] = useState("");
 
   const { data: searchList } = trpc.positions.search.useQuery({

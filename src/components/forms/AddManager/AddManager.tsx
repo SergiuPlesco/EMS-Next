@@ -7,7 +7,7 @@ import { trpc } from "@/utils/trpc";
 
 const AddManager = () => {
   const { toast } = useToast();
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
   const [inputValue, setInputValue] = useState("");
   const [managers, setManagers] = useState<{ id: string; name: string }[]>([]);
 

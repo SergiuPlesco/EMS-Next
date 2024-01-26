@@ -57,6 +57,14 @@ export const userRouter = router({
               "Skill name cannot be longer than 50 characters. Please shorten the skill name and try again."
             )
         ),
+        projects: z.array(
+          z
+            .string()
+            .max(
+              50,
+              "Project name cannot be longer than 50 characters. Please shorten the project name and try again."
+            )
+        ),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -73,6 +81,15 @@ export const userRouter = router({
             some: {
               name: {
                 in: input.skills,
+              },
+            },
+          },
+        }),
+        ...(input.projects.length > 0 && {
+          projects: {
+            some: {
+              name: {
+                in: input.projects,
               },
             },
           },
