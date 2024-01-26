@@ -2,13 +2,13 @@ import { Availability } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
 
+import { USERS_PER_PAGE } from "@/constants/common";
 import { trpc } from "@/utils/trpc";
 
 import Pagination from "../Pagination/Pagination";
 import UserCard from "../UserCard/UserCard";
 import UserSkeleton from "../UserSkeleton/UserSkeleton";
 import NoData from "./NoData";
-const USERS_PER_PAGE = 24;
 
 const UsersList = () => {
   const { query } = useRouter();

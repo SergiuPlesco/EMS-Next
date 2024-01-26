@@ -35,7 +35,7 @@ const SkillFilter = () => {
   return (
     <FilterWrapper>
       <div>
-        <ScrollArea className="w-full h-[325px]" type="always">
+        <ScrollArea className="w-full h-[225px]" type="always">
           {skillsList &&
             skillsList.map((item) => {
               return (
