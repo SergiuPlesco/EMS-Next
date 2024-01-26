@@ -10,7 +10,6 @@ const FiltersReset = () => {
   const resetAllFilters = () => {
     const params = new URLSearchParams(Object(query));
 
-    params.delete(FILTERS.SEARCH);
     params.delete(FILTERS.AVAILABILITY);
     params.delete(FILTERS.SKILLS);
 

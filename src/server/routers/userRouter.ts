@@ -49,7 +49,14 @@ export const userRouter = router({
         page: z.number(),
         perPage: z.number(),
         availability: z.array(z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"])),
-        skills: z.array(z.string()),
+        skills: z.array(
+          z
+            .string()
+            .max(
+              50,
+              "Skill name cannot be longer than 50 characters. Please shorten the skill name and try again."
+            )
+        ),
       })
     )
     .query(async ({ ctx, input }) => {
