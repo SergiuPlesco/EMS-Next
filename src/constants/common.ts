@@ -18,3 +18,5 @@ export const AVAILABILITY_BORDER_COLORS = {
 export const ENDPOINTS = {
   employees: "/employees",
 };
+
+export const USERS_PER_PAGE = 24;
