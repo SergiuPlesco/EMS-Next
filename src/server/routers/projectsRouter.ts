@@ -63,14 +63,9 @@ export const projectRouter = router({
       }
     }),
   all: procedure.query(async ({ ctx }) => {
-    return await ctx.prisma.userProject.findMany({
-      where: {
-        user: {
-          id: ctx.session?.user.id,
-        },
-      },
+    return await ctx.prisma.project.findMany({
       orderBy: {
-        startDate: "desc",
+        name: "asc",
       },
     });
   }),
