@@ -56,7 +56,7 @@ const FormSchema = z
 
 export default function EditProject({ projectId }: { projectId: number }) {
   const { toast } = useToast();
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
 
   const { data: userProject } = trpc.projects.getById.useQuery({
     id: projectId,
@@ -93,7 +93,7 @@ export default function EditProject({ projectId }: { projectId: number }) {
             description: `${data.name} has been updated.`,
             variant: "success",
           });
-          utils.projects.getAll.invalidate();
+          utils.projects.all.invalidate();
           utils.projects.getById.invalidate();
           utils.users.getLoggedUser.invalidate();
           form.reset();

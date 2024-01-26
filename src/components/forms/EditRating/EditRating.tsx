@@ -37,7 +37,7 @@ const EditRating = ({
   });
 
   const { toast } = useToast();
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
 
   const updateSkillRating = trpc.users.updateRating.useMutation();
 

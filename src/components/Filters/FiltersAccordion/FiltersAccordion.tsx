@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
+import ProjectsFilter from "../ProjectsFilter/ProjectsFilter";
 import { FILTERS } from "../utils/constans";
 
 const FiltersAccordion = () => {
@@ -26,6 +27,14 @@ const FiltersAccordion = () => {
         </AccordionTrigger>
         <AccordionContent>
           <SkillFilter />
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value={FILTERS.PROJECTS}>
+        <AccordionTrigger className="capitalize">
+          {FILTERS.PROJECTS}
+        </AccordionTrigger>
+        <AccordionContent>
+          <ProjectsFilter />
         </AccordionContent>
       </AccordionItem>
     </Accordion>
