@@ -25,7 +25,7 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
 
   const createSkill = trpc.skills.create.useMutation();
   const deleteSkillFromUser = trpc.users.deleteSkill.useMutation();
-  const addSkillToUser = trpc.users.addSKill.useMutation();
+  const addSkillToUser = trpc.users.addSkill.useMutation();
 
   const selectTag = (tag: UserSkill) => () => {
     setSelectedSkill((prevSelectedSkill) =>

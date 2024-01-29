@@ -31,7 +31,7 @@ const AssignRole = ({ user }: { user: TUser }) => {
   const { toast } = useToast();
   const roleValues = Object.values(USER_ROLES);
   const utils = trpc.useUtils();
-  const assignRole = trpc.users.assignRole.useMutation();
+  const assignRole = trpc.admin.assignRole.useMutation();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),

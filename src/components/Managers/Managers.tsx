@@ -48,19 +48,23 @@ const Managers = ({
             <AddManager managers={managers} />
           </Modal>
         )}
-        {!isLoggedUser && hasManagers && (
+        {!isLoggedUser && (
           <p className="text-[12px] font-normal text-slate-500">Managers</p>
         )}
       </div>
-      {managers?.length > 0 &&
+      {hasManagers ? (
         managers.map((manager) => {
-          if (!manager.name) return null;
           return (
             <Link key={manager.id} href={createManagerURL(manager.id)}>
               <h3 className="font-semibold text-slate-600">{manager.name}</h3>
             </Link>
           );
-        })}
+        })
+      ) : (
+        <p className="font-semibold text-slate-300">
+          Managers have not been added yet
+        </p>
+      )}
     </div>
   );
 };
