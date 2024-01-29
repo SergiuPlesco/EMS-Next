@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/accordion";
 
 import ManagersFilter from "../ManagersFilter/ManagersFilter";
+import PositionsFilter from "../PositionsFilter/PositionsFilter";
 import ProjectsFilter from "../ProjectsFilter/ProjectsFilter";
 import { FILTERS } from "../utils/constans";
 
@@ -28,6 +29,14 @@ const FiltersAccordion = () => {
         </AccordionTrigger>
         <AccordionContent>
           <SkillFilter />
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value={FILTERS.POSITIONS}>
+        <AccordionTrigger className="capitalize">
+          Employees with positions
+        </AccordionTrigger>
+        <AccordionContent>
+          <PositionsFilter />
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value={FILTERS.PROJECTS}>
