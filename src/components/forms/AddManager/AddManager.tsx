@@ -1,21 +1,19 @@
-import { useEffect, useState } from "react";
+import { User } from "@prisma/client";
+import { useState } from "react";
 
 import Autocomplete from "@/components/Autocomplete/Autocomplete";
 import TagList from "@/components/TagList/TagList";
 import { useToast } from "@/components/ui/use-toast";
 import { trpc } from "@/utils/trpc";
 
-const AddManager = () => {
+const AddManager = ({ managers }: { managers: User[] }) => {
   const { toast } = useToast();
   const utils = trpc.useUtils();
   const [inputValue, setInputValue] = useState("");
-  const [managers, setManagers] = useState<{ id: string; name: string }[]>([]);
 
   const { data: searchList } = trpc.users.search.useQuery({
     searchQuery: inputValue,
   });
-  const { data: userManagers, isLoading: isUserManagersLoading } =
-    trpc.users.getManagers.useQuery();
 
   const addManager = trpc.users.addManager.useMutation();
   const deleteManager = trpc.users.deleteManager.useMutation();
@@ -32,7 +30,7 @@ const AddManager = () => {
             description: `${name} added as your manager.`,
             variant: "success",
           });
-          utils.users.getManagers.invalidate();
+
           utils.users.getLoggedUser.invalidate();
         },
         onError: () => {
@@ -52,18 +50,11 @@ const AddManager = () => {
 
   const handleDeleteFromUser =
     (id: number | string, name: string | null) => () => {
-      const elementToDeleteIndex = managers.findIndex(
-        (position) => position.id === id
-      );
-      if (elementToDeleteIndex !== -1) {
-        const newManagers = [...managers];
-        newManagers.splice(elementToDeleteIndex, 1);
-        setManagers(newManagers);
-      }
       if (name == null) return;
+
       deleteManager.mutate(
         {
-          name,
+          userId: id.toString(),
         },
         {
           onSuccess: () => {
@@ -71,23 +62,16 @@ const AddManager = () => {
               description: `${name} has been deleted from your managers.`,
               variant: "success",
             });
-            utils.users.getManagers.invalidate();
+
             utils.users.getLoggedUser.invalidate();
           },
         }
       );
     };
 
-  useEffect(() => {
-    !isUserManagersLoading &&
-      userManagers &&
-      setManagers(
-        userManagers.managers.map((user) => ({
-          id: user.id,
-          name: user.name!,
-        }))
-      );
-  }, [isUserManagersLoading, userManagers]);
+  if (!managers) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col items-start gap-4 border rounded p-2 mb-6 shadow-md">

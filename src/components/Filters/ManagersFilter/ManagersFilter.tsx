@@ -11,23 +11,23 @@ import { FILTERS } from "../utils/constans";
 import FilterItemWrapper from "../utils/FilterItemWrapper";
 import FilterWrapper from "../utils/FilterWrapper";
 
-const ProjectsFilter = () => {
+const ManagersFilter = () => {
   const { query, pathname, replace } = useRouter();
-  const projects =
-    typeof query?.projects === "string"
-      ? (query?.projects?.split(",") as string[])
+  const managers =
+    typeof query?.managers === "string"
+      ? (query?.managers?.split(",") as string[])
       : [];
 
-  const { data: projectsList } = trpc.projects.all.useQuery();
+  const { data: managersList } = trpc.users.getAllManagers.useQuery();
 
   const handleSetFilter = (val: string[]) => {
     const valString = val.join(",");
     const params = new URLSearchParams(Object(query));
 
     if (valString) {
-      params.set(FILTERS.PROJECTS, valString);
+      params.set(FILTERS.MANAGERS, valString);
     } else {
-      params.delete(FILTERS.PROJECTS);
+      params.delete(FILTERS.MANAGERS);
     }
     params.set(FILTERS.PAGE, "1");
     replace(`${pathname}?${params.toString()}`);
@@ -39,26 +39,28 @@ const ProjectsFilter = () => {
         <ScrollArea
           className={cn(
             "w-full ",
-            projectsList && projectsList?.length >= 10
+            managersList && managersList?.length >= 10
               ? "h-[225px] md:h-[325px]"
               : "h-full"
           )}
           type="always"
         >
-          {projectsList &&
-            projectsList.map((item) => {
+          {managersList &&
+            managersList.map((item) => {
+              if (!item.name) return null;
               return (
                 <FilterItemWrapper key={item.id}>
                   <Checkbox
                     className="data-[state=checked]:bg-[--smart-purple] border-[--smart-purple]"
                     id={item.name}
-                    value={item.name}
-                    checked={projects.includes(item.name)}
+                    value={item.name || ""}
+                    checked={managers.includes(item.name)}
                     onCheckedChange={(checked) => {
+                      if (!item.name) return;
                       return checked
-                        ? handleSetFilter([...projects, item.name])
+                        ? handleSetFilter([...managers, item.name])
                         : handleSetFilter(
-                            projects?.filter((value) => value !== item.name)
+                            managers?.filter((value) => value !== item.name)
                           );
                     }}
                   />
@@ -77,4 +79,4 @@ const ProjectsFilter = () => {
   );
 };
 
-export default ProjectsFilter;
+export default ManagersFilter;

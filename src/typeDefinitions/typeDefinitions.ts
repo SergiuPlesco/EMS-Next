@@ -15,6 +15,7 @@ export type TUser = User & {
   skills: UserSkill[];
   projects: UserProject[];
   managers: User[];
+  members: User[];
 };
 
 export const AvailabilityEnum = [
