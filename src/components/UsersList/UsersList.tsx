@@ -33,6 +33,11 @@ const UsersList = () => {
       ? (query?.managers?.split(",") as string[])
       : [];
 
+  const positions =
+    typeof query?.positions === "string"
+      ? (query?.positions?.split(",") as string[])
+      : [];
+
   const { data, isLoading, isFetching } = trpc.users.filter.useQuery({
     searchQuery: searchQuery as string,
     page: currentPage,
@@ -41,6 +46,7 @@ const UsersList = () => {
     skills,
     projects,
     managers,
+    positions,
   });
 
   if (isLoading || isFetching) {
