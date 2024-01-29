@@ -1,23 +1,21 @@
 import { procedure } from "../../trpc";
 
 export const all = procedure.query(async ({ ctx }) => {
-  const members = await ctx.prisma.user.findMany({
-    include: {
-      members: true,
-    },
-  });
   const managers = await ctx.prisma.user.findMany({
-    include: {
-      managers: true,
+    where: {
+      managers: {
+        some: {}, // Check if there is at least one manager assigned
+      },
     },
   });
   const positions = await ctx.prisma.position.findMany();
   const projects = await ctx.prisma.project.findMany();
+  const skills = await ctx.prisma.skill.findMany();
 
   return {
-    hasMembers: members,
     hasManagers: Boolean(managers.length),
     hasPositions: Boolean(positions.length),
     hasProjects: Boolean(projects.length),
+    hasSkills: Boolean(skills.length),
   };
 });
