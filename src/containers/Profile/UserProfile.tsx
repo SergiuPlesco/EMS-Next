@@ -39,14 +39,15 @@ const UserProfile = () => {
       <section
         className={cn(
           "grid grid-cols-1 gap-4 mb-10",
-          user.members.length > 0 ? "md:grid-cols-4" : "md:grid-cols-3",
-          user.managers.length > 0 ? "md:grid-cols-4" : "md:grid-cols-3"
+          user.members.length > 0 && user.managers.length > 0
+            ? "md:grid-cols-4"
+            : "md:grid-cols-3"
         )}
       >
         <Positions user={user} isLoggedUser={false} />
-        {user.managers.length > 0 && (
-          <Managers user={user} isLoggedUser={false} />
-        )}
+
+        <Managers user={user} isLoggedUser={false} />
+
         {user?.members.length > 0 && (
           <Members user={user} isLoggedUser={false} />
         )}

@@ -53,7 +53,7 @@ const Members = ({
           <p className="text-[12px] font-normal text-slate-500">Members</p>
         )}
       </div>
-      {members?.length > 0 &&
+      {hasManagers ? (
         members.map((manager) => {
           if (!manager.name) return null;
           return (
@@ -61,7 +61,12 @@ const Members = ({
               <h3 className="font-semibold text-slate-600">{manager.name}</h3>
             </Link>
           );
-        })}
+        })
+      ) : (
+        <p className="font-semibold text-slate-300">
+          Members have not been added yet
+        </p>
+      )}
     </div>
   );
 };
