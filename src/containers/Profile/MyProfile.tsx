@@ -1,9 +1,11 @@
 import Identity from "@/components/Identity/Identity";
 import Managers from "@/components/Managers/Managers";
+import Members from "@/components/Members/Members";
 import Positions from "@/components/Positions/Positions";
 import Spinner from "@/components/Spinner/Spinner";
 import Projects from "@/containers/Projects/Projects";
 import Skills from "@/containers/Skills/Skills";
+import { cn } from "@/lib/utils";
 import { trpc } from "@/utils/trpc";
 
 const MyProfile = () => {
@@ -19,9 +21,17 @@ const MyProfile = () => {
       <section className="flex justify-between">
         <Identity user={loggedUser} isLoggedUser={true} />
       </section>
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+      <section
+        className={cn(
+          "grid grid-cols-1 gap-4 mb-10",
+          loggedUser.members.length > 0 ? "md:grid-cols-4" : "md:grid-cols-3"
+        )}
+      >
         <Positions user={loggedUser} isLoggedUser={true} />
         <Managers user={loggedUser} isLoggedUser={true} />
+        {loggedUser.members.length > 0 && (
+          <Members user={loggedUser} isLoggedUser={true} />
+        )}
       </section>
       <section className="mb-10">
         <Skills user={loggedUser} isLoggedUser={true} />

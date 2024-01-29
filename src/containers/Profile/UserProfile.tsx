@@ -2,12 +2,14 @@ import { useRouter } from "next/router";
 
 import Identity from "@/components/Identity/Identity";
 import Managers from "@/components/Managers/Managers";
+import Members from "@/components/Members/Members";
 import Positions from "@/components/Positions/Positions";
 import Spinner from "@/components/Spinner/Spinner";
 import UserManager from "@/components/UserManager/UserManager";
 import { USER_ROLES } from "@/constants/common";
 import Projects from "@/containers/Projects/Projects";
 import Skills from "@/containers/Skills/Skills";
+import { cn } from "@/lib/utils";
 import { trpc } from "@/utils/trpc";
 
 const UserProfile = () => {
@@ -34,9 +36,20 @@ const UserProfile = () => {
       <section className="flex justify-between">
         <Identity user={user} isLoggedUser={false} />
       </section>
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+      <section
+        className={cn(
+          "grid grid-cols-1 gap-4 mb-10",
+          user.members.length > 0 ? "md:grid-cols-4" : "md:grid-cols-3",
+          user.managers.length > 0 ? "md:grid-cols-4" : "md:grid-cols-3"
+        )}
+      >
         <Positions user={user} isLoggedUser={false} />
-        <Managers user={user} isLoggedUser={false} />
+        {user.managers.length > 0 && (
+          <Managers user={user} isLoggedUser={false} />
+        )}
+        {user?.members.length > 0 && (
+          <Members user={user} isLoggedUser={false} />
+        )}
         {loggedUser?.role === USER_ROLES.ADMIN && <UserManager user={user} />}
       </section>
       <section className="mb-10">

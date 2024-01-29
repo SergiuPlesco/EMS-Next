@@ -8,31 +8,31 @@ import { TUser } from "@/typeDefinitions/typeDefinitions";
 
 import Modal from "../Modal/Modal";
 
-const Managers = ({
+const Members = ({
   user,
   isLoggedUser,
 }: {
   user: TUser;
   isLoggedUser: boolean;
 }) => {
-  const managers = user.managers;
+  const members = user.members;
 
-  const createManagerURL = (managerId: string) => {
-    return `${ENDPOINTS.employees}/${managerId}`;
+  const createMemberURL = (memberId: string) => {
+    return `${ENDPOINTS.employees}/${memberId}`;
   };
 
-  if (!managers) {
+  if (!members) {
     return null;
   }
 
-  const hasManagers = managers.length > 0;
+  const hasManagers = members.length > 0;
 
   return (
     <div className="flex flex-col">
       <div className="flex justify-start items-center gap-2">
         {isLoggedUser && (
           <Modal
-            title="Edit managers"
+            title="Edit members"
             description="Search and add your project manager/s"
             icon={
               hasManagers ? (
@@ -42,21 +42,22 @@ const Managers = ({
               )
             }
             text={
-              <p className="text-[12px] font-normal text-slate-500">Managers</p>
+              <p className="text-[12px] font-normal text-slate-500">Members</p>
             }
           >
-            <AddManager managers={managers} />
+            {/* managers prop should be members here */}
+            <AddManager managers={members} />
           </Modal>
         )}
         {!isLoggedUser && hasManagers && (
-          <p className="text-[12px] font-normal text-slate-500">Managers</p>
+          <p className="text-[12px] font-normal text-slate-500">Members</p>
         )}
       </div>
-      {managers?.length > 0 &&
-        managers.map((manager) => {
+      {members?.length > 0 &&
+        members.map((manager) => {
           if (!manager.name) return null;
           return (
-            <Link key={manager.id} href={createManagerURL(manager.id)}>
+            <Link key={manager.id} href={createMemberURL(manager.id)}>
               <h3 className="font-semibold text-slate-600">{manager.name}</h3>
             </Link>
           );
@@ -65,4 +66,4 @@ const Managers = ({
   );
 };
 
-export default Managers;
+export default Members;

@@ -4,6 +4,7 @@ import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 import { trpc } from "@/utils/trpc";
 
 import { FILTERS } from "../utils/constans";
@@ -35,7 +36,15 @@ const ManagersFilter = () => {
   return (
     <FilterWrapper>
       <div>
-        <ScrollArea className="w-full h-[225px] md:h-[225px]" type="always">
+        <ScrollArea
+          className={cn(
+            "w-full ",
+            managersList && managersList?.length >= 10
+              ? "h-[225px] md:h-[325px]"
+              : "h-full"
+          )}
+          type="always"
+        >
           {managersList &&
             managersList.map((item) => {
               if (!item.name) return null;

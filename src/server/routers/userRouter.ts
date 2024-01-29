@@ -187,6 +187,7 @@ export const userRouter = router({
         include: {
           positions: true,
           managers: true,
+          members: true,
           skills: {
             orderBy: {
               createdAt: "asc",
@@ -208,6 +209,7 @@ export const userRouter = router({
       include: {
         positions: true,
         managers: true,
+        members: true,
         skills: {
           orderBy: {
             createdAt: "asc",
@@ -251,16 +253,16 @@ export const userRouter = router({
       });
       return phone;
     }),
-  getPhone: procedure.query(async ({ ctx }) => {
-    return await ctx.prisma.user.findUnique({
-      where: {
-        id: ctx.session?.user.id,
-      },
-      select: {
-        phone: true,
-      },
-    });
-  }),
+  // getPhone: procedure.query(async ({ ctx }) => {
+  //   return await ctx.prisma.user.findUnique({
+  //     where: {
+  //       id: ctx.session?.user.id,
+  //     },
+  //     select: {
+  //       phone: true,
+  //     },
+  //   });
+  // }),
   addSKill: procedure
     .input(
       z.object({
@@ -483,25 +485,25 @@ export const userRouter = router({
       }
       return deletedPosition;
     }),
-  getPositions: procedure.query(async ({ ctx }) => {
-    const user = await ctx.prisma.user.findFirst({
-      where: {
-        id: ctx.session?.user?.id,
-      },
-    });
+  // getPositions: procedure.query(async ({ ctx }) => {
+  //   const user = await ctx.prisma.user.findFirst({
+  //     where: {
+  //       id: ctx.session?.user?.id,
+  //     },
+  //   });
 
-    if (!user) throw new Error("This user does not exist");
+  //   if (!user) throw new Error("This user does not exist");
 
-    const allUserPositions = await ctx.prisma.userPosition.findMany({
-      where: {
-        user: {
-          id: user.id,
-        },
-      },
-    });
+  //   const allUserPositions = await ctx.prisma.userPosition.findMany({
+  //     where: {
+  //       user: {
+  //         id: user.id,
+  //       },
+  //     },
+  //   });
 
-    return allUserPositions;
-  }),
+  //   return allUserPositions;
+  // }),
   addManager: procedure
     .input(
       z.object({
@@ -536,11 +538,11 @@ export const userRouter = router({
       });
     }),
   deleteManager: procedure
-    .input(z.object({ name: z.string() }))
+    .input(z.object({ userId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.user.findFirst({
         where: {
-          name: input.name,
+          id: input.userId,
         },
       });
 
@@ -559,7 +561,7 @@ export const userRouter = router({
         },
       });
     }),
-  getManagers: procedure.query(async ({ ctx }) => {
+  getUserManagers: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.user.findFirst({
       where: {
         id: ctx.session?.user.id,
