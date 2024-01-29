@@ -6,4 +6,5 @@ export const FILTERS = {
   POSITIONS: "positions",
   MANAGERS: "managers",
   PROJECTS: "projects",
+  MEMBERS: "members",
 };

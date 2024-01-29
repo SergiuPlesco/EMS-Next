@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
+import ManagersFilter from "../ManagersFilter/ManagersFilter";
 import ProjectsFilter from "../ProjectsFilter/ProjectsFilter";
 import { FILTERS } from "../utils/constans";
 
@@ -14,8 +15,8 @@ const FiltersAccordion = () => {
   return (
     <Accordion defaultValue={FILTERS.AVAILABILITY} type="single" collapsible>
       <AccordionItem value={FILTERS.AVAILABILITY}>
-        <AccordionTrigger className="capitalize">
-          {FILTERS.AVAILABILITY}
+        <AccordionTrigger className="capitalize text-left">
+          Employees available for new projects
         </AccordionTrigger>
         <AccordionContent>
           <AvailabilityFilter />
@@ -23,7 +24,7 @@ const FiltersAccordion = () => {
       </AccordionItem>
       <AccordionItem value={FILTERS.SKILLS}>
         <AccordionTrigger className="capitalize">
-          {FILTERS.SKILLS}
+          Employees with skills
         </AccordionTrigger>
         <AccordionContent>
           <SkillFilter />
@@ -31,10 +32,18 @@ const FiltersAccordion = () => {
       </AccordionItem>
       <AccordionItem value={FILTERS.PROJECTS}>
         <AccordionTrigger className="capitalize">
-          {FILTERS.PROJECTS}
+          Project&apos;s Team
         </AccordionTrigger>
         <AccordionContent>
           <ProjectsFilter />
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value={FILTERS.MANAGERS}>
+        <AccordionTrigger className="capitalize">
+          Manager&apos;s Team
+        </AccordionTrigger>
+        <AccordionContent>
+          <ManagersFilter />
         </AccordionContent>
       </AccordionItem>
     </Accordion>

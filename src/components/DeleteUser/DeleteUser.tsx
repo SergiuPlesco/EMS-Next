@@ -22,7 +22,7 @@ const DeleteUser = ({ user }: { user: TUser }) => {
   const { toast } = useToast();
   const router = useRouter();
   const utils = trpc.useUtils();
-  const deleteUser = trpc.users.deleteById.useMutation();
+  const deleteUser = trpc.admin.deleteUserById.useMutation();
 
   const handleDeleteUser = () => {
     deleteUser.mutate(
