@@ -11,8 +11,11 @@ import ManagersFilter from "../ManagersFilter/ManagersFilter";
 import PositionsFilter from "../PositionsFilter/PositionsFilter";
 import ProjectsFilter from "../ProjectsFilter/ProjectsFilter";
 import { FILTERS } from "../utils/constans";
+// import { trpc } from "@/utils/trpc";
 
 const FiltersAccordion = () => {
+  // const { data: filters } = trpc.filters.all.useQuery();
+
   return (
     <Accordion defaultValue={FILTERS.AVAILABILITY} type="single" collapsible>
       <AccordionItem value={FILTERS.AVAILABILITY}>

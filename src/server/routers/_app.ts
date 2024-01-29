@@ -1,9 +1,10 @@
 import { router } from "../trpc";
 import { adminRouter } from "./adminRouter";
+import { filtersRouter } from "./filters/router";
 import { positionsRouter } from "./positionsRouter";
 import { projectRouter } from "./projectsRouter";
 import { skillsRouter } from "./skillsRouter";
-import { userRouter } from "./useRouter/userRouter";
+import { userRouter } from "./userRouter/userRouter";
 
 export const appRouter = router({
   users: userRouter,
@@ -11,7 +12,7 @@ export const appRouter = router({
   positions: positionsRouter,
   projects: projectRouter,
   admin: adminRouter,
+  filters: filtersRouter,
 });
 
-// export type definition of API
 export type AppRouter = typeof appRouter;
