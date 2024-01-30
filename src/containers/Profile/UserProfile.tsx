@@ -39,18 +39,14 @@ const UserProfile = () => {
       <section
         className={cn(
           "grid grid-cols-1 gap-4 mb-10",
-          user.members.length > 0 && user.managers.length > 0
+          loggedUser?.role === USER_ROLES.ADMIN
             ? "md:grid-cols-4"
             : "md:grid-cols-3"
         )}
       >
         <Positions user={user} isLoggedUser={false} />
-
         <Managers user={user} isLoggedUser={false} />
-
-        {user?.members.length > 0 && (
-          <Members user={user} isLoggedUser={false} />
-        )}
+        <Members user={user} isLoggedUser={false} />
         {loggedUser?.role === USER_ROLES.ADMIN && <UserManager user={user} />}
       </section>
       <section className="mb-10">
