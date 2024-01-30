@@ -13,6 +13,8 @@ const FiltersReset = () => {
     params.delete(FILTERS.AVAILABILITY);
     params.delete(FILTERS.SKILLS);
     params.delete(FILTERS.PROJECTS);
+    params.delete(FILTERS.MANAGERS);
+    params.delete(FILTERS.POSITIONS);
 
     replace(`${pathname}?${params.toString()}`);
   };

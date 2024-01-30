@@ -6,7 +6,7 @@ import TagList from "@/components/TagList/TagList";
 import { useToast } from "@/components/ui/use-toast";
 import { trpc } from "@/utils/trpc";
 
-const AddManager = ({ managers }: { managers: User[] }) => {
+const AddTeamMember = ({ teamMembers }: { teamMembers: User[] }) => {
   const { toast } = useToast();
   const utils = trpc.useUtils();
   const [inputValue, setInputValue] = useState("");
@@ -15,11 +15,11 @@ const AddManager = ({ managers }: { managers: User[] }) => {
     searchQuery: inputValue,
   });
 
-  const addManager = trpc.users.addManager.useMutation();
-  const deleteManager = trpc.users.deleteManager.useMutation();
+  const addTeamMember = trpc.users.addTeamMember.useMutation();
+  const deleteTeamMember = trpc.users.deleteTeamMember.useMutation();
 
   const handleOnSelect = (name: string) => {
-    addManager.mutate(
+    addTeamMember.mutate(
       {
         name,
       },
@@ -27,7 +27,7 @@ const AddManager = ({ managers }: { managers: User[] }) => {
         onSuccess: () => {
           setInputValue("");
           toast({
-            description: `${name} added as your manager.`,
+            description: `${name} added as your team member.`,
             variant: "success",
           });
 
@@ -35,7 +35,7 @@ const AddManager = ({ managers }: { managers: User[] }) => {
         },
         onError: () => {
           toast({
-            description: "Error occured when adding a manager.",
+            description: "Error occured when adding a team member.",
             variant: "destructive",
           });
         },
@@ -52,14 +52,14 @@ const AddManager = ({ managers }: { managers: User[] }) => {
     (id: number | string, name: string | null) => () => {
       if (name == null) return;
 
-      deleteManager.mutate(
+      deleteTeamMember.mutate(
         {
           userId: id.toString(),
         },
         {
           onSuccess: () => {
             toast({
-              description: `${name} has been deleted from your managers.`,
+              description: `${name} has been deleted from your team.`,
               variant: "success",
             });
 
@@ -69,13 +69,13 @@ const AddManager = ({ managers }: { managers: User[] }) => {
       );
     };
 
-  if (!managers) {
+  if (!teamMembers) {
     return null;
   }
 
   return (
     <div className="flex flex-col items-start gap-4 border rounded p-2 mb-6 shadow-md">
-      <TagList options={managers} onDelete={handleDeleteFromUser} />
+      <TagList options={teamMembers} onDelete={handleDeleteFromUser} />
       <Autocomplete
         value={inputValue}
         onChange={handleOnChange}
@@ -86,4 +86,4 @@ const AddManager = ({ managers }: { managers: User[] }) => {
   );
 };
 
-export default AddManager;
+export default AddTeamMember;

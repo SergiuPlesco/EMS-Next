@@ -44,19 +44,23 @@ const Positions = ({
             <AddPosition userPositions={userPositions} />
           </Modal>
         )}
-        {!isLoggedUser && hasUserPositions && (
+        {!isLoggedUser && (
           <p className="text-[12px] font-normal text-slate-500">Positions</p>
         )}
       </div>
-      {hasUserPositions
-        ? userPositions.map((position) => {
-            return (
-              <h3 key={position.id} className="font-semibold text-slate-600">
-                {position.name}
-              </h3>
-            );
-          })
-        : null}
+      {hasUserPositions ? (
+        userPositions.map((position) => {
+          return (
+            <h3 key={position.id} className="font-semibold text-slate-600">
+              {position.name}
+            </h3>
+          );
+        })
+      ) : (
+        <p className="font-semibold text-slate-300">
+          Positions have not been added yet
+        </p>
+      )}
     </div>
   );
 };

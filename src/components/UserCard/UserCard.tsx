@@ -10,10 +10,10 @@ const UserCard = ({ user }: { user: TUser }) => {
     <div className="rounded-md shadow-md border w-full ">
       <Link
         href={`/employees/${user.id}`}
-        className="flex flex-col items-start justify-start"
+        className="flex flex-col items-start justify-start h-full"
       >
         <div
-          className={`border-[3px] m-3 rounded-full `}
+          className={`border-[3px] m-3 rounded-full`}
           style={{
             borderColor: AVAILABILITY_BORDER_COLORS[user.availability],
           }}
