@@ -1,6 +1,7 @@
 import { SlidersIcon } from "lucide-react";
 
 import FiltersAccordion from "@/components/Filters/FiltersAccordion/FiltersAccordion";
+import FiltersList from "@/components/Filters/FiltersList/FiltersList";
 import FiltersReset from "@/components/Filters/FiltersReset/FiltersReset";
 import SearchFilter from "@/components/Filters/SearchFilter/SearchFilter";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,9 @@ const EmployeesPage = () => {
     <div className="flex flex-col gap-10">
       <div>
         <SearchFilter />
+      </div>
+      <div>
+        <FiltersList />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-[minmax(0,200px),1fr] gap-10">
         <div className="flex justify-end md:hidden">
@@ -56,7 +60,6 @@ const EmployeesPage = () => {
             </DrawerContent>
           </Drawer>
         </div>
-
         <div className="hidden md:block">
           <FiltersReset />
           <FiltersAccordion />
