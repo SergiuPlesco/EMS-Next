@@ -50,7 +50,7 @@ const Members = ({
             <AddTeamMember teamMembers={members} />
           </Modal>
         )}
-        {!isLoggedUser && hasMembers && (
+        {!isLoggedUser && (
           <p className="text-[12px] font-normal text-slate-500">Team Members</p>
         )}
       </div>
