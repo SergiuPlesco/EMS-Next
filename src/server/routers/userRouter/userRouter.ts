@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { procedure, router } from "../../trpc";
 import { addSkill, deleteSkill } from "./userSkillsProcedures";
+import { addTeamMember, deleteTeamMember } from "./userTeamMembersProcedure";
 
 export const userRouter = router({
   all: procedure.query(async ({ ctx }) => {
@@ -74,6 +75,14 @@ export const userRouter = router({
               "Manager name cannot be longer than 50 characters. Please shorten the manager name and try again."
             )
         ),
+        positions: z.array(
+          z
+            .string()
+            .max(
+              50,
+              "Position name cannot be longer than 50 characters. Please shorten the position name and try again."
+            )
+        ),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -108,6 +117,15 @@ export const userRouter = router({
             some: {
               name: {
                 in: input.managers,
+              },
+            },
+          },
+        }),
+        ...(input.positions.length > 0 && {
+          positions: {
+            some: {
+              name: {
+                in: input.positions,
               },
             },
           },
@@ -439,6 +457,8 @@ export const userRouter = router({
         },
       });
     }),
+  addTeamMember,
+  deleteTeamMember,
   getUserManagers: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.user.findFirst({
       where: {

@@ -1,9 +1,13 @@
 import { Pencil1Icon, PlusIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 
 import AddPosition from "@/components/forms/AddPosition/AddPosition";
+import { ENDPOINTS } from "@/constants/common";
 import { TUser } from "@/typeDefinitions/typeDefinitions";
 
+import { FILTERS } from "../Filters/utils/constans";
 import Modal from "../Modal/Modal";
 
 const Positions = ({
@@ -13,7 +17,16 @@ const Positions = ({
   user: TUser;
   isLoggedUser: boolean;
 }) => {
+  const { query } = useRouter();
   const userPositions = user.positions;
+
+  const createPositionURL = (positionName: string) => {
+    const params = new URLSearchParams(Object(query));
+    params.set(FILTERS.PAGE, "1");
+    params.set(FILTERS.POSITIONS, positionName);
+    params.delete("id");
+    return `${ENDPOINTS.employees}/?${params.toString()}`;
+  };
 
   if (!userPositions) {
     return null;
@@ -51,9 +64,9 @@ const Positions = ({
       {hasUserPositions ? (
         userPositions.map((position) => {
           return (
-            <h3 key={position.id} className="font-semibold text-slate-600">
-              {position.name}
-            </h3>
+            <Link key={position.id} href={createPositionURL(position.name)}>
+              <h3 className="font-semibold text-slate-600">{position.name}</h3>
+            </Link>
           );
         })
       ) : (

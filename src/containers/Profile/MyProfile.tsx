@@ -15,23 +15,16 @@ const MyProfile = () => {
   if (isLoggedUserLoading || !loggedUser) {
     return <Spinner />;
   }
-
+  const isManager = loggedUser.members.length > 0;
   return (
     <div className="flex flex-col">
       <section className="flex justify-between">
         <Identity user={loggedUser} isLoggedUser={true} />
       </section>
-      <section
-        className={cn(
-          "grid grid-cols-1 gap-4 mb-10",
-          loggedUser.members.length > 0 ? "md:grid-cols-4" : "md:grid-cols-3"
-        )}
-      >
+      <section className={cn("grid grid-cols-1 gap-4 mb-10 md:grid-cols-3")}>
         <Positions user={loggedUser} isLoggedUser={true} />
         <Managers user={loggedUser} isLoggedUser={true} />
-        {loggedUser.members.length > 0 && (
-          <Members user={loggedUser} isLoggedUser={true} />
-        )}
+        {isManager && <Members user={loggedUser} isLoggedUser={true} />}
       </section>
       <section className="mb-10">
         <Skills user={loggedUser} isLoggedUser={true} />
