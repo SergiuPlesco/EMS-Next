@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { procedure, router } from "../../trpc";
 import { addSkill, deleteSkill } from "./userSkillsProcedures";
+import { addTeamMember, deleteTeamMember } from "./userTeamMembersProcedure";
 
 export const userRouter = router({
   all: procedure.query(async ({ ctx }) => {
@@ -456,6 +457,8 @@ export const userRouter = router({
         },
       });
     }),
+  addTeamMember,
+  deleteTeamMember,
   getUserManagers: procedure.query(async ({ ctx }) => {
     return await ctx.prisma.user.findFirst({
       where: {
