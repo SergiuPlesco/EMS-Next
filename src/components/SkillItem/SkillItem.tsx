@@ -69,6 +69,7 @@ const SkillItem = ({ skill, isLoggedUser }: SkillItemProps) => {
     const params = new URLSearchParams(Object(query));
     params.set(FILTERS.PAGE, "1");
     params.set(FILTERS.SKILLS, skillName);
+    params.delete("id");
     return `${ENDPOINTS.employees}/?${params.toString()}`;
   };
 

@@ -80,6 +80,7 @@ const Projects = ({
     const params = new URLSearchParams(Object(query));
     params.set(FILTERS.PAGE, "1");
     params.set(FILTERS.PROJECTS, projectName);
+    params.delete("id");
     return `${ENDPOINTS.employees}/?${params.toString()}`;
   };
 
