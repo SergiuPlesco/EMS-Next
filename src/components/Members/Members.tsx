@@ -42,14 +42,16 @@ const Members = ({
               )
             }
             text={
-              <p className="text-[12px] font-normal text-slate-500">Team</p>
+              <p className="text-[12px] font-normal text-slate-500">
+                Team Members
+              </p>
             }
           >
             <AddTeamMember teamMembers={members} />
           </Modal>
         )}
         {!isLoggedUser && hasMembers && (
-          <p className="text-[12px] font-normal text-slate-500">Team</p>
+          <p className="text-[12px] font-normal text-slate-500">Team Members</p>
         )}
       </div>
       {hasMembers ? (
