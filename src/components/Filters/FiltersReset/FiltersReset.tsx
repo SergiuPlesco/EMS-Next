@@ -20,6 +20,7 @@ const FiltersReset = ({
     params.delete(FILTERS.PROJECTS);
     params.delete(FILTERS.MANAGERS);
     params.delete(FILTERS.POSITIONS);
+    params.delete(FILTERS.KNOWLEDGE);
 
     replace(`${pathname}?${params.toString()}`);
   };

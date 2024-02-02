@@ -4,6 +4,7 @@ import React from "react";
 
 import { FILTERS } from "../utils/constans";
 import FilterList from "./FiltersList";
+import FilterListRange from "./FiltersListRange";
 
 const FiltersContainer = () => {
   const { query } = useRouter();
@@ -31,13 +32,18 @@ const FiltersContainer = () => {
     typeof query?.positions === "string"
       ? (query?.positions?.split(",") as string[])
       : [];
+  const knowledge =
+    typeof query?.knowledge === "string"
+      ? (query?.knowledge?.split(",") as string[])
+      : [];
 
   const hasSelectedFilters =
     Boolean(availability.length) ||
     Boolean(skills.length) ||
     Boolean(projects.length) ||
     Boolean(managers.length) ||
-    Boolean(positions.length);
+    Boolean(positions.length) ||
+    Boolean(knowledge.length);
 
   if (!hasSelectedFilters) {
     return null;
@@ -50,6 +56,7 @@ const FiltersContainer = () => {
       <FilterList filterName={FILTERS.POSITIONS} />
       <FilterList filterName={FILTERS.PROJECTS} />
       <FilterList filterName={FILTERS.MANAGERS} />
+      <FilterListRange filterName="knowledge" />
     </div>
   );
 };

@@ -46,13 +46,18 @@ const EmployeesPage = () => {
     typeof query?.positions === "string"
       ? (query?.positions?.split(",") as string[])
       : [];
+  const knowledge =
+    typeof query?.knowledge === "string"
+      ? (query?.knowledge?.split(",") as string[])
+      : [];
 
   const hasSelectedFilters =
     Boolean(availability.length) ||
     Boolean(skills.length) ||
     Boolean(projects.length) ||
     Boolean(managers.length) ||
-    Boolean(positions.length);
+    Boolean(positions.length) ||
+    Boolean(knowledge.length);
 
   return (
     <div className="flex flex-col gap-10">

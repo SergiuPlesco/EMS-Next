@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/accordion";
 import { trpc } from "@/utils/trpc";
 
+import KnowledgeFilter from "../KnowledgeFilter/KnowledgeFilter";
 import ManagersFilter from "../ManagersFilter/ManagersFilter";
 import PositionsFilter from "../PositionsFilter/PositionsFilter";
 import ProjectsFilter from "../ProjectsFilter/ProjectsFilter";
@@ -66,6 +67,15 @@ const FiltersAccordion = () => {
           </AccordionContent>
         </AccordionItem>
       )}
+
+      <AccordionItem value={FILTERS.KNOWLEDGE}>
+        <AccordionTrigger className="capitalize">
+          Skill knowledge level
+        </AccordionTrigger>
+        <AccordionContent>
+          <KnowledgeFilter />
+        </AccordionContent>
+      </AccordionItem>
     </Accordion>
   );
 };
