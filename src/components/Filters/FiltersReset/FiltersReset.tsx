@@ -2,10 +2,15 @@ import { useRouter } from "next/router";
 import React from "react";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 import { FILTERS } from "../utils/constans";
 
-const FiltersReset = () => {
+const FiltersReset = ({
+  className,
+}: {
+  className?: React.ComponentProps<"button">["className"];
+}) => {
   const { query, pathname, replace } = useRouter();
   const resetAllFilters = () => {
     const params = new URLSearchParams(Object(query));
@@ -21,10 +26,13 @@ const FiltersReset = () => {
   return (
     <Button
       variant="outline"
-      className="border-[--smart-purple] w-full text-[--smart-purple]"
+      className={cn(
+        "border-[--smart-purple] text-[--smart-purple] w-full",
+        className
+      )}
       onClick={resetAllFilters}
     >
-      Reset all filters
+      Clear all filters
     </Button>
   );
 };
