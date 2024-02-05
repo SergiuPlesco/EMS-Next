@@ -38,6 +38,11 @@ const UsersList = () => {
       ? (query?.positions?.split(",") as string[])
       : [];
 
+  const knowledgeRange =
+    typeof query?.knowledge === "string"
+      ? (query?.knowledge?.split(",").map(Number) as number[])
+      : [];
+
   const { data, isLoading, isFetching } = trpc.users.filter.useQuery({
     searchQuery: searchQuery as string,
     page: currentPage,
@@ -47,6 +52,7 @@ const UsersList = () => {
     projects,
     managers,
     positions,
+    knowledgeLevel: knowledgeRange,
   });
 
   if (isLoading || isFetching) {

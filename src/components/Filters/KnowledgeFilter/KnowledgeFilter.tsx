@@ -28,6 +28,16 @@ const KnowledgeFilter = () => {
 
   return (
     <FilterWrapper>
+      <p className="flex justify-between w-full mb-2">
+        <span>
+          <span className="text-[10px]">min:</span>
+          {knowledgeRange[0]}
+        </span>
+        <span>
+          <span className="text-[10px]">max:</span>
+          {knowledgeRange[1]}
+        </span>
+      </p>
       <Slider
         max={100}
         min={0}

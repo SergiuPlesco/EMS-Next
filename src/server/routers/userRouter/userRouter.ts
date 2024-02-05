@@ -83,6 +83,18 @@ export const userRouter = router({
               "Position name cannot be longer than 50 characters. Please shorten the position name and try again."
             )
         ),
+        knowledgeLevel: z
+          .array(z.number())
+          .refine(
+            (arr) =>
+              arr.length === 2
+                ? arr.every((num) => num >= 5 && num <= 100)
+                : arr.length === 0,
+            {
+              message:
+                "Array must contain exactly 2 numbers between 5 and 100, or be empty",
+            }
+          ),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -99,6 +111,10 @@ export const userRouter = router({
             some: {
               name: {
                 in: input.skills,
+              },
+              rating: {
+                gte: input.knowledgeLevel[0],
+                lte: input.knowledgeLevel[1],
               },
             },
           },
@@ -130,6 +146,7 @@ export const userRouter = router({
             },
           },
         }),
+
         OR: [
           {
             name: {
