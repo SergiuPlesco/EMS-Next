@@ -29,7 +29,7 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
 
   const selectTag = (tag: UserSkill) => () => {
     setSelectedSkill((prevSelectedSkill) =>
-      prevSelectedSkill?.id === tag.id ? null : tag
+      prevSelectedSkill?.id === tag.id ? null : tag,
     );
   };
 
@@ -67,7 +67,7 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
   const handleDeleteFromUser =
@@ -85,7 +85,7 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
             setSelectedSkill(null);
             utils.users.getLoggedUser.invalidate();
           },
-        }
+        },
       );
     };
 
@@ -122,7 +122,7 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -143,7 +143,7 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
       <div
         className={cn(
           "transition ease-in-out duration-300",
-          selectedSkill ? "opacity-100" : "opacity-0"
+          selectedSkill ? "opacity-100" : "opacity-0",
         )}
       >
         {selectedSkill ? (

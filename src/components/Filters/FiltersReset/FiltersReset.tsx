@@ -29,7 +29,7 @@ const FiltersReset = ({
       variant="outline"
       className={cn(
         "border-[--smart-purple] text-[--smart-purple] w-full",
-        className
+        className,
       )}
       onClick={resetAllFilters}
     >
