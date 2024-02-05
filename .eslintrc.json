@@ -1,11 +1,11 @@
 {
-  "extends": [
-    "next",
-    "next/core-web-vitals",
-    "prettier",
+  "extends": ["next", "next/core-web-vitals", "prettier"],
+  "plugins": [
+    "react",
+    "simple-import-sort",
+    "@typescript-eslint",
     "eslint-plugin-import"
   ],
-  "plugins": ["react", "simple-import-sort", "@typescript-eslint"],
   "rules": {
     "no-console": "error",
     "no-var": "error",
