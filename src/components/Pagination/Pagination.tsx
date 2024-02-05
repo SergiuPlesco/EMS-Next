@@ -76,7 +76,7 @@ export default function PaginationSection(props: IProps) {
         {totalPages > 1 && (
           <Link
             href={createPageURL(
-              currentPage < totalPages ? currentPage + 1 : totalPages
+              currentPage < totalPages ? currentPage + 1 : totalPages,
             )}
             className="py-1 px-2 rounded hover:bg-slate-100"
           >

@@ -18,7 +18,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
 };
 
 export const createContext = async (
-  opts: trpcNext.CreateNextContextOptions
+  opts: trpcNext.CreateNextContextOptions,
 ) => {
   const { req, res } = opts;
   const session = await getServerAuthSession({ req, res });

@@ -39,7 +39,7 @@ const FilterList = ({ filterName }: Props) => {
         return (
           <Badge
             key={item}
-            className="text-[--smart-purple] gap-2 bg-white hover:bg-slate-100 border-[--smart-purple]  rounded"
+            className="text-[--smart-purple] gap-2 bg-white hover:bg-slate-100 border-[--smart-purple] rounded"
           >
             {item}
             <Button

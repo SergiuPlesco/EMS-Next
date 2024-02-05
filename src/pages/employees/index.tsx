@@ -1,6 +1,4 @@
-import { Availability } from "@prisma/client";
 import { SlidersIcon } from "lucide-react";
-import { useRouter } from "next/router";
 
 import FiltersAccordion from "@/components/Filters/FiltersAccordion/FiltersAccordion";
 import FiltersListsContainer from "@/components/Filters/FiltersListsContainer/FiltersListsContainer";
@@ -19,40 +17,10 @@ import {
 } from "@/components/ui/drawer";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import UsersList from "@/components/UsersList/UsersList";
+import { useFiltersUrlState } from "@/hooks/useFiltersUrlState";
 
 const EmployeesPage = () => {
-  const { query } = useRouter();
-
-  const availability =
-    typeof query?.availability === "string"
-      ? (query?.availability?.split(",") as Availability[])
-      : [];
-  const skills =
-    typeof query?.skills === "string"
-      ? (query?.skills?.split(",") as string[])
-      : [];
-
-  const projects =
-    typeof query?.projects === "string"
-      ? (query?.projects?.split(",") as string[])
-      : [];
-
-  const managers =
-    typeof query?.managers === "string"
-      ? (query?.managers?.split(",") as string[])
-      : [];
-
-  const positions =
-    typeof query?.positions === "string"
-      ? (query?.positions?.split(",") as string[])
-      : [];
-
-  const hasSelectedFilters =
-    Boolean(availability.length) ||
-    Boolean(skills.length) ||
-    Boolean(projects.length) ||
-    Boolean(managers.length) ||
-    Boolean(positions.length);
+  const { hasSelectedFilters } = useFiltersUrlState();
 
   return (
     <div className="flex flex-col gap-10">

@@ -30,7 +30,7 @@ const TagList = ({
                         ? "bg-[--smart-green] text-slate-800"
                         : "",
                       isSelectable &&
-                        "transition hover:bg-[--smart-green] hover:text-slate-800 hover:cursor-pointer"
+                        "transition hover:bg-[--smart-green] hover:text-slate-800 hover:cursor-pointer",
                     )}
                     onClick={onSelect ? onSelect(option) : undefined}
                   >
