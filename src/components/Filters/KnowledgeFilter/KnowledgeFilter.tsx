@@ -18,9 +18,9 @@ const KnowledgeFilter = () => {
     const params = new URLSearchParams(Object(query));
 
     if (valString) {
-      params.set(FILTERS.KNOWLEDGE, valString);
+      params.set(FILTERS.RATING_LEVEL, valString);
     } else {
-      params.delete(FILTERS.KNOWLEDGE);
+      params.delete(FILTERS.RATING_LEVEL);
     }
     params.set(FILTERS.PAGE, "1");
     replace(`${pathname}?${params.toString()}`);

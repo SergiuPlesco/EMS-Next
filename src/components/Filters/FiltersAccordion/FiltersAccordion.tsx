@@ -6,10 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useFiltersUrlState } from "@/hooks/useFiltersUrlState";
 import { trpc } from "@/utils/trpc";
 
-import KnowledgeFilter from "../KnowledgeFilter/KnowledgeFilter";
 import ManagersFilter from "../ManagersFilter/ManagersFilter";
 import PositionsFilter from "../PositionsFilter/PositionsFilter";
 import ProjectsFilter from "../ProjectsFilter/ProjectsFilter";
@@ -17,7 +15,6 @@ import { FILTERS } from "../utils/constans";
 
 const FiltersAccordion = () => {
   const { data: filters } = trpc.filters.all.useQuery();
-  const { hasSelectedSkills } = useFiltersUrlState();
 
   return (
     <Accordion defaultValue={FILTERS.AVAILABILITY} type="single" collapsible>
@@ -30,26 +27,14 @@ const FiltersAccordion = () => {
         </AccordionContent>
       </AccordionItem>
       {filters?.hasSkills && (
-        <>
-          <AccordionItem value={FILTERS.SKILLS}>
-            <AccordionTrigger className="capitalize">
-              Employees with skills
-            </AccordionTrigger>
-            <AccordionContent>
-              <SkillFilter />
-            </AccordionContent>
-          </AccordionItem>
-          {hasSelectedSkills && (
-            <AccordionItem value={FILTERS.KNOWLEDGE}>
-              <AccordionTrigger className="capitalize">
-                Skill knowledge level
-              </AccordionTrigger>
-              <AccordionContent>
-                <KnowledgeFilter />
-              </AccordionContent>
-            </AccordionItem>
-          )}
-        </>
+        <AccordionItem value={FILTERS.SKILLS}>
+          <AccordionTrigger className="capitalize">
+            Employees with skills
+          </AccordionTrigger>
+          <AccordionContent>
+            <SkillFilter />
+          </AccordionContent>
+        </AccordionItem>
       )}
       {filters?.hasPositions && (
         <AccordionItem value={FILTERS.POSITIONS}>

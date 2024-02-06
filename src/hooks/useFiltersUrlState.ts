@@ -32,6 +32,11 @@ export const useFiltersUrlState = () => {
       ? (query?.knowledge?.split(",") as string[])
       : [];
 
+  const knowledgeRange =
+    typeof query?.knowledge === "string"
+      ? (query?.knowledge?.split(",").map(Number) as number[])
+      : [];
+
   const hasSelectedAvailability = Boolean(availability.length);
   const hasSelectedSkills = Boolean(skills.length);
   const hasSelectedProjects = Boolean(projects.length);
@@ -48,6 +53,12 @@ export const useFiltersUrlState = () => {
     hasSelectedKnowledge;
 
   return {
+    availability,
+    skills,
+    projects,
+    managers,
+    positions,
+    knowledgeRange,
     hasSelectedAvailability,
     hasSelectedSkills,
     hasSelectedProjects,
