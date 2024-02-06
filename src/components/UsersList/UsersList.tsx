@@ -14,15 +14,31 @@ const UsersList = () => {
   const { query } = useRouter();
   const searchQuery = query.search || "";
   const currentPage = Number(query.page) || 1;
-  const { availability, projects, managers, positions, knowledgeRange } =
-    useFiltersUrlState();
+  const {
+    availability,
+    projects,
+    managers,
+    positions,
+    knowledgeRange,
+    skills,
+  } = useFiltersUrlState();
+
+  const skillToFilter = skills.map((skill) => {
+    return {
+      name: skill.split(":")[0],
+      ratingRange: [
+        Number(skill.split(":")[1]) || 5,
+        Number(skill.split(":")[2] || 100),
+      ],
+    };
+  });
 
   const { data, isLoading, isFetching } = trpc.users.filter.useQuery({
     searchQuery: searchQuery as string,
     page: currentPage,
     perPage: USERS_PER_PAGE,
     availability,
-    skills: [],
+    skills: skillToFilter,
     projects,
     managers,
     positions,

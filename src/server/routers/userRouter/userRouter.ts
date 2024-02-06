@@ -110,28 +110,16 @@ export const userRouter = router({
               : ["FULLTIME", "PARTTIME", "NOTAVAILABLE"],
         },
         ...(input.skills.length > 0 && {
-          // skills: {
-          //   some: {
-          //     name: {
-          //       in: input.skills,
-          //     },
-          //     rating: {
-          //       gte: input.knowledgeLevel[0],
-          //       lte: input.knowledgeLevel[1],
-          //     },
-          //   },
-          // },
           skills: {
-            some: input.skills.map((skill) => ({
-              name: { in: [skill.name] },
-              rating:
-                skill.ratingRange.length === 2
-                  ? {
-                      gte: skill.ratingRange[0],
-                      lte: skill.ratingRange[1],
-                    }
-                  : undefined,
-            })),
+            some: {
+              name: {
+                in: input.skills.map((skill) => skill.name),
+              },
+              rating: {
+                gte: input.skills.map((skill) => skill.ratingRange[0])[0],
+                lte: input.skills.map((skill) => skill.ratingRange[1])[0],
+              },
+            },
           },
         }),
         ...(input.projects.length > 0 && {

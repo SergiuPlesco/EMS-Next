@@ -16,32 +16,46 @@ const SkillFilter = () => {
   const { query, pathname, replace } = useRouter();
   const { data: skillsList } = trpc.skills.all.useQuery();
 
-  const skills =
-    typeof query?.skills === "string"
-      ? (query?.skills
-          ?.split(",")
-          .map((skill) => skill.split(":")[0]) as string[])
-      : [];
+  // const skills =
+  //   typeof query?.skills === "string"
+  //     ? (query?.skills
+  //         ?.split(",")
+  //         .map((skill) => skill.split(":")[0]) as string[])
+  //     : [];
+  const skillsFull =
+    typeof query?.skills === "string" ? query.skills?.split(",") : [];
 
-  const knowledgeRange =
-    typeof query?.skills === "string"
-      ? (query?.skills?.split(":").map(Number) as number[])
-      : [5, 100];
+  // const ratingRange: number[] =
+  //   typeof query?.skills === "string"
+  //     ? (query?.skills
+  //         ?.split(",")
+  //         .map((skill) => {
+  //           const [skillMinLevel, skillMaxLevel] = skill
+  //             .split(":")
+  //             .slice(1)
+  //             .map(Number);
+  //           return [skillMinLevel || 5, skillMaxLevel || 100];
+  //         })
+  //         .flat() as number[])
+  //     : [5, 100];
+
+  // console.log(ratingRange);
 
   const handleSetSkills = (val: string[]) => {
-    const skillsWithRating =
-      typeof query?.skills === "string"
-        ? (query?.skills?.split(",") as string[])
-        : [];
+    // const skillsWithRating =
+    //   typeof query?.skills === "string"
+    //     ? (query?.skills?.split(",") as string[])
+    //     : [];
 
-    const filtered = val.filter((item) => {
-      return !skillsWithRating
-        .map((skill) => skill.split(":")[0])
-        .includes(item);
-    });
+    // const filtered = val.filter((item) => {
+    //   return !skillsWithRating
+    //     .map((skill) => skill.split(":")[0])
+    //     .includes(item);
+    // });
 
-    const concat = [...skillsWithRating, ...filtered];
-    const valString = concat.join(",");
+    // const concat = [...skillsWithRating, ...filtered];
+    // const valString = concat.join(",");
+    const valString = val.join(",");
     const params = new URLSearchParams(Object(query));
 
     if (valString) {
@@ -95,13 +109,15 @@ const SkillFilter = () => {
                       className="data-[state=checked]:bg-[--smart-purple] border-[--smart-purple]"
                       id={item.name}
                       value={item.name}
-                      checked={skills.includes(item.name)}
+                      checked={skillsFull
+                        .map((skill) => skill.split(":")[0])
+                        .includes(item.name)}
                       onCheckedChange={(checked) => {
                         checked
-                          ? handleSetSkills([...skills, item.name])
+                          ? handleSetSkills([...skillsFull, item.name])
                           : handleSetSkills(
-                              skills?.filter((value) => {
-                                return value !== item.name;
+                              skillsFull?.filter((value) => {
+                                return value.split(":")[0] !== item.name;
                               }),
                             );
                       }}
@@ -114,31 +130,38 @@ const SkillFilter = () => {
                     </Label>
                   </FilterItemWrapper>
 
-                  {skills.includes(item.name) && (
-                    <div className="mb-4 pb-4 shadow-md">
-                      <div className="flex flex-col">
-                        <p className="flex justify-between w-full mb-2">
-                          <span>
-                            <span className="text-[10px]">min:</span>
-                            {knowledgeRange[0]}
-                          </span>
-                          <span>
-                            <span className="text-[10px]">max:</span>
-                            {knowledgeRange[1]}
-                          </span>
-                        </p>
-                        <Slider
-                          max={100}
-                          min={5}
-                          step={5}
-                          value={knowledgeRange}
-                          onValueChange={(newValue) => {
-                            handleSetFilter(item.name, newValue);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  )}
+                  {skillsFull.map((skill) => {
+                    if (skill.split(":")[0] === item.name) {
+                      return (
+                        <div key={item.id} className="mb-4 pb-4 shadow-md">
+                          <div className="flex flex-col">
+                            <p className="flex justify-between w-full mb-2">
+                              <span>
+                                <span className="text-[10px]">min:</span>
+                                {skill.split(":")[1] || 5}
+                              </span>
+                              <span>
+                                <span className="text-[10px]">max:</span>
+                                {skill.split(":")[2] || 100}
+                              </span>
+                            </p>
+                            <Slider
+                              max={100}
+                              min={5}
+                              step={5}
+                              value={[
+                                Number(skill.split(":")[1]) || 5,
+                                Number(skill.split(":")[2]) || 100,
+                              ]}
+                              onValueChange={(newValue) => {
+                                handleSetFilter(item.name, newValue);
+                              }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    }
+                  })}
                 </div>
               );
             })}
