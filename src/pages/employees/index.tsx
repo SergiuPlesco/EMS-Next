@@ -17,10 +17,10 @@ import {
 } from "@/components/ui/drawer";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import UsersList from "@/components/UsersList/UsersList";
-import { useFiltersUrlState } from "@/hooks/useFiltersUrlState";
+import { useURLSearchParams } from "@/hooks/useURLSearchParams";
 
 const EmployeesPage = () => {
-  const { hasSelectedFilters } = useFiltersUrlState();
+  const { hasSelectedFilters } = useURLSearchParams();
 
   return (
     <div className="flex flex-col gap-10">
