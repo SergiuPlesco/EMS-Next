@@ -1,7 +1,7 @@
 import { Availability } from "@prisma/client";
 import { useRouter } from "next/router";
 
-export const useFiltersUrlState = () => {
+export const useURLSearchParams = () => {
   const { query } = useRouter();
 
   const availability =

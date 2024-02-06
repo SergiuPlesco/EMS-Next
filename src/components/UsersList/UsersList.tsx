@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import React from "react";
 
 import { USERS_PER_PAGE } from "@/constants/common";
-import { useFiltersUrlState } from "@/hooks/useFiltersUrlState";
+import { useURLSearchParams } from "@/hooks/useURLSearchParams";
 import { trpc } from "@/utils/trpc";
 
 import Pagination from "../Pagination/Pagination";
@@ -21,7 +21,7 @@ const UsersList = () => {
     positions,
     knowledgeRange,
     skills,
-  } = useFiltersUrlState();
+  } = useURLSearchParams();
 
   const skillToFilter = skills.map((skill) => {
     return {

@@ -1,12 +1,12 @@
 import React from "react";
 
-import { useFiltersUrlState } from "@/hooks/useFiltersUrlState";
+import { useURLSearchParams } from "@/hooks/useURLSearchParams";
 
 import { FILTERS } from "../utils/constans";
 import FilterList from "./FiltersList";
 
 const FiltersContainer = () => {
-  const { hasSelectedFilters } = useFiltersUrlState();
+  const { hasSelectedFilters } = useURLSearchParams();
 
   if (!hasSelectedFilters) {
     return null;

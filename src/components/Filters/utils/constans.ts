@@ -7,5 +7,5 @@ export const FILTERS = {
   MANAGERS: "managers",
   PROJECTS: "projects",
   MEMBERS: "members",
-  RATING_LEVEL: "range",
+  RATING_RANGE: "range",
 };
