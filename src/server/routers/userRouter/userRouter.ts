@@ -112,13 +112,15 @@ export const userRouter = router({
         ...(input.skills.length > 0 && {
           skills: {
             some: {
-              name: {
-                in: input.skills.map((skill) => skill.name),
-              },
-              rating: {
-                gte: input.skills.map((skill) => skill.ratingRange[0])[0],
-                lte: input.skills.map((skill) => skill.ratingRange[1])[0],
-              },
+              OR: input.skills.map((skill) => {
+                return {
+                  name: skill.name,
+                  rating: {
+                    gte: skill.ratingRange[0],
+                    lte: skill.ratingRange[1],
+                  },
+                };
+              }),
             },
           },
         }),
