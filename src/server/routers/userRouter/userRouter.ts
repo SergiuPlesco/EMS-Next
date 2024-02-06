@@ -86,7 +86,7 @@ export const userRouter = router({
               "Position name cannot be longer than 50 characters. Please shorten the position name and try again.",
             ),
         ),
-        knowledgeLevel: z
+        ratingRange: z
           .array(z.number())
           .refine(
             (arr) =>
