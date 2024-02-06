@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import React from "react";
 
 import { Button } from "@/components/ui/button";
+import { useURLSearchParams } from "@/hooks/useURLSearchParams";
 import { cn } from "@/lib/utils";
 
 import { FILTERS } from "../utils/constans";
@@ -12,6 +13,7 @@ const FiltersReset = ({
   className?: React.ComponentProps<"button">["className"];
 }) => {
   const { query, pathname, replace } = useRouter();
+  const { hasSelectedFilters } = useURLSearchParams();
   const resetAllFilters = () => {
     const params = new URLSearchParams(Object(query));
 
@@ -26,13 +28,14 @@ const FiltersReset = ({
   return (
     <Button
       variant="outline"
+      disabled={!hasSelectedFilters}
       className={cn(
-        "border-[--smart-purple] text-[--smart-purple] w-full",
+        "border-[--smart-purple] text-[--smart-purple] w-full disabled:opacity-100",
         className,
       )}
       onClick={resetAllFilters}
     >
-      Clear all filters
+      {hasSelectedFilters ? "Clear all filters" : "Filters"}
     </Button>
   );
 };
