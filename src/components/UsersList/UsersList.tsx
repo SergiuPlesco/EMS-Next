@@ -5,6 +5,11 @@ import { USERS_PER_PAGE } from "@/constants/common";
 import { useURLSearchParams } from "@/hooks/useURLSearchParams";
 import { trpc } from "@/utils/trpc";
 
+import {
+  getSkillMaxRating,
+  getSkillMinRating,
+  getSkillName,
+} from "../Filters/SkillFilter/utils";
 import Pagination from "../Pagination/Pagination";
 import UserCard from "../UserCard/UserCard";
 import UserSkeleton from "../UserSkeleton/UserSkeleton";
@@ -14,21 +19,15 @@ const UsersList = () => {
   const { query } = useRouter();
   const searchQuery = query.search || "";
   const currentPage = Number(query.page) || 1;
-  const {
-    availability,
-    projects,
-    managers,
-    positions,
-    knowledgeRange,
-    skills,
-  } = useURLSearchParams();
+  const { availability, projects, managers, positions, ratingRange, skills } =
+    useURLSearchParams();
 
-  const skillToFilter = skills.map((skill) => {
+  const selectedSkillsWithRatingRange = skills.map((skill) => {
     return {
-      name: skill.split(":")[0],
+      name: getSkillName(skill),
       ratingRange: [
-        Number(skill.split(":")[1]) || 5,
-        Number(skill.split(":")[2] || 100),
+        getSkillMinRating(skill) || 5,
+        getSkillMaxRating(skill) || 100,
       ],
     };
   });
@@ -38,11 +37,11 @@ const UsersList = () => {
     page: currentPage,
     perPage: USERS_PER_PAGE,
     availability,
-    skills: skillToFilter,
+    skills: selectedSkillsWithRatingRange,
     projects,
     managers,
     positions,
-    knowledgeLevel: knowledgeRange,
+    ratingRange,
   });
 
   if (isLoading || isFetching) {

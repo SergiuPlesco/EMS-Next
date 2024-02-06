@@ -27,14 +27,10 @@ export const useURLSearchParams = () => {
     typeof query?.positions === "string"
       ? (query?.positions?.split(",") as string[])
       : [];
-  const knowledge =
-    typeof query?.knowledge === "string"
-      ? (query?.knowledge?.split(",") as string[])
-      : [];
 
-  const knowledgeRange =
-    typeof query?.knowledge === "string"
-      ? (query?.knowledge?.split(",").map(Number) as number[])
+  const ratingRange =
+    typeof query?.range === "string"
+      ? (query?.range?.split(",").map(Number) as number[])
       : [];
 
   const hasSelectedAvailability = Boolean(availability.length);
@@ -42,7 +38,7 @@ export const useURLSearchParams = () => {
   const hasSelectedProjects = Boolean(projects.length);
   const hasSelectedManagers = Boolean(managers.length);
   const hasSelectedPositioins = Boolean(positions.length);
-  const hasSelectedKnowledge = Boolean(knowledge.length);
+  const hasSelectedRatingRange = Boolean(ratingRange.length);
 
   const hasSelectedFilters =
     hasSelectedAvailability ||
@@ -50,7 +46,7 @@ export const useURLSearchParams = () => {
     hasSelectedProjects ||
     hasSelectedManagers ||
     hasSelectedPositioins ||
-    hasSelectedKnowledge;
+    hasSelectedRatingRange;
 
   return {
     availability,
@@ -58,13 +54,13 @@ export const useURLSearchParams = () => {
     projects,
     managers,
     positions,
-    knowledgeRange,
+    ratingRange,
     hasSelectedAvailability,
     hasSelectedSkills,
     hasSelectedProjects,
     hasSelectedManagers,
     hasSelectedPositioins,
-    hasSelectedKnowledge,
+    hasSelectedRatingRange,
     hasSelectedFilters,
   };
 };

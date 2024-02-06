@@ -4,6 +4,7 @@ import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useURLSearchParams } from "@/hooks/useURLSearchParams";
 import { cn } from "@/lib/utils";
 import { trpc } from "@/utils/trpc";
 
@@ -13,10 +14,7 @@ import FilterWrapper from "../utils/FilterWrapper";
 
 const PositionsFilter = () => {
   const { query, pathname, replace } = useRouter();
-  const positions =
-    typeof query?.positions === "string"
-      ? (query?.positions?.split(",") as string[])
-      : [];
+  const { positions } = useURLSearchParams();
 
   const { data: positionsList } = trpc.positions.all.useQuery();
 
@@ -38,10 +36,10 @@ const PositionsFilter = () => {
       <div>
         <ScrollArea
           className={cn(
-            "w-full ",
+            "w-full pr-2",
             positionsList && positionsList?.length >= 10
               ? "h-[225px] md:h-[325px]"
-              : "h-full"
+              : "h-full",
           )}
           type="always"
         >
@@ -60,7 +58,7 @@ const PositionsFilter = () => {
                       return checked
                         ? handleSetFilter([...positions, item.name])
                         : handleSetFilter(
-                            positions?.filter((value) => value !== item.name)
+                            positions?.filter((value) => value !== item.name),
                           );
                     }}
                   />

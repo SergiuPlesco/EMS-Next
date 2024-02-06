@@ -12,6 +12,7 @@ import { trpc } from "@/utils/trpc";
 import { FILTERS } from "../utils/constans";
 import FilterItemWrapper from "../utils/FilterItemWrapper";
 import FilterWrapper from "../utils/FilterWrapper";
+import { getSkillMaxRating,getSkillMinRating, getSkillName } from "./utils";
 
 const defaultSkillMinRating = 5;
 const defaultSkillMaxRating = 100;
@@ -52,24 +53,12 @@ const SkillFilter = () => {
     replace(`${pathname}?${params.toString()}`);
   };
 
-  const getSkillName = (skill: string) => {
-    return skill.split(":")[0];
-  };
-
-  const getSkillMinRating = (skill: string) => {
-    return Number(skill.split(":")[1]);
-  };
-
-  const getSkillMaxRating = (skill: string) => {
-    return Number(skill.split(":")[2]);
-  };
-
   return (
     <FilterWrapper>
       <div>
         <ScrollArea
           className={cn(
-            "w-full ",
+            "w-full pr-2",
             skillsList && skillsList?.length >= 10
               ? "h-[225px] md:h-[325px]"
               : "h-full",

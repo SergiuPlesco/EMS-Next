@@ -38,10 +38,10 @@ const ProjectsFilter = () => {
       <div>
         <ScrollArea
           className={cn(
-            "w-full ",
+            "w-full pr-2",
             projectsList && projectsList?.length >= 10
               ? "h-[225px] md:h-[325px]"
-              : "h-full"
+              : "h-full",
           )}
           type="always"
         >
@@ -58,7 +58,7 @@ const ProjectsFilter = () => {
                       return checked
                         ? handleSetFilter([...projects, item.name])
                         : handleSetFilter(
-                            projects?.filter((value) => value !== item.name)
+                            projects?.filter((value) => value !== item.name),
                           );
                     }}
                   />

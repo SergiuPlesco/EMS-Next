@@ -3,6 +3,7 @@ import React from "react";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { useURLSearchParams } from "@/hooks/useURLSearchParams";
 import {
   Availability,
   AvailabilityEnum,
@@ -29,10 +30,7 @@ const AvailabilityItems = [
 
 const AvailabilityFilter = () => {
   const { query, pathname, replace } = useRouter();
-  const availability =
-    typeof query?.availability === "string"
-      ? (query?.availability?.split(",") as Availability[])
-      : [];
+  const { availability } = useURLSearchParams();
 
   const handleSetAvailability = (val: Availability[]) => {
     const valString = val.join(",");
@@ -62,7 +60,7 @@ const AvailabilityFilter = () => {
                   return checked
                     ? handleSetAvailability([...availability, item.value])
                     : handleSetAvailability(
-                        availability?.filter((value) => value !== item.value)
+                        availability?.filter((value) => value !== item.value),
                       );
                 }}
               />
