@@ -18,17 +18,31 @@ export default function PaginationSection(props: IProps) {
   const currentPage = Number(query.page) || 1;
   const { totalPages } = props;
 
-  const getLink = (current: number) => (
-    <Link
-      key={current}
-      href={createPageURL(current)}
-      className={cn("py-1 px-2 rounded hover:bg-slate-100", {
-        "bg-slate-100": currentPage === current,
-      })}
-    >
-      {current}
-    </Link>
-  );
+  const getLink = (current: number) => {
+    if (currentPage === current) {
+      return (
+        <p
+          className={cn("py-1 px-2 rounded hover:bg-slate-100", {
+            "bg-slate-100": currentPage === current,
+          })}
+        >
+          {current}
+        </p>
+      );
+    } else {
+      return (
+        <Link
+          key={current}
+          href={createPageURL(current)}
+          className={cn("py-1 px-2 rounded hover:bg-slate-100", {
+            "bg-slate-100": currentPage === current,
+          })}
+        >
+          {current}
+        </Link>
+      );
+    }
+  };
 
   const createPageURL = (pageNumber: number | string) => {
     const params = new URLSearchParams(Object(query));
@@ -43,14 +57,14 @@ export default function PaginationSection(props: IProps) {
   return (
     <>
       <div className="mx-auto max-w-90 gap-1 flex flex-row justify-center items-center">
-        {totalPages > 1 && (
+        {totalPages > 1 && currentPage !== 1 ? (
           <Link
             href={createPageURL(currentPage > 1 ? currentPage - 1 : 1)}
             className="py-1 px-2 rounded hover:bg-slate-100"
           >
             <ChevronLeft />
           </Link>
-        )}
+        ) : null}
 
         {totalPages <= MAX_VISIBLE_PAGES + 2 ? (
           Array(totalPages)
@@ -73,7 +87,7 @@ export default function PaginationSection(props: IProps) {
           </>
         )}
 
-        {totalPages > 1 && (
+        {totalPages > 1 && currentPage !== totalPages ? (
           <Link
             href={createPageURL(
               currentPage < totalPages ? currentPage + 1 : totalPages,
@@ -82,7 +96,7 @@ export default function PaginationSection(props: IProps) {
           >
             <ChevronRight />
           </Link>
-        )}
+        ) : null}
       </div>
       {/* shadcn/ui pagination - temporary commented out*/}
       {/* <Pagination>
