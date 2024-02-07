@@ -20,7 +20,7 @@ const FiltersAccordion = () => {
     <Accordion defaultValue={FILTERS.AVAILABILITY} type="single" collapsible>
       <AccordionItem value={FILTERS.AVAILABILITY}>
         <AccordionTrigger className="capitalize">
-          {FILTERS.AVAILABILITY}
+          Current Occupancy
         </AccordionTrigger>
         <AccordionContent>
           <AvailabilityFilter />

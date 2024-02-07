@@ -11,9 +11,9 @@ export const positionsRouter = router({
           .string()
           .max(
             50,
-            "Position name cannot be longer than 50 characters. Please shorten the position name and try again."
+            "Position name cannot be longer than 50 characters. Please shorten the position name and try again.",
           ),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const newPosition = await ctx.prisma.position.upsert({
@@ -36,7 +36,9 @@ export const positionsRouter = router({
       return newPosition;
     }),
   all: procedure.query(async ({ ctx }) => {
-    return await ctx.prisma.position.findMany();
+    return await ctx.prisma.position.findMany({
+      orderBy: { name: "asc" },
+    });
   }),
   search: procedure
     .input(
@@ -45,9 +47,9 @@ export const positionsRouter = router({
           .string()
           .max(
             50,
-            "Search querry cannot be longer than 50 characters. Please shorten the search query and try again."
+            "Search querry cannot be longer than 50 characters. Please shorten the search query and try again.",
           ),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       if (input.searchQuery == "") return [];

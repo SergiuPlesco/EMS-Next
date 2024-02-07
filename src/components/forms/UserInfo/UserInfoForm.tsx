@@ -33,7 +33,7 @@ const FormSchema = z.object({
     .string()
     .length(
       9,
-      "Please ensure it is 9 digits long and follows the format 0xxxxxxxx."
+      "Please ensure it is 9 digits long and follows the format 0xxxxxxxx.",
     ),
   employmentDate: z.date().nullable(),
   availability: z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"]),
@@ -72,7 +72,7 @@ const UserInfoForm = ({ user }: { user: User }) => {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
   return (
@@ -127,7 +127,7 @@ const UserInfoForm = ({ user }: { user: User }) => {
                               variant={"outline"}
                               className={cn(
                                 "justify-start text-left font-normal text-base",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                             >
                               <CalendarIcon className="mr-2 h-4 w-4" />
@@ -154,7 +154,7 @@ const UserInfoForm = ({ user }: { user: User }) => {
                   return (
                     <FormItem className="flex flex-col gap-1 mt-2">
                       <FormLabel className="flex justify-start items-center gap-1 relative">
-                        Availability for new projects
+                        Current Occupancy
                       </FormLabel>
 
                       <Select
@@ -168,16 +168,16 @@ const UserInfoForm = ({ user }: { user: User }) => {
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="FULLTIME" className="text-base">
-                            Full Time
+                            Fully Occupied
                           </SelectItem>
                           <SelectItem value="PARTTIME" className="text-base">
-                            Part Time
+                            Partially Occupied
                           </SelectItem>
                           <SelectItem
                             value="NOTAVAILABLE"
                             className="text-base"
                           >
-                            Not Available
+                            Not Occupied
                           </SelectItem>
                         </SelectContent>
                       </Select>

@@ -41,7 +41,7 @@ const FilterList = ({ filterName }: Props) => {
             key={item}
             className="text-[--smart-purple] gap-2 bg-white hover:bg-slate-100 border-[--smart-purple] rounded"
           >
-            {item}
+            {item}%
             <Button
               variant="ghost"
               size="icon"

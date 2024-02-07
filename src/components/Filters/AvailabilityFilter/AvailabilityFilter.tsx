@@ -13,18 +13,33 @@ import { FILTERS } from "../utils/constans";
 import FilterItemWrapper from "../utils/FilterItemWrapper";
 import FilterWrapper from "../utils/FilterWrapper";
 
+// const AvailabilityItems = [
+//   {
+//     value: AvailabilityEnum[0],
+//     label: "Full Time",
+//   },
+//   {
+//     value: AvailabilityEnum[1],
+//     label: "Part Time",
+//   },
+//   {
+//     value: AvailabilityEnum[2],
+//     label: "Not Available",
+//   },
+// ];
+
 const AvailabilityItems = [
   {
     value: AvailabilityEnum[0],
-    label: "Full Time",
+    label: "Fully Occupied",
   },
   {
     value: AvailabilityEnum[1],
-    label: "Part Time",
+    label: "Partially Occupied",
   },
   {
     value: AvailabilityEnum[2],
-    label: "Not Available",
+    label: "Not Occupied",
   },
 ];
 

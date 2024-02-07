@@ -117,7 +117,7 @@ export const userRouter = router({
                   name: skill.name,
                   rating: {
                     gte: skill.ratingRange[0],
-                    lte: skill.ratingRange[1],
+                    // lte: skill.ratingRange[1],
                   },
                 };
               }),
@@ -201,6 +201,9 @@ export const userRouter = router({
           take: input.perPage,
           where,
           include,
+          orderBy: {
+            name: "asc",
+          },
         }),
 
         ctx.prisma.user.findMany({
@@ -226,12 +229,24 @@ export const userRouter = router({
           id: input.userId,
         },
         include: {
-          positions: true,
-          managers: true,
-          members: true,
+          positions: {
+            orderBy: {
+              name: "asc",
+            },
+          },
+          managers: {
+            orderBy: {
+              name: "asc",
+            },
+          },
+          members: {
+            orderBy: {
+              name: "asc",
+            },
+          },
           skills: {
             orderBy: {
-              createdAt: "asc",
+              name: "asc",
             },
           },
           projects: {
@@ -248,12 +263,24 @@ export const userRouter = router({
         id: ctx.session?.user.id,
       },
       include: {
-        positions: true,
-        managers: true,
-        members: true,
+        positions: {
+          orderBy: {
+            name: "asc",
+          },
+        },
+        managers: {
+          orderBy: {
+            name: "asc",
+          },
+        },
+        members: {
+          orderBy: {
+            name: "asc",
+          },
+        },
         skills: {
           orderBy: {
-            createdAt: "asc",
+            name: "asc",
           },
         },
         projects: {
@@ -497,6 +524,9 @@ export const userRouter = router({
         members: {
           some: {},
         },
+      },
+      orderBy: {
+        name: "asc",
       },
     });
   }),
