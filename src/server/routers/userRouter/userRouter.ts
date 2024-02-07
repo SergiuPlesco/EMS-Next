@@ -543,17 +543,29 @@ export const userRouter = router({
   deleteProject: procedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      return await ctx.prisma.user.update({
+      const deleteUserProject = await ctx.prisma.userProject.delete({
         where: {
-          id: ctx.session?.user.id,
+          id: input.id,
         },
-        data: {
+      });
+
+      const userWithProject = await ctx.prisma.user.findFirst({
+        where: {
           projects: {
-            delete: {
-              id: input.id,
+            some: {
+              projectId: deleteUserProject.projectId,
             },
           },
         },
       });
+
+      if (!userWithProject && deleteUserProject.projectId) {
+        await ctx.prisma.project.delete({
+          where: {
+            id: deleteUserProject.projectId,
+          },
+        });
+      }
+      return deleteUserProject;
     }),
 });
