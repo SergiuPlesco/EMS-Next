@@ -156,6 +156,7 @@ const AddSkill = ({ userSkills }: { userSkills: UserSkill[] }) => {
       </div>
 
       <Autocomplete
+        placeholder="Search, select, or create a tag on Enter or Add button."
         value={inputValue}
         onChange={handleOnChange}
         options={searchList}
