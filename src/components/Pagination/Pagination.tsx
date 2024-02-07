@@ -22,6 +22,7 @@ export default function PaginationSection(props: IProps) {
     if (currentPage === current) {
       return (
         <p
+          key={current}
           className={cn("py-1 px-2 rounded hover:bg-slate-100", {
             "bg-slate-100": currentPage === current,
           })}
