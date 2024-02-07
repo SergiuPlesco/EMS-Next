@@ -109,21 +109,21 @@ export const userRouter = router({
               ? input.availability
               : ["FULLTIME", "PARTTIME", "NOTAVAILABLE"],
         },
-        ...(input.skills.length > 0 && {
-          skills: {
-            some: {
-              OR: input.skills.map((skill) => {
-                return {
-                  name: skill.name,
-                  rating: {
-                    gte: skill.ratingRange[0],
-                    // lte: skill.ratingRange[1],
-                  },
-                };
-              }),
-            },
-          },
-        }),
+        // ...(input.skills.length > 0 && {
+        //   skills: {
+        //     some: {
+        //       AND: input.skills.map((skill) => {
+        //         return {
+        //           name: skill.name,
+        //           rating: {
+        //             gte: skill.ratingRange[0],
+        //             // lte: skill.ratingRange[1],
+        //           },
+        //         };
+        //       }),
+        //     },
+        //   },
+        // }),
         ...(input.projects.length > 0 && {
           projects: {
             some: {
@@ -151,6 +151,16 @@ export const userRouter = router({
             },
           },
         }),
+        AND: input.skills.map((skill) => ({
+          skills: {
+            some: {
+              name: skill.name,
+              rating: {
+                gte: skill.ratingRange[0],
+              },
+            },
+          },
+        })),
 
         OR: [
           {
