@@ -12,10 +12,10 @@ import { trpc } from "@/utils/trpc";
 import { FILTERS } from "../utils/constans";
 import FilterItemWrapper from "../utils/FilterItemWrapper";
 import FilterWrapper from "../utils/FilterWrapper";
-import { getSkillMaxRating,getSkillMinRating, getSkillName } from "./utils";
+import { getSkillMinRating, getSkillName } from "./utils";
 
 const defaultSkillMinRating = 5;
-const defaultSkillMaxRating = 100;
+// const defaultSkillMaxRating = 100;
 
 const SkillFilter = () => {
   const { query, pathname, replace } = useRouter();
@@ -108,25 +108,28 @@ const SkillFilter = () => {
                           <div className="flex flex-col">
                             <p className="flex justify-between w-full mb-2">
                               <span>
-                                <span className="text-[10px]">min:</span>
+                                <span className="text-[10px] opacity-80">
+                                  Knowledge level at least:{" "}
+                                </span>
                                 {getSkillMinRating(skill) ||
                                   defaultSkillMinRating}
+                                %
                               </span>
-                              <span>
+                              {/* <span>
                                 <span className="text-[10px]">max:</span>
                                 {getSkillMaxRating(skill) ||
                                   defaultSkillMaxRating}
-                              </span>
+                              </span> */}
                             </p>
                             <Slider
+                              inverted={false}
+                              className="touch-none"
                               max={100}
                               min={5}
                               step={5}
                               value={[
                                 getSkillMinRating(skill) ||
                                   defaultSkillMinRating,
-                                getSkillMaxRating(skill) ||
-                                  defaultSkillMaxRating,
                               ]}
                               onValueChange={(newValue) => {
                                 handleSetFilter(item.name, newValue);
