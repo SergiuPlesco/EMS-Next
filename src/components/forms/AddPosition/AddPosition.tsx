@@ -46,13 +46,13 @@ const AddPosition = ({ userPositions }: { userPositions: UserPosition[] }) => {
               variant: "destructive",
             });
           },
-        }
+        },
       );
     };
 
   const handleOnSelect = (name: string) => {
     const positionAdded = userPositions?.find(
-      (position) => position.name === name
+      (position) => position.name === name,
     );
 
     if (name === "" || positionAdded) {
@@ -76,7 +76,7 @@ const AddPosition = ({ userPositions }: { userPositions: UserPosition[] }) => {
           });
           utils.users.getLoggedUser.invalidate();
         },
-      }
+      },
     );
   };
 
@@ -113,7 +113,7 @@ const AddPosition = ({ userPositions }: { userPositions: UserPosition[] }) => {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -126,6 +126,7 @@ const AddPosition = ({ userPositions }: { userPositions: UserPosition[] }) => {
       <div className="flex flex-col gap-2 border rounded p-2 mb-6 shadow-md">
         <TagList options={userPositions} onDelete={handleDeleteFromUser} />
         <Autocomplete
+          placeholder="Search, select, or create a tag on Enter or Add button."
           value={inputValue}
           onChange={handleOnChange}
           options={searchList}

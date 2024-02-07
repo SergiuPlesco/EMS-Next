@@ -37,8 +37,10 @@ const Modal = ({
       </DialogTrigger>
       <DialogContent className="flex flex-col justify-start h-full sm:h-auto sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
+          <DialogTitle className="text-left">{title}</DialogTitle>
+          <DialogDescription className="text-left">
+            {description}
+          </DialogDescription>
         </DialogHeader>
         {children}
       </DialogContent>

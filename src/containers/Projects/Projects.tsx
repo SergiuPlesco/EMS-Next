@@ -73,7 +73,7 @@ const Projects = ({
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
   const createProjectURL = (projectName: string) => {
@@ -99,7 +99,7 @@ const Projects = ({
         {isLoggedUser && (
           <Modal
             title="Projects"
-            description="Search, add, or create new projects."
+            description="Search, select, or create new projects."
             icon={
               <PlusIcon width={20} height={20} color="var(--smart-purple)" />
             }
@@ -149,7 +149,10 @@ const Projects = ({
                         <DialogContent>
                           <DialogHeader>
                             <DialogTitle>Projects</DialogTitle>
-                            <DialogDescription>Edit project.</DialogDescription>
+                            <DialogDescription>
+                              Edit project&apos;s start or end date and
+                              description.
+                            </DialogDescription>
                           </DialogHeader>
                           <EditProject projectId={project.projectId} />
                         </DialogContent>
@@ -168,7 +171,7 @@ const Projects = ({
                             <AlertDialogAction
                               onClick={handleDeleteProject(
                                 project.id,
-                                project.name
+                                project.name,
                               )}
                               className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90"
                             >
