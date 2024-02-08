@@ -23,7 +23,7 @@ const TagList = ({
           type="always"
           className="max-h-[200px] md:max-h-[400px] lg:max-h-[500px]"
         >
-          <div className="flex gap-2 flex-wrap overflow-auto">
+          <div className="flex gap-2 flex-wrap pr-4">
             {options
               ? options.map((option) => {
                   return (
