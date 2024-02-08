@@ -49,7 +49,8 @@ const Autocomplete = ({
           maxLength={50}
         />
       </div>
-      <div className="absolute top-[100%] mt-1 rounded w-full bg-[#ffffff]">
+      {/* absolute top-[100%] */}
+      <div className="mt-1 rounded w-full bg-[#ffffff]">
         {options && options.length ? (
           <div className="border w-full rounded mt-1 shadow-lg">
             <ScrollArea
