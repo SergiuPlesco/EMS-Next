@@ -43,7 +43,7 @@ const Modal = ({
             {description}
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea type="auto" className="max-h-[700px] pr-4">
+        <ScrollArea type="auto" className="h-full pr-4">
           {children}
         </ScrollArea>
       </DialogContent>

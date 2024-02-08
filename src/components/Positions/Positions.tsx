@@ -41,9 +41,9 @@ const Positions = ({
           <Modal
             title="Positions"
             description={
-              <>
-                <p>Search, select, remove, or create new positions.</p>
-              </>
+              <span className="block">
+                Search, select, remove, or create new positions.
+              </span>
             }
             icon={
               hasUserPositions ? (

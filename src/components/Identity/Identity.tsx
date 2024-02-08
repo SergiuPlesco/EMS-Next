@@ -42,13 +42,10 @@ const Identity = ({
             <Modal
               title="Profile"
               description={
-                <>
-                  <p>
-                    Add your mobile phone, employment date and current occupancy
-                    status.
-                  </p>
-                  <p></p>
-                </>
+                <span className="block">
+                  Add your mobile phone, employment date and current occupancy
+                  status.
+                </span>
               }
               icon={<GearIcon width={16} color="var(--smart-purple)" />}
             >

@@ -2,6 +2,9 @@ import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import React from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
+
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
@@ -49,33 +52,41 @@ const Autocomplete = ({
       <div className="absolute top-[100%] mt-1 rounded w-full bg-[#ffffff]">
         {options && options.length ? (
           <div className="border w-full rounded mt-1 shadow-lg">
-            <ul className="flex flex-col gap-1 m-1">
-              {options.map((option) => {
-                return (
-                  <div
-                    key={option.id}
-                    className="flex justify-between items-center border-transparend rounded bg-slate-200 hover:bg-slate-300"
-                  >
-                    <li
+            <ScrollArea
+              type="scroll"
+              className={cn("h-auto", options.length >= 7 ? "h-[300px]" : "")}
+            >
+              <ul className="flex flex-col gap-1 m-1 p-2">
+                {options.map((option) => {
+                  return (
+                    <div
                       key={option.id}
-                      className="px-2 py-2 m-0 flex items-center w-full rounded hover:bg-slate-300 cursor-pointer"
-                      onClick={() => onSelect(option.name)}
+                      className="flex justify-between items-center border-transparend rounded bg-slate-200 hover:bg-slate-300"
                     >
-                      <p className="m-0">{option.name}</p>
-                    </li>
-                    {onDelete && (
-                      <Button
-                        variant="link"
-                        onClick={onDelete(option.id, option.name)}
-                        className="focus:bg-accent focus:text-accent-foreground"
+                      <li
+                        key={option.id}
+                        className="px-2 py-2 m-0 flex items-center w-full rounded hover:bg-slate-300 cursor-pointer"
+                        onClick={() => onSelect(option.name)}
                       >
-                        <AiOutlineDelete size={16} className="text-[#a12064]" />
-                      </Button>
-                    )}
-                  </div>
-                );
-              })}
-            </ul>
+                        <p className="m-0">{option.name}</p>
+                      </li>
+                      {onDelete && (
+                        <Button
+                          variant="link"
+                          onClick={onDelete(option.id, option.name)}
+                          className="focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <AiOutlineDelete
+                            size={16}
+                            className="text-[#a12064]"
+                          />
+                        </Button>
+                      )}
+                    </div>
+                  );
+                })}
+              </ul>
+            </ScrollArea>
           </div>
         ) : null}
       </div>

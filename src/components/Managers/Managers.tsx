@@ -34,9 +34,9 @@ const Managers = ({
           <Modal
             title="Managers"
             description={
-              <>
-                <p>Search, select, or remove your project manager/s.</p>
-              </>
+              <span className="block">
+                Search, select, or remove your project manager/s.
+              </span>
             }
             icon={
               hasManagers ? (
