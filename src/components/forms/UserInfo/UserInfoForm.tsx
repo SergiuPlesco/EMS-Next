@@ -167,16 +167,16 @@ const UserInfoForm = ({ user }: { user: User }) => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="FULLTIME" className="text-base">
+                          <SelectItem
+                            value="NOTAVAILABLE"
+                            className="text-base"
+                          >
                             Fully Occupied
                           </SelectItem>
                           <SelectItem value="PARTTIME" className="text-base">
                             Partially Occupied
                           </SelectItem>
-                          <SelectItem
-                            value="NOTAVAILABLE"
-                            className="text-base"
-                          >
+                          <SelectItem value="FULLTIME" className="text-base">
                             Not Occupied
                           </SelectItem>
                         </SelectContent>
