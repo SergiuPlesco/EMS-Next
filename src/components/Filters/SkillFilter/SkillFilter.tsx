@@ -125,7 +125,7 @@ const SkillFilter = () => {
                               inverted={false}
                               className="touch-none"
                               max={100}
-                              min={5}
+                              min={0}
                               step={5}
                               value={[
                                 getSkillMinRating(skill) ||
