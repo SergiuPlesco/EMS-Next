@@ -30,7 +30,7 @@ import FilterWrapper from "../utils/FilterWrapper";
 
 const AvailabilityItems = [
   {
-    value: AvailabilityEnum[0],
+    value: AvailabilityEnum[2],
     label: "Fully Occupied",
   },
   {
@@ -38,7 +38,7 @@ const AvailabilityItems = [
     label: "Partially Occupied",
   },
   {
-    value: AvailabilityEnum[2],
+    value: AvailabilityEnum[0],
     label: "Not Occupied",
   },
 ];
