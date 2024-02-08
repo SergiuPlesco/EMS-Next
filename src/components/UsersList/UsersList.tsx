@@ -19,7 +19,7 @@ const UsersList = () => {
   const { query } = useRouter();
   const searchQuery = query.search || "";
   const currentPage = Number(query.page) || 1;
-  const { availability, projects, managers, positions, ratingRange, skills } =
+  const { occupancy, projects, managers, positions, ratingRange, skills } =
     useURLSearchParams();
 
   const selectedSkillsWithRatingRange = skills.map((skill) => {
@@ -36,7 +36,7 @@ const UsersList = () => {
     searchQuery: searchQuery as string,
     page: currentPage,
     perPage: USERS_PER_PAGE,
-    availability,
+    occupancy,
     skills: selectedSkillsWithRatingRange,
     projects,
     managers,

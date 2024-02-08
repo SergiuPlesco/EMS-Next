@@ -52,7 +52,7 @@ model User {
   certificates   Certificate[]
   employmentDate DateTime?
   role           String?        @default("user")
-  availability   Availability   @default(FULLTIME)
+  occupancy      Occupancy      @default(NOT)
 }
 
 model Skill {
@@ -127,8 +127,8 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-enum Availability {
-  FULLTIME
-  PARTTIME
-  NOTAVAILABLE
+enum Occupancy {
+  FULL
+  PART
+  NOT
 }
