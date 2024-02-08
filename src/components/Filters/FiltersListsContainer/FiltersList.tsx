@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-import { getSkillMinRating,getSkillName } from "../SkillFilter/utils";
+import { getSkillMinRating, getSkillName } from "../SkillFilter/utils";
 
 type Props = {
   filterName: string;
@@ -36,7 +36,7 @@ const FilterList = ({ filterName }: Props) => {
   }
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 flex-wrap">
       {selectedFilters.map((item) => {
         return (
           <Badge
