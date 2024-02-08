@@ -12,11 +12,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import { TUser } from "@/typeDefinitions/typeDefinitions";
 import { trpc } from "@/utils/trpc";
-
-import { Button } from "../ui/button";
-import { useToast } from "../ui/use-toast";
 
 const DeleteUser = ({ user }: { user: TUser }) => {
   const { toast } = useToast();
@@ -44,7 +43,7 @@ const DeleteUser = ({ user }: { user: TUser }) => {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
   return (

@@ -19,8 +19,8 @@ const FiltersAccordion = () => {
   return (
     <Accordion defaultValue={FILTERS.AVAILABILITY} type="single" collapsible>
       <AccordionItem value={FILTERS.AVAILABILITY}>
-        <AccordionTrigger className="capitalize text-left">
-          Employees available for new projects
+        <AccordionTrigger className="capitalize">
+          Current Occupancy
         </AccordionTrigger>
         <AccordionContent>
           <AvailabilityFilter />
@@ -29,7 +29,7 @@ const FiltersAccordion = () => {
       {filters?.hasSkills && (
         <AccordionItem value={FILTERS.SKILLS}>
           <AccordionTrigger className="capitalize">
-            Employees with skills
+            {FILTERS.SKILLS}
           </AccordionTrigger>
           <AccordionContent>
             <SkillFilter />
@@ -39,7 +39,7 @@ const FiltersAccordion = () => {
       {filters?.hasPositions && (
         <AccordionItem value={FILTERS.POSITIONS}>
           <AccordionTrigger className="capitalize">
-            Employees with positions
+            {FILTERS.POSITIONS}
           </AccordionTrigger>
           <AccordionContent>
             <PositionsFilter />
@@ -49,7 +49,7 @@ const FiltersAccordion = () => {
       {filters?.hasProjects && (
         <AccordionItem value={FILTERS.PROJECTS}>
           <AccordionTrigger className="capitalize">
-            Project&apos;s Team
+            {FILTERS.PROJECTS}
           </AccordionTrigger>
           <AccordionContent>
             <ProjectsFilter />
@@ -59,7 +59,7 @@ const FiltersAccordion = () => {
       {filters?.hasManagers && (
         <AccordionItem value={FILTERS.MANAGERS}>
           <AccordionTrigger className="capitalize">
-            Manager&apos;s Team
+            {FILTERS.MANAGERS}
           </AccordionTrigger>
           <AccordionContent>
             <ManagersFilter />

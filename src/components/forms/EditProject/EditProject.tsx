@@ -34,7 +34,7 @@ const FormSchema = z
       .string()
       .max(
         350,
-        "Project description cannot be longer than 350 characters. Please shorten the project description and try again."
+        "Project description cannot be longer than 350 characters. Please shorten the project description and try again.",
       ),
   })
   .refine(
@@ -51,7 +51,7 @@ const FormSchema = z
     {
       message: "Invalid date range. Please check the start and end dates.",
       path: ["endDate"],
-    }
+    },
   );
 
 export default function EditProject({ projectId }: { projectId: number }) {
@@ -104,7 +104,7 @@ export default function EditProject({ projectId }: { projectId: number }) {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -175,7 +175,7 @@ export default function EditProject({ projectId }: { projectId: number }) {
                               variant={"outline"}
                               className={cn(
                                 "justify-start text-left font-normal text-base",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                             >
                               <CalendarIcon className="mr-2 h-4 w-4" />
@@ -218,7 +218,7 @@ export default function EditProject({ projectId }: { projectId: number }) {
                               variant={"outline"}
                               className={cn(
                                 "justify-start text-left font-normal text-base",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                             >
                               <CalendarIcon className="mr-2 h-4 w-4" />
@@ -259,11 +259,11 @@ export default function EditProject({ projectId }: { projectId: number }) {
             render={({ field }) => {
               return (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Your role in the project</FormLabel>
                   <FormControl>
                     <Textarea
                       className="placeholder:text-slate-400 text-base"
-                      placeholder="Start writing about your role in this project and more..."
+                      placeholder="Start writing about your role in the project and more..."
                       {...field}
                     />
                   </FormControl>

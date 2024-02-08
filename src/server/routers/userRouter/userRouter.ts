@@ -20,9 +20,9 @@ export const userRouter = router({
           .string()
           .max(
             50,
-            "Search querry cannot be longer than 50 characters. Please shorten the search query and try again."
+            "Search querry cannot be longer than 50 characters. Please shorten the search query and try again.",
           ),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       if (input.searchQuery === "") return [];
@@ -35,7 +35,7 @@ export const userRouter = router({
         },
       });
       const excludedLoggedUser = result.filter(
-        (user) => user.id !== ctx.session?.user.id
+        (user) => user.id !== ctx.session?.user.id,
       );
       return excludedLoggedUser;
     }),
@@ -46,44 +46,59 @@ export const userRouter = router({
           .string()
           .max(
             50,
-            "Search querry cannot be longer than 50 characters. Please shorten the search query and try again."
+            "Search querry cannot be longer than 50 characters. Please shorten the search query and try again.",
           ),
         page: z.number(),
         perPage: z.number(),
         availability: z.array(z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"])),
         skills: z.array(
-          z
-            .string()
-            .max(
-              50,
-              "Skill name cannot be longer than 50 characters. Please shorten the skill name and try again."
-            )
+          z.object({
+            name: z
+              .string()
+              .max(
+                50,
+                "Skill name cannot be longer than 50 characters. Please shorten the skill name and try again.",
+              ),
+            ratingRange: z.array(z.number()).min(0).max(2),
+          }),
         ),
         projects: z.array(
           z
             .string()
             .max(
               50,
-              "Project name cannot be longer than 50 characters. Please shorten the project name and try again."
-            )
+              "Project name cannot be longer than 50 characters. Please shorten the project name and try again.",
+            ),
         ),
         managers: z.array(
           z
             .string()
             .max(
               50,
-              "Manager name cannot be longer than 50 characters. Please shorten the manager name and try again."
-            )
+              "Manager name cannot be longer than 50 characters. Please shorten the manager name and try again.",
+            ),
         ),
         positions: z.array(
           z
             .string()
             .max(
               50,
-              "Position name cannot be longer than 50 characters. Please shorten the position name and try again."
-            )
+              "Position name cannot be longer than 50 characters. Please shorten the position name and try again.",
+            ),
         ),
-      })
+        ratingRange: z
+          .array(z.number())
+          .refine(
+            (arr) =>
+              arr.length === 2
+                ? arr.every((num) => num >= 5 && num <= 100)
+                : arr.length === 0,
+            {
+              message:
+                "Array must contain exactly 2 numbers between 5 and 100, or be empty",
+            },
+          ),
+      }),
     )
     .query(async ({ ctx, input }) => {
       const skipPages = input.perPage * (input.page - 1);
@@ -94,15 +109,21 @@ export const userRouter = router({
               ? input.availability
               : ["FULLTIME", "PARTTIME", "NOTAVAILABLE"],
         },
-        ...(input.skills.length > 0 && {
-          skills: {
-            some: {
-              name: {
-                in: input.skills,
-              },
-            },
-          },
-        }),
+        // ...(input.skills.length > 0 && {
+        //   skills: {
+        //     some: {
+        //       AND: input.skills.map((skill) => {
+        //         return {
+        //           name: skill.name,
+        //           rating: {
+        //             gte: skill.ratingRange[0],
+        //             // lte: skill.ratingRange[1],
+        //           },
+        //         };
+        //       }),
+        //     },
+        //   },
+        // }),
         ...(input.projects.length > 0 && {
           projects: {
             some: {
@@ -130,6 +151,17 @@ export const userRouter = router({
             },
           },
         }),
+        AND: input.skills.map((skill) => ({
+          skills: {
+            some: {
+              name: skill.name,
+              rating: {
+                gte: skill.ratingRange[0],
+              },
+            },
+          },
+        })),
+
         OR: [
           {
             name: {
@@ -179,6 +211,9 @@ export const userRouter = router({
           take: input.perPage,
           where,
           include,
+          orderBy: {
+            name: "asc",
+          },
         }),
 
         ctx.prisma.user.findMany({
@@ -204,12 +239,24 @@ export const userRouter = router({
           id: input.userId,
         },
         include: {
-          positions: true,
-          managers: true,
-          members: true,
+          positions: {
+            orderBy: {
+              name: "asc",
+            },
+          },
+          managers: {
+            orderBy: {
+              name: "asc",
+            },
+          },
+          members: {
+            orderBy: {
+              name: "asc",
+            },
+          },
           skills: {
             orderBy: {
-              createdAt: "asc",
+              name: "asc",
             },
           },
           projects: {
@@ -226,12 +273,24 @@ export const userRouter = router({
         id: ctx.session?.user.id,
       },
       include: {
-        positions: true,
-        managers: true,
-        members: true,
+        positions: {
+          orderBy: {
+            name: "asc",
+          },
+        },
+        managers: {
+          orderBy: {
+            name: "asc",
+          },
+        },
+        members: {
+          orderBy: {
+            name: "asc",
+          },
+        },
         skills: {
           orderBy: {
-            createdAt: "asc",
+            name: "asc",
           },
         },
         projects: {
@@ -249,15 +308,15 @@ export const userRouter = router({
           .string()
           .length(
             9,
-            "Please ensure it is 9 digits long and follows the format 0xxxxxxxx."
+            "Please ensure it is 9 digits long and follows the format 0xxxxxxxx.",
           )
           .regex(
             new RegExp("[0-9]{9}"),
-            "Please ensure it is 9 digits long and follows the format 0xxxxxxxx."
+            "Please ensure it is 9 digits long and follows the format 0xxxxxxxx.",
           ),
         employmentDate: z.date().nullable(),
         availability: z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"]),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const phone = await ctx.prisma.user.update({
@@ -316,7 +375,7 @@ export const userRouter = router({
   // }),
   updateRating: procedure
     .input(
-      z.object({ skillId: z.number(), rating: z.number().min(5).max(100) })
+      z.object({ skillId: z.number(), rating: z.number().min(5).max(100) }),
     )
     .mutation(async ({ ctx, input }) => {
       const updatedSkill = await ctx.prisma.userSkill.update({
@@ -339,9 +398,9 @@ export const userRouter = router({
           .string()
           .max(
             50,
-            "Position name cannot be longer than 50 characters. Please shorten the position name and try again."
+            "Position name cannot be longer than 50 characters. Please shorten the position name and try again.",
           ),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const position = await ctx.prisma.position.findUnique({
@@ -407,9 +466,9 @@ export const userRouter = router({
           .string()
           .max(
             50,
-            "Manager name cannot be longer than 50 characters. Please shorten the manager name and try again."
+            "Manager name cannot be longer than 50 characters. Please shorten the manager name and try again.",
           ),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.user.findFirst({
@@ -476,22 +535,37 @@ export const userRouter = router({
           some: {},
         },
       },
+      orderBy: {
+        name: "asc",
+      },
     });
   }),
   deleteProject: procedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      return await ctx.prisma.user.update({
+      const deleteUserProject = await ctx.prisma.userProject.delete({
         where: {
-          id: ctx.session?.user.id,
+          id: input.id,
         },
-        data: {
+      });
+
+      const userWithProject = await ctx.prisma.user.findFirst({
+        where: {
           projects: {
-            delete: {
-              id: input.id,
+            some: {
+              projectId: deleteUserProject.projectId,
             },
           },
         },
       });
+
+      if (!userWithProject && deleteUserProject.projectId) {
+        await ctx.prisma.project.delete({
+          where: {
+            id: deleteUserProject.projectId,
+          },
+        });
+      }
+      return deleteUserProject;
     }),
 });

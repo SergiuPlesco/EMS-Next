@@ -1,10 +1,15 @@
-import { Availability } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
 
 import { USERS_PER_PAGE } from "@/constants/common";
+import { useURLSearchParams } from "@/hooks/useURLSearchParams";
 import { trpc } from "@/utils/trpc";
 
+import {
+  getSkillMaxRating,
+  getSkillMinRating,
+  getSkillName,
+} from "../Filters/SkillFilter/utils";
 import Pagination from "../Pagination/Pagination";
 import UserCard from "../UserCard/UserCard";
 import UserSkeleton from "../UserSkeleton/UserSkeleton";
@@ -14,39 +19,29 @@ const UsersList = () => {
   const { query } = useRouter();
   const searchQuery = query.search || "";
   const currentPage = Number(query.page) || 1;
-  const availability =
-    typeof query?.availability === "string"
-      ? (query?.availability?.split(",") as Availability[])
-      : [];
-  const skills =
-    typeof query?.skills === "string"
-      ? (query?.skills?.split(",") as string[])
-      : [];
+  const { availability, projects, managers, positions, ratingRange, skills } =
+    useURLSearchParams();
 
-  const projects =
-    typeof query?.projects === "string"
-      ? (query?.projects?.split(",") as string[])
-      : [];
-
-  const managers =
-    typeof query?.managers === "string"
-      ? (query?.managers?.split(",") as string[])
-      : [];
-
-  const positions =
-    typeof query?.positions === "string"
-      ? (query?.positions?.split(",") as string[])
-      : [];
+  const selectedSkillsWithRatingRange = skills.map((skill) => {
+    return {
+      name: getSkillName(skill),
+      ratingRange: [
+        getSkillMinRating(skill) || 5,
+        getSkillMaxRating(skill) || 100,
+      ],
+    };
+  });
 
   const { data, isLoading, isFetching } = trpc.users.filter.useQuery({
     searchQuery: searchQuery as string,
     page: currentPage,
     perPage: USERS_PER_PAGE,
     availability,
-    skills,
+    skills: selectedSkillsWithRatingRange,
     projects,
     managers,
     positions,
+    ratingRange,
   });
 
   if (isLoading || isFetching) {

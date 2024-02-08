@@ -1,43 +1,12 @@
-import { Availability } from "@prisma/client";
-import { useRouter } from "next/router";
 import React from "react";
+
+import { useURLSearchParams } from "@/hooks/useURLSearchParams";
 
 import { FILTERS } from "../utils/constans";
 import FilterList from "./FiltersList";
 
 const FiltersContainer = () => {
-  const { query } = useRouter();
-
-  const availability =
-    typeof query?.availability === "string"
-      ? (query?.availability?.split(",") as Availability[])
-      : [];
-  const skills =
-    typeof query?.skills === "string"
-      ? (query?.skills?.split(",") as string[])
-      : [];
-
-  const projects =
-    typeof query?.projects === "string"
-      ? (query?.projects?.split(",") as string[])
-      : [];
-
-  const managers =
-    typeof query?.managers === "string"
-      ? (query?.managers?.split(",") as string[])
-      : [];
-
-  const positions =
-    typeof query?.positions === "string"
-      ? (query?.positions?.split(",") as string[])
-      : [];
-
-  const hasSelectedFilters =
-    Boolean(availability.length) ||
-    Boolean(skills.length) ||
-    Boolean(projects.length) ||
-    Boolean(managers.length) ||
-    Boolean(positions.length);
+  const { hasSelectedFilters } = useURLSearchParams();
 
   if (!hasSelectedFilters) {
     return null;

@@ -32,7 +32,7 @@ const FormSchema = z
       .min(1, "Project name is required")
       .max(
         50,
-        "Project name cannot be longer than 50 characters. Please shorten the project name and try again."
+        "Project name cannot be longer than 50 characters. Please shorten the project name and try again.",
       ),
     startDate: z.date(),
     endDate: z.date().nullable(),
@@ -41,7 +41,7 @@ const FormSchema = z
       .string()
       .max(
         350,
-        "Project description cannot be longer than 350 characters. Please shorten the project description and try again."
+        "Project description cannot be longer than 350 characters. Please shorten the project description and try again.",
       ),
   })
   .refine(
@@ -58,7 +58,7 @@ const FormSchema = z
     {
       message: "Invalid date range. Please check the start and end dates.",
       path: ["endDate"],
-    }
+    },
   );
 
 export default function CreateProject() {
@@ -107,7 +107,7 @@ export default function CreateProject() {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -135,9 +135,10 @@ export default function CreateProject() {
               return (
                 <FormItem>
                   <FormControl>
-                    <div className="my-2 flex items-center">
+                    <div className="my-2  flex items-start">
                       <Checkbox
-                        className="data-[state=checked]:bg-[--smart-purple] border-[--smart-purple]"
+                        id="projectAssignment"
+                        className="data-[state=checked]:bg-[--smart-purple] border-[--smart-purple] mt-[0.2rem]"
                         checked={field.value}
                         onCheckedChange={(isChecked) => {
                           field.onChange(isChecked);
@@ -149,7 +150,10 @@ export default function CreateProject() {
                         }}
                       />
 
-                      <FormLabel className="ml-2 text-base">
+                      <FormLabel
+                        htmlFor="projectAssignment"
+                        className="ml-2 text-base"
+                      >
                         I am currently assigned to this project
                       </FormLabel>
                     </div>
@@ -183,7 +187,7 @@ export default function CreateProject() {
                               variant={"outline"}
                               className={cn(
                                 "justify-start text-left font-normal text-base",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                             >
                               <CalendarIcon className="mr-2 h-4 w-4" />
@@ -226,7 +230,7 @@ export default function CreateProject() {
                               variant={"outline"}
                               className={cn(
                                 "justify-start text-left font-normal text-base",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                             >
                               <CalendarIcon className="mr-2 h-4 w-4" />
@@ -252,11 +256,11 @@ export default function CreateProject() {
             render={({ field }) => {
               return (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Project Name</FormLabel>
                   <FormControl>
                     <Autocomplete
                       value={field.value}
-                      //
+                      placeholder="Search, select, or create a new one..."
                       onChange={(e) => {
                         setSearchQuery(e.target.value);
                         field.onChange(e);
@@ -276,11 +280,11 @@ export default function CreateProject() {
             render={({ field }) => {
               return (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Your role in the project</FormLabel>
                   <FormControl>
                     <Textarea
                       className="placeholder:text-slate-400 text-base"
-                      placeholder="Start writing about your role in this project and more..."
+                      placeholder="Start writing about your role in the project and more..."
                       {...field}
                     />
                   </FormControl>

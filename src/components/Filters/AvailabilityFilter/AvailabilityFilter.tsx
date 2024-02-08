@@ -3,6 +3,7 @@ import React from "react";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { useURLSearchParams } from "@/hooks/useURLSearchParams";
 import {
   Availability,
   AvailabilityEnum,
@@ -12,27 +13,39 @@ import { FILTERS } from "../utils/constans";
 import FilterItemWrapper from "../utils/FilterItemWrapper";
 import FilterWrapper from "../utils/FilterWrapper";
 
+// const AvailabilityItems = [
+//   {
+//     value: AvailabilityEnum[0],
+//     label: "Full Time",
+//   },
+//   {
+//     value: AvailabilityEnum[1],
+//     label: "Part Time",
+//   },
+//   {
+//     value: AvailabilityEnum[2],
+//     label: "Not Available",
+//   },
+// ];
+
 const AvailabilityItems = [
   {
     value: AvailabilityEnum[0],
-    label: "Full Time",
+    label: "Fully Occupied",
   },
   {
     value: AvailabilityEnum[1],
-    label: "Part Time",
+    label: "Partially Occupied",
   },
   {
     value: AvailabilityEnum[2],
-    label: "Not Available",
+    label: "Not Occupied",
   },
 ];
 
 const AvailabilityFilter = () => {
   const { query, pathname, replace } = useRouter();
-  const availability =
-    typeof query?.availability === "string"
-      ? (query?.availability?.split(",") as Availability[])
-      : [];
+  const { availability } = useURLSearchParams();
 
   const handleSetAvailability = (val: Availability[]) => {
     const valString = val.join(",");
@@ -62,7 +75,7 @@ const AvailabilityFilter = () => {
                   return checked
                     ? handleSetAvailability([...availability, item.value])
                     : handleSetAvailability(
-                        availability?.filter((value) => value !== item.value)
+                        availability?.filter((value) => value !== item.value),
                       );
                 }}
               />
