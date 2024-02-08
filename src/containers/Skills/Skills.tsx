@@ -31,8 +31,12 @@ const Skills = ({
             title="Skills"
             description={
               <>
-                <p>Search, add, remove, or create new skills.</p>
-                <p>Easily adjust knowledge levels by clicking on a tag.</p>
+                <span className="block">
+                  Search, select, remove, or create new skills.
+                </span>
+                <span className="block">
+                  Easily adjust knowledge levels by clicking on a skill tag.
+                </span>
               </>
             }
             icon={

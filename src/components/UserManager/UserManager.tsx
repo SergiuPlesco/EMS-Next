@@ -15,9 +15,9 @@ const UserManager = ({ user }: { user: TUser }) => {
           description="Assign a new role or delete the user"
           icon={<Pencil1Icon width={16} color="var(--smart-purple)" />}
           text={
-            <p className="text-[12px] font-normal text-slate-500">
+            <span className="text-[12px] font-normal text-slate-500">
               Manage User
-            </p>
+            </span>
           }
         >
           <AssignRole user={user} />

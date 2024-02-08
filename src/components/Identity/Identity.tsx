@@ -40,8 +40,13 @@ const Identity = ({
           <h2 className="text-xl font-bold">{user?.name}</h2>
           {isLoggedUser && (
             <Modal
-              title="Edit profile"
-              description="Make changes to your profile here. Save each detail."
+              title="Profile"
+              description={
+                <span className="block">
+                  Add your mobile phone, employment date and current occupancy
+                  status.
+                </span>
+              }
               icon={<GearIcon width={16} color="var(--smart-purple)" />}
             >
               <UserInfo user={user} />

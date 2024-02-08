@@ -39,8 +39,12 @@ const Positions = ({
       <div className="flex justify-start items-center gap-2">
         {isLoggedUser && (
           <Modal
-            title="Edit positions"
-            description="Search or create"
+            title="Positions"
+            description={
+              <span className="block">
+                Search, select, remove, or create new positions.
+              </span>
+            }
             icon={
               hasUserPositions ? (
                 <Pencil1Icon width={16} color="var(--smart-purple)" />

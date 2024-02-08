@@ -32,8 +32,12 @@ const Managers = ({
       <div className="flex justify-start items-center gap-2">
         {isLoggedUser && (
           <Modal
-            title="Edit managers"
-            description="Search and add your project manager/s"
+            title="Managers"
+            description={
+              <span className="block">
+                Search, select, or remove your project manager/s.
+              </span>
+            }
             icon={
               hasManagers ? (
                 <Pencil1Icon width={16} color="var(--smart-purple)" />
