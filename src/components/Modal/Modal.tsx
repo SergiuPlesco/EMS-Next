@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
+
 type ModalProps = {
   title?: string;
   description?: React.ReactNode | string;
@@ -43,9 +43,7 @@ const Modal = ({
             {description}
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea type="auto" className="h-full pr-4">
-          {children}
-        </ScrollArea>
+        {children}
       </DialogContent>
     </Dialog>
   );
