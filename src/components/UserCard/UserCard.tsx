@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-import { AVAILABILITY_BORDER_COLORS } from "@/constants/common";
+import { OCCUPANCY_BORDER_COLORS } from "@/constants/common";
 import { TUser } from "@/typeDefinitions/typeDefinitions";
 
 const UserCard = ({ user }: { user: TUser }) => {
@@ -15,7 +15,7 @@ const UserCard = ({ user }: { user: TUser }) => {
         <div
           className={`border-[3px] m-3 rounded-full`}
           style={{
-            borderColor: AVAILABILITY_BORDER_COLORS[user.availability],
+            borderColor: OCCUPANCY_BORDER_COLORS[user.occupancy],
           }}
         >
           <Image

@@ -4,7 +4,7 @@ import Image from "next/image";
 import React from "react";
 
 import UserInfo from "@/components/forms/UserInfo/UserInfo";
-import { AVAILABILITY_BORDER_COLORS } from "@/constants/common";
+import { OCCUPANCY_BORDER_COLORS } from "@/constants/common";
 import { cn } from "@/lib/utils";
 import { TUser } from "@/typeDefinitions/typeDefinitions";
 
@@ -22,7 +22,7 @@ const Identity = ({
       <div
         className={`border-[3px] rounded-full `}
         style={{
-          borderColor: AVAILABILITY_BORDER_COLORS[user.availability],
+          borderColor: OCCUPANCY_BORDER_COLORS[user.occupancy],
         }}
       >
         <Image

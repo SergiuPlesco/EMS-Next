@@ -1,12 +1,12 @@
-import { Availability } from "@prisma/client";
+import { Occupancy } from "@prisma/client";
 import { useRouter } from "next/router";
 
 export const useURLSearchParams = () => {
   const { query } = useRouter();
 
-  const availability =
-    typeof query?.availability === "string"
-      ? (query?.availability?.split(",") as Availability[])
+  const occupancy =
+    typeof query?.occupancy === "string"
+      ? (query?.occupancy?.split(",") as Occupancy[])
       : [];
   const skills =
     typeof query?.skills === "string"
@@ -33,7 +33,7 @@ export const useURLSearchParams = () => {
       ? (query?.range?.split(",").map(Number) as number[])
       : [];
 
-  const hasSelectedAvailability = Boolean(availability.length);
+  const hasSelectedOccupancy = Boolean(occupancy.length);
   const hasSelectedSkills = Boolean(skills.length);
   const hasSelectedProjects = Boolean(projects.length);
   const hasSelectedManagers = Boolean(managers.length);
@@ -41,7 +41,7 @@ export const useURLSearchParams = () => {
   const hasSelectedRatingRange = Boolean(ratingRange.length);
 
   const hasSelectedFilters =
-    hasSelectedAvailability ||
+    hasSelectedOccupancy ||
     hasSelectedSkills ||
     hasSelectedProjects ||
     hasSelectedManagers ||
@@ -49,13 +49,13 @@ export const useURLSearchParams = () => {
     hasSelectedRatingRange;
 
   return {
-    availability,
+    occupancy,
     skills,
     projects,
     managers,
     positions,
     ratingRange,
-    hasSelectedAvailability,
+    hasSelectedOccupancy,
     hasSelectedSkills,
     hasSelectedProjects,
     hasSelectedManagers,

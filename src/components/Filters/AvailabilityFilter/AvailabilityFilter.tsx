@@ -4,10 +4,7 @@ import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useURLSearchParams } from "@/hooks/useURLSearchParams";
-import {
-  Availability,
-  AvailabilityEnum,
-} from "@/typeDefinitions/typeDefinitions";
+import { Occupancy, OccupancyEnum } from "@/typeDefinitions/typeDefinitions";
 
 import { FILTERS } from "../utils/constans";
 import FilterItemWrapper from "../utils/FilterItemWrapper";
@@ -28,33 +25,33 @@ import FilterWrapper from "../utils/FilterWrapper";
 //   },
 // ];
 
-const AvailabilityItems = [
+const OccupancyItems = [
   {
-    value: AvailabilityEnum[2],
+    value: OccupancyEnum[0],
     label: "Fully Occupied",
   },
   {
-    value: AvailabilityEnum[1],
+    value: OccupancyEnum[1],
     label: "Partially Occupied",
   },
   {
-    value: AvailabilityEnum[0],
+    value: OccupancyEnum[2],
     label: "Not Occupied",
   },
 ];
 
 const AvailabilityFilter = () => {
   const { query, pathname, replace } = useRouter();
-  const { availability } = useURLSearchParams();
+  const { occupancy } = useURLSearchParams();
 
-  const handleSetAvailability = (val: Availability[]) => {
+  const handleSetAvailability = (val: Occupancy[]) => {
     const valString = val.join(",");
     const params = new URLSearchParams(Object(query));
 
     if (valString) {
-      params.set(FILTERS.AVAILABILITY, valString);
+      params.set(FILTERS.OCCUPANCY, valString);
     } else {
-      params.delete(FILTERS.AVAILABILITY);
+      params.delete(FILTERS.OCCUPANCY);
     }
     params.set(FILTERS.PAGE, "1");
     replace(`${pathname}?${params.toString()}`);
@@ -63,19 +60,19 @@ const AvailabilityFilter = () => {
   return (
     <FilterWrapper>
       <div>
-        {AvailabilityItems.map((item) => {
+        {OccupancyItems.map((item) => {
           return (
             <FilterItemWrapper key={item.value}>
               <Checkbox
                 className="data-[state=checked]:bg-[--smart-purple] border-[--smart-purple]"
                 id={item.value}
                 value={item.value}
-                checked={availability.includes(item.value)}
+                checked={occupancy.includes(item.value)}
                 onCheckedChange={(checked) => {
                   return checked
-                    ? handleSetAvailability([...availability, item.value])
+                    ? handleSetAvailability([...occupancy, item.value])
                     : handleSetAvailability(
-                        availability?.filter((value) => value !== item.value),
+                        occupancy?.filter((value) => value !== item.value),
                       );
                 }}
               />

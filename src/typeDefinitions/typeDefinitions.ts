@@ -1,5 +1,5 @@
 import {
-  Availability as UserAvailability,
+  Occupancy as UserOccupancy,
   Position,
   Project,
   Skill,
@@ -11,19 +11,15 @@ import {
 
 export type TUser = User & {
   positions: UserPosition[];
-  availability: UserAvailability;
+  occupancy: UserOccupancy;
   skills: UserSkill[];
   projects: UserProject[];
   managers: User[];
   members: User[];
 };
 
-export const AvailabilityEnum = [
-  "FULLTIME",
-  "PARTTIME",
-  "NOTAVAILABLE",
-] as const;
-export type Availability = (typeof AvailabilityEnum)[number];
+export const OccupancyEnum = ["FULL", "PART", "NOT"] as const;
+export type Occupancy = (typeof OccupancyEnum)[number];
 
 export type Option =
   | Position

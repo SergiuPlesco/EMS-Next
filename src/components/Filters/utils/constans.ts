@@ -2,7 +2,7 @@ export const FILTERS = {
   PAGE: "page",
   SEARCH: "search",
   SKILLS: "skills",
-  AVAILABILITY: "availability",
+  OCCUPANCY: "occupancy",
   POSITIONS: "positions",
   MANAGERS: "managers",
   PROJECTS: "projects",
