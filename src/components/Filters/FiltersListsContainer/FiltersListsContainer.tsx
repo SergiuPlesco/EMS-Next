@@ -14,7 +14,7 @@ const FiltersContainer = () => {
 
   return (
     <div className="flex justify-start flex-wrap gap-2">
-      <FilterList filterName={FILTERS.AVAILABILITY} />
+      <FilterList filterName={FILTERS.OCCUPANCY} />
       <FilterList filterName={FILTERS.SKILLS} />
       <FilterList filterName={FILTERS.POSITIONS} />
       <FilterList filterName={FILTERS.PROJECTS} />
