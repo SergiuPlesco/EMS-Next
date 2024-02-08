@@ -36,7 +36,7 @@ const FormSchema = z.object({
       "Please ensure it is 9 digits long and follows the format 0xxxxxxxx.",
     ),
   employmentDate: z.date().nullable(),
-  availability: z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"]),
+  occupancy: z.enum(["FULL", "PART", "NOT"]),
 });
 
 const UserInfoForm = ({ user }: { user: User }) => {
@@ -47,7 +47,7 @@ const UserInfoForm = ({ user }: { user: User }) => {
     values: {
       phone: user?.phone || "",
       employmentDate: user?.employmentDate,
-      availability: user?.availability,
+      occupancy: user?.occupancy,
     },
     mode: "all",
   });
@@ -149,7 +149,7 @@ const UserInfoForm = ({ user }: { user: User }) => {
             <div>
               <FormField
                 control={form.control}
-                name="availability"
+                name="occupancy"
                 render={({ field }) => {
                   return (
                     <FormItem className="flex flex-col gap-1 mt-2">
@@ -167,16 +167,13 @@ const UserInfoForm = ({ user }: { user: User }) => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem
-                            value="NOTAVAILABLE"
-                            className="text-base"
-                          >
+                          <SelectItem value="FULL" className="text-base">
                             Fully Occupied
                           </SelectItem>
-                          <SelectItem value="PARTTIME" className="text-base">
+                          <SelectItem value="PART" className="text-base">
                             Partially Occupied
                           </SelectItem>
-                          <SelectItem value="FULLTIME" className="text-base">
+                          <SelectItem value="NOT" className="text-base">
                             Not Occupied
                           </SelectItem>
                         </SelectContent>

@@ -17,8 +17,8 @@ const FiltersAccordion = () => {
   const { data: filters } = trpc.filters.all.useQuery();
 
   return (
-    <Accordion defaultValue={FILTERS.AVAILABILITY} type="single" collapsible>
-      <AccordionItem value={FILTERS.AVAILABILITY}>
+    <Accordion defaultValue={FILTERS.OCCUPANCY} type="single" collapsible>
+      <AccordionItem value={FILTERS.OCCUPANCY}>
         <AccordionTrigger className="capitalize">
           Current Occupancy
         </AccordionTrigger>
