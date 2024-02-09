@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 import { getSkillMinRating, getSkillName } from "../SkillFilter/utils";
+import { FILTERS,OCCUPANCY_NAMES } from "../utils/constans";
 
 type Props = {
   filterName: string;
@@ -43,7 +44,9 @@ const FilterList = ({ filterName }: Props) => {
             key={item}
             className="text-[--smart-purple] gap-2 bg-white hover:bg-slate-100 border-[--smart-purple] rounded"
           >
-            {getSkillName(item)}{" "}
+            {filterName === FILTERS.OCCUPANCY
+              ? OCCUPANCY_NAMES[`${getSkillName(item)}`]
+              : getSkillName(item)}{" "}
             {getSkillMinRating(item) ? `${getSkillMinRating(item)}%` : ""}
             <Button
               variant="ghost"
