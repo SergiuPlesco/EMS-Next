@@ -8,6 +8,7 @@ export const FILTERS = {
   PROJECTS: "projects",
   MEMBERS: "members",
   RATING_RANGE: "range",
+  SKILL_SEARCH_QUERY: "skillSearchQuery",
 };
 
 export const OCCUPANCY_NAMES: Record<string, string> = {

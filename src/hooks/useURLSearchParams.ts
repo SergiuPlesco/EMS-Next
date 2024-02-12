@@ -33,12 +33,16 @@ export const useURLSearchParams = () => {
       ? (query?.range?.split(",").map(Number) as number[])
       : [];
 
+  const skillFilterSearchQuery =
+    typeof query?.skillSearchQuery === "string" ? query?.skillSearchQuery : "";
+
   const hasSelectedOccupancy = Boolean(occupancy.length);
   const hasSelectedSkills = Boolean(skills.length);
   const hasSelectedProjects = Boolean(projects.length);
   const hasSelectedManagers = Boolean(managers.length);
   const hasSelectedPositioins = Boolean(positions.length);
   const hasSelectedRatingRange = Boolean(ratingRange.length);
+  const hasSkillFilterSearchQuery = Boolean(skillFilterSearchQuery);
 
   const hasSelectedFilters =
     hasSelectedOccupancy ||
@@ -46,7 +50,8 @@ export const useURLSearchParams = () => {
     hasSelectedProjects ||
     hasSelectedManagers ||
     hasSelectedPositioins ||
-    hasSelectedRatingRange;
+    hasSelectedRatingRange ||
+    hasSkillFilterSearchQuery;
 
   return {
     occupancy,
@@ -62,5 +67,7 @@ export const useURLSearchParams = () => {
     hasSelectedPositioins,
     hasSelectedRatingRange,
     hasSelectedFilters,
+    skillFilterSearchQuery,
+    hasSkillFilterSearchQuery,
   };
 };

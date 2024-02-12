@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import React from "react";
 
 import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Slider } from "@/components/ui/slider";
@@ -19,7 +20,7 @@ const defaultSkillMinRating = 5;
 
 const SkillFilter = () => {
   const { query, pathname, replace } = useRouter();
-  const { skills } = useURLSearchParams();
+  const { skills, skillFilterSearchQuery } = useURLSearchParams();
   const { data: skillsList } = trpc.skills.all.useQuery();
 
   const handleSetSkills = (val: string[]) => {
@@ -35,7 +36,7 @@ const SkillFilter = () => {
     replace(`${pathname}?${params.toString()}`);
   };
 
-  const handleSetFilter = (skillName: string, ratingRange: number[]) => {
+  const handleSetSkillLevel = (skillName: string, ratingRange: number[]) => {
     const params = new URLSearchParams(Object(query));
 
     const skillWithRatingRange = skills.map((skill) => {
@@ -53,20 +54,49 @@ const SkillFilter = () => {
     replace(`${pathname}?${params.toString()}`);
   };
 
+  const handleSetSearchSkill = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const searchQuery = event.target.value;
+    const params = new URLSearchParams(Object(query));
+
+    if (searchQuery) {
+      params.set(FILTERS.SKILL_SEARCH_QUERY, searchQuery);
+    } else {
+      params.delete(FILTERS.SKILL_SEARCH_QUERY);
+    }
+
+    replace(`${pathname}?${params.toString()}`);
+  };
+
   return (
     <FilterWrapper>
-      <div>
-        <ScrollArea
-          className={cn(
-            "w-full pr-2",
-            skillsList && skillsList?.length >= 10
-              ? "h-[225px] md:h-[325px]"
-              : "h-full",
-          )}
-          type="always"
-        >
-          {skillsList &&
-            skillsList.map((item) => {
+      {skillsList && skillsList.length >= 15 && (
+        <div className="mb-4">
+          <Input
+            type="search"
+            value={skillFilterSearchQuery}
+            onChange={handleSetSearchSkill}
+            className="text-base"
+            placeholder="Search skill..."
+          />
+        </div>
+      )}
+      <ScrollArea
+        className={cn(
+          "w-full pr-2",
+          skillsList && skillsList?.length >= 10
+            ? "h-[225px] md:h-[325px]"
+            : "h-full",
+        )}
+        type="always"
+      >
+        {skillsList &&
+          skillsList
+            .filter((item) => {
+              return item.name
+                .toLowerCase()
+                .includes(skillFilterSearchQuery.toLowerCase());
+            })
+            .map((item) => {
               return (
                 <div key={item.id} className="mb-2">
                   <FilterItemWrapper key={item.id}>
@@ -132,7 +162,7 @@ const SkillFilter = () => {
                                   defaultSkillMinRating,
                               ]}
                               onValueChange={(newValue) => {
-                                handleSetFilter(item.name, newValue);
+                                handleSetSkillLevel(item.name, newValue);
                               }}
                             />
                           </div>
@@ -143,8 +173,7 @@ const SkillFilter = () => {
                 </div>
               );
             })}
-        </ScrollArea>
-      </div>
+      </ScrollArea>
     </FilterWrapper>
   );
 };
