@@ -22,6 +22,7 @@ const FiltersReset = ({
     params.delete(FILTERS.PROJECTS);
     params.delete(FILTERS.MANAGERS);
     params.delete(FILTERS.POSITIONS);
+    params.delete(FILTERS.SKILL_SEARCH_QUERY);
 
     replace(`${pathname}?${params.toString()}`);
   };
