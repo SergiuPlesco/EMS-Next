@@ -36,7 +36,7 @@ const Modal = ({
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="flex flex-col justify-start h-full md:h-auto sm:max-w-[600px] overflow-auto">
+      <DialogContent className="flex flex-col justify-start h-full md:max-h-[1000px] sm:max-w-[600px] overflow-auto">
         <DialogHeader>
           <DialogTitle className="text-left">{title}</DialogTitle>
           <DialogDescription className="text-left">

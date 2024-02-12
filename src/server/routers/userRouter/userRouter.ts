@@ -50,7 +50,7 @@ export const userRouter = router({
           ),
         page: z.number(),
         perPage: z.number(),
-        availability: z.array(z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"])),
+        occupancy: z.array(z.enum(["FULL", "PART", "NOT"])),
         skills: z.array(
           z.object({
             name: z
@@ -103,11 +103,11 @@ export const userRouter = router({
     .query(async ({ ctx, input }) => {
       const skipPages = input.perPage * (input.page - 1);
       const where: Prisma.UserWhereInput = {
-        availability: {
+        occupancy: {
           in:
-            input.availability.length > 0
-              ? input.availability
-              : ["FULLTIME", "PARTTIME", "NOTAVAILABLE"],
+            input.occupancy.length > 0
+              ? input.occupancy
+              : ["FULL", "PART", "NOT"],
         },
         // ...(input.skills.length > 0 && {
         //   skills: {
@@ -315,7 +315,7 @@ export const userRouter = router({
             "Please ensure it is 9 digits long and follows the format 0xxxxxxxx.",
           ),
         employmentDate: z.date().nullable(),
-        availability: z.enum(["FULLTIME", "PARTTIME", "NOTAVAILABLE"]),
+        occupancy: z.enum(["FULL", "PART", "NOT"]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -326,7 +326,7 @@ export const userRouter = router({
         data: {
           phone: input.phone,
           employmentDate: input.employmentDate,
-          availability: input.availability,
+          occupancy: input.occupancy,
         },
       });
       return phone;
