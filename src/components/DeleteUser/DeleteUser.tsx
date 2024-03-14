@@ -35,7 +35,7 @@ const DeleteUser = ({ user }: { user: TUser }) => {
             variant: "success",
           });
           utils.users.all.invalidate();
-          router.push("/employees");
+          router.push("/people");
         },
         onError: () => {
           toast({

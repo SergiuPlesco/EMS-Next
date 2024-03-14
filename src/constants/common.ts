@@ -16,7 +16,7 @@ export const OCCUPANCY_BORDER_COLORS = {
 };
 
 export const ENDPOINTS = {
-  employees: "/employees",
+  employees: "/people",
 };
 
 export const USERS_PER_PAGE = 24;

@@ -6,16 +6,14 @@ import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import LogoutButton from "../../../components/LogoutButton/LogoutButton";
 
 const navigationTabs = [
-  // { icon: AiFillHome, path: "/", title: "Profile" },
-  // { icon: AiOutlineAreaChart, path: "/analytics", title: "Analytics" },
-  { icon: AiOutlineUsergroupAdd, path: "/employees", title: "Employees" },
+  { icon: AiOutlineUsergroupAdd, path: "/people", title: "People" },
 ];
 
 const NavigationList = () => {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col md:flex-row md:items-start gap-5 p-2 mt-3">
+    <div className="flex flex-col md:flex-row md:items-center gap-5">
       {navigationTabs.map((item, index) => (
         <Link
           href={item.path}

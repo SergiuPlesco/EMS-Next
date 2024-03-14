@@ -9,7 +9,7 @@ const UserCard = ({ user }: { user: TUser }) => {
   return (
     <div className="rounded-md shadow-md border w-full ">
       <Link
-        href={`/employees/${user.id}`}
+        href={`/people/${user.id}`}
         className="flex flex-col items-start justify-start h-full"
       >
         <div
